@@ -1,0 +1,59 @@
+query GetAdminProducts($options: ProductListOptions) {
+  products(options: $options) {
+    items {
+      id
+      name
+      slug
+      description
+      enabled
+      featuredAsset {
+        id
+        preview
+      }
+      variants {
+        id
+        name
+        sku
+        price
+        enabled
+        stockOnHand
+        trackInventory
+      }
+    }
+    totalItems
+  }
+}
+
+mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
+    id
+    name
+    slug
+  }
+}
+
+mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
+    id
+    name
+    slug
+  }
+}
+
+mutation CreateProductVariants($input: [CreateProductVariantInput!]!) {
+  createProductVariants(input: $input) {
+    id
+    name
+    sku
+    price
+  }
+}
+
+mutation UpdateProductVariants($input: [UpdateProductVariantInput!]!) {
+  updateProductVariants(input: $input) {
+    id
+    name
+    sku
+    price
+  }
+}

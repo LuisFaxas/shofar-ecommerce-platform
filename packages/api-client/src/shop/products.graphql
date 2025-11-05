@@ -1,0 +1,127 @@
+query GetProducts($options: ProductListOptions) {
+  products(options: $options) {
+    items {
+      id
+      name
+      slug
+      description
+      featuredAsset {
+        id
+        preview
+      }
+      variants {
+        id
+        name
+        sku
+        price
+        currencyCode
+        stockLevel
+        featuredAsset {
+          id
+          preview
+        }
+      }
+    }
+    totalItems
+  }
+}
+
+query GetProduct($slug: String, $id: ID) {
+  product(slug: $slug, id: $id) {
+    id
+    name
+    slug
+    description
+    featuredAsset {
+      id
+      preview
+    }
+    assets {
+      id
+      preview
+      source
+    }
+    variants {
+      id
+      name
+      sku
+      price
+      currencyCode
+      stockLevel
+      featuredAsset {
+        id
+        preview
+      }
+      assets {
+        id
+        preview
+        source
+      }
+      facetValues {
+        id
+        code
+        name
+        facet {
+          id
+          code
+          name
+        }
+      }
+    }
+    facetValues {
+      id
+      code
+      name
+      facet {
+        id
+        code
+        name
+      }
+    }
+  }
+}
+
+query GetCollections {
+  collections {
+    items {
+      id
+      name
+      slug
+      description
+      featuredAsset {
+        id
+        preview
+      }
+      productVariants {
+        totalItems
+      }
+    }
+  }
+}
+
+query GetCollection($slug: String, $id: ID) {
+  collection(slug: $slug, id: $id) {
+    id
+    name
+    slug
+    description
+    featuredAsset {
+      id
+      preview
+    }
+    productVariants(options: { take: 100 }) {
+      items {
+        id
+        name
+        sku
+        price
+        product {
+          id
+          name
+          slug
+        }
+      }
+      totalItems
+    }
+  }
+}
