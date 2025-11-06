@@ -3,7 +3,12 @@
   "private": true,
   "scripts": {
     "dev": "turbo run dev --parallel",
+    "dev:shofar": "turbo run dev --filter=@shofar/shofar-store --filter=@shofar/vendure",
+    "dev:pharma": "turbo run dev --filter=@shofar/pharma-store --filter=@shofar/vendure",
+    "dev:faxas": "turbo run dev --filter=@shofar/faxas-store --filter=@shofar/vendure",
+    "dev:all-stores": "turbo run dev --filter=@shofar/*-store --filter=@shofar/vendure",
     "build": "turbo run build",
+    "build:stores": "turbo run build --filter=@shofar/*-store",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "test:e2e": "playwright test",

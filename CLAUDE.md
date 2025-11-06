@@ -5,15 +5,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## High-Level Architecture
 
 ### Monorepo Structure
-This is a **Turborepo + pnpm** monorepo with strict TypeScript configuration. The architecture follows a clear separation between apps (deployable services) and packages (shared libraries).
+This is a **Turborepo + pnpm** monorepo with strict TypeScript configuration. The architecture follows **ISOLATED STORE ARCHITECTURE** with complete separation between business categories.
 
-### Multi-Tenant Architecture
-The platform supports multiple brands (TOOLY, PEPTIDES) with SEO-safe, production-ready patterns:
+### Isolated Store Architecture (CRITICAL - WO 2.3/2.4)
+
+#### Three Completely Isolated Stores
+The platform consists of THREE independent Next.js applications, each serving a distinct business category:
+
+1. **@shofar/shofar-store** (Port 3001)
+   - Business: Tools & Hardware
+   - Brands: TOOLY (future tool brands)
+   - Path: `apps/shofar-store`
+
+2. **@shofar/pharma-store** (Port 3002)
+   - Business: Medical & Research
+   - Brands: PEPTIDES (future pharma brands)
+   - Path: `apps/pharma-store`
+
+3. **@shofar/faxas-store** (Port 3003)
+   - Business: Fashion (placeholder)
+   - Brands: Future fashion brands
+   - Path: `apps/faxas-store`
+
+**CRITICAL SECURITY REQUIREMENT**: Customers on TOOLY must NEVER discover PEPTIDES exists. Complete isolation achieved.
+
+### Multi-Brand Resolution (Within Each Store)
+Each store maintains internal multi-brand support using:
 
 #### Mode A (Production - Recommended)
 - **BRAND_KEY** environment variable pins the brand
 - Enables SSG/ISR for optimal performance
-- One Vercel deployment per brand
+- One deployment per brand per store
 - Best for SEO and performance
 
 #### Mode B (Staging/Multi-domain)
@@ -24,28 +46,25 @@ The platform supports multiple brands (TOOLY, PEPTIDES) with SEO-safe, productio
 
 **CRITICAL**: NO cookie-based brand switching in production (kills SEO)
 
-### Brand Architecture (CRITICAL - WO 2.2)
+### Store Isolation Principles
 
-#### Each Brand is Unique
-- **Brands DO NOT share UI components** - Complete frontend isolation
-- Each brand has its own complete frontend in `/brands/[brand]/`
-- Shared only: Vendure backend, utilities, infrastructure (brand resolution, API clients)
-- NO shared layouts, components, or styles between brands
+#### Complete Code Isolation
+- **NO shared UI components** between stores
+- Each store has completely unique frontend code
+- Store-specific brand configuration packages
+- Independent deployment pipelines
 
-#### Current Brands
-- **TOOLY**: Premium tool store (one-page experience planned)
-- **PEPTIDES**: Future medical/research interface (placeholder)
+#### Shared Infrastructure Only
+- Vendure backend (multi-channel)
+- API client package (channel-aware)
+- Feature flags system
+- Config packages (TypeScript, ESLint)
 
-#### Adding New Brand
-1. Create `/brands/[newbrand]/` folder structure
-2. Add brand config to `packages/brand-config/src/brands/`
-3. Implement completely custom frontend (no shared UI)
+#### Adding New Brands
+1. Identify the business category (tools/pharma/fashion)
+2. Add brand to appropriate store's brand-config package
+3. Implement brand-specific UI in that store only
 4. Deploy with BRAND_KEY env var for production
-
-#### Architecture Principle
-After Work Order 2.2, the codebase maintains strict separation:
-- **Infrastructure** (shared): Brand resolution, API, security, error handling
-- **UI** (unique per brand): Components, layouts, styles, user experience
 
 ### Data Flow
 1. **Web** (Next.js) → Resolves brand via **@shofar/brand-config**
@@ -56,22 +75,25 @@ After Work Order 2.2, the codebase maintains strict separation:
 
 ### Package Dependencies
 ```
-┌─────────────────────────────────────────────────┐
-│                      Web                         │
-│                  (Next.js App)                   │
-└─────────┬──────────┬──────────┬─────────────────┘
-          │          │          │
-          ▼          ▼          ▼
-    ┌─────────┐ ┌──────────┐ ┌──────────────┐
-    │   UI    │ │API Client│ │Feature Flags │
-    └─────────┘ └──────────┘ └──────────────┘
-          │          │          │
-          └──────────┴──────────┘
-                     │
-                     ▼
-              ┌──────────┐
-              │  Config  │
-              └──────────┘
+┌──────────────────┬──────────────────┬──────────────────┐
+│  SHOFAR-STORE    │  PHARMA-STORE    │  FAXAS-STORE     │
+│  (Next.js App)   │  (Next.js App)   │  (Next.js App)   │
+└────────┬─────────┴────────┬─────────┴────────┬─────────┘
+         │                  │                   │
+         ▼                  ▼                   ▼
+┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+│ shofar-brand-  │ │ pharma-brand-  │ │ faxas-brand-   │
+│    config      │ │    config      │ │    config      │
+└────────────────┘ └────────────────┘ └────────────────┘
+         │                  │                   │
+         └──────────────────┼───────────────────┘
+                           │
+              ┌────────────┴────────────┐
+              │   Shared Packages:      │
+              │  - api-client           │
+              │  - feature-flags        │
+              │  - config               │
+              └─────────────────────────┘
 ```
 
 ### Multi-Channel Architecture
@@ -91,11 +113,26 @@ Each channel has isolated:
 ```
 SOURCE_CODE/
 ├── apps/
-│   ├── web/                # Next.js 14+ App Router, customer-facing
+│   ├── shofar-store/      # Tools & Hardware Store (Next.js 16)
 │   │   ├── src/
 │   │   │   ├── app/       # App Router pages & layouts
-│   │   │   ├── components/# React components
-│   │   │   └── lib/       # Utility functions
+│   │   │   ├── brands/    # Brand-specific UI (tooly/)
+│   │   │   ├── components/# Store-specific components
+│   │   │   └── lib/       # Store runtime & utilities
+│   │   └── public/        # Static assets
+│   │
+│   ├── pharma-store/      # Medical & Research Store (Next.js 16)
+│   │   ├── src/
+│   │   │   ├── app/       # App Router pages & layouts
+│   │   │   ├── brands/    # Brand-specific UI (peptides/)
+│   │   │   ├── components/# Store-specific components
+│   │   │   └── lib/       # Store runtime & utilities
+│   │   └── public/        # Static assets
+│   │
+│   ├── faxas-store/       # Fashion Store Placeholder (Next.js 16)
+│   │   ├── src/
+│   │   │   ├── app/       # App Router pages & layouts
+│   │   │   └── lib/       # Store runtime & utilities
 │   │   └── public/        # Static assets
 │   │
 │   └── vendure/           # Vendure GraphQL commerce backend
@@ -105,22 +142,28 @@ SOURCE_CODE/
 │       └── static/        # Generated assets & emails
 │
 ├── packages/
-│   ├── ui/               # Shared glassmorphic components
+│   ├── shofar-brand-config/  # Tools store brand configuration
 │   │   └── src/
-│   │       ├── components/# shadcn/ui + glass theme
-│   │       └── lib/       # cn() utility
+│   │       ├── brands/    # TOOLY config
+│   │       ├── types.ts   # BrandConfig, BrandKey types
+│   │       └── index.ts   # Brand resolution functions
+│   │
+│   ├── pharma-brand-config/  # Pharma store brand configuration
+│   │   └── src/
+│   │       ├── brands/    # PEPTIDES config
+│   │       ├── types.ts   # BrandConfig, BrandKey types
+│   │       └── index.ts   # Brand resolution functions
+│   │
+│   ├── faxas-brand-config/   # Fashion store brand configuration (empty)
+│   │   └── src/
+│   │       ├── types.ts   # BrandConfig, BrandKey types
+│   │       └── index.ts   # Brand resolution functions (placeholder)
 │   │
 │   ├── api-client/       # GraphQL codegen & Apollo client
 │   │   └── src/
 │   │       ├── queries/   # GraphQL queries
 │   │       ├── mutations/ # GraphQL mutations
 │   │       └── generated/ # Auto-generated types
-│   │
-│   ├── brand-config/     # Multi-tenant brand configuration
-│   │   └── src/
-│   │       ├── brands/    # Brand-specific configs (tooly, peptides)
-│   │       ├── types.ts   # BrandConfig, BrandKey types
-│   │       └── index.ts   # Brand resolution functions
 │   │
 │   ├── feature-flags/    # Feature flag system
 │   │   └── src/
@@ -144,21 +187,31 @@ SOURCE_CODE/
 # Install dependencies
 pnpm install
 
-# Run all apps in dev mode (Next.js on :3000, Vendure on :3001)
-pnpm dev
+# Run specific store in dev mode
+pnpm dev:shofar    # TOOLY store on :3001
+pnpm dev:pharma    # PEPTIDES store on :3002
+pnpm dev:faxas     # Fashion store on :3003
 
-# Run specific app
-pnpm --filter @shofar/web dev
+# Run all stores simultaneously
+pnpm dev:all-stores
+
+# Run specific app directly
+pnpm --filter @shofar/shofar-store dev
+pnpm --filter @shofar/pharma-store dev
+pnpm --filter @shofar/faxas-store dev
 pnpm --filter @shofar/vendure dev
 
-# Build all packages
-pnpm build
+# Build all stores
+pnpm build:stores
+
+# Build specific store
+pnpm --filter @shofar/shofar-store build
 
 # Lint all packages
 pnpm lint
 
 # Type check all packages
-pnpm --filter @shofar/web typecheck
+pnpm --filter @shofar/shofar-store typecheck
 pnpm --filter @shofar/vendure typecheck
 
 # Format code
@@ -282,14 +335,19 @@ git commit -m "chore(deps): update dependencies"
 
 ## Brand Resolution & Multi-Tenant Setup
 
-### Brand Resolution Flow
+### Brand Resolution Flow (Per Store)
 ```typescript
-// apps/web/src/lib/brand-runtime.ts
+// apps/[store-name]/src/lib/store-runtime.ts
 1. Check BRAND_KEY env → Mode A (Production)
 2. Check host header → Mode B (Staging)
 3. Dev cookie override → ONLY if ALLOW_BRAND_COOKIE_OVERRIDE=true
-4. Fallback to default brand (TOOLY)
+4. Fallback to default brand for that store
 ```
+
+Example for each store:
+- **shofar-store**: Resolves TOOLY or future tool brands
+- **pharma-store**: Resolves PEPTIDES or future pharma brands
+- **faxas-store**: Will resolve future fashion brands
 
 ### Environment Variables for Brands
 ```bash
@@ -355,9 +413,10 @@ Adapter-based architecture in `@shofar/feature-flags`:
 - Switchable via configuration without code changes
 
 ### Component Library Strategy
-- **@shofar/ui**: Radix UI primitives + Tailwind CSS
-- Glassmorphic theme variants built into components
-- Tree-shakeable exports for optimal bundle size
+- **NO shared UI components** between stores (enforced isolation)
+- Each store implements its own UI with Tailwind CSS v4
+- Store-specific component libraries within each app
+- Complete UI independence between business categories
 
 ## Agentic Coding Rules
 

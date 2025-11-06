@@ -11,10 +11,12 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@shofar/ui": ["packages/ui/src"],
       "@shofar/api-client": ["packages/api-client/src"],
       "@shofar/feature-flags": ["packages/feature-flags/src"],
-      "@shofar/config": ["packages/config"]
+      "@shofar/config": ["packages/config"],
+      "@shofar/shofar-brand-config": ["packages/shofar-brand-config/src"],
+      "@shofar/pharma-brand-config": ["packages/pharma-brand-config/src"],
+      "@shofar/faxas-brand-config": ["packages/faxas-brand-config/src"]
     }
   }
 }
