@@ -7,16 +7,57 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Monorepo Structure
 This is a **Turborepo + pnpm** monorepo with strict TypeScript configuration. The architecture follows a clear separation between apps (deployable services) and packages (shared libraries).
 
+### Multi-Tenant Architecture
+The platform supports multiple brands (TOOLY, PEPTIDES) with SEO-safe, production-ready patterns:
+
+#### Mode A (Production - Recommended)
+- **BRAND_KEY** environment variable pins the brand
+- Enables SSG/ISR for optimal performance
+- One Vercel deployment per brand
+- Best for SEO and performance
+
+#### Mode B (Staging/Multi-domain)
+- Host-based brand resolution
+- SSR only (no SSG/ISR)
+- Single deployment serving multiple domains
+- For staging environments or demos
+
+**CRITICAL**: NO cookie-based brand switching in production (kills SEO)
+
+### Brand Architecture (CRITICAL - WO 2.2)
+
+#### Each Brand is Unique
+- **Brands DO NOT share UI components** - Complete frontend isolation
+- Each brand has its own complete frontend in `/brands/[brand]/`
+- Shared only: Vendure backend, utilities, infrastructure (brand resolution, API clients)
+- NO shared layouts, components, or styles between brands
+
+#### Current Brands
+- **TOOLY**: Premium tool store (one-page experience planned)
+- **PEPTIDES**: Future medical/research interface (placeholder)
+
+#### Adding New Brand
+1. Create `/brands/[newbrand]/` folder structure
+2. Add brand config to `packages/brand-config/src/brands/`
+3. Implement completely custom frontend (no shared UI)
+4. Deploy with BRAND_KEY env var for production
+
+#### Architecture Principle
+After Work Order 2.2, the codebase maintains strict separation:
+- **Infrastructure** (shared): Brand resolution, API, security, error handling
+- **UI** (unique per brand): Components, layouts, styles, user experience
+
 ### Data Flow
-1. **Storefront** (Next.js) → Makes GraphQL requests via **@shofar/api-client**
-2. **API Client** → Uses Apollo Client with channel-specific tokens to communicate with **Vendure**
-3. **Vendure** → Returns data through Shop API (public) or Admin API (authenticated)
-4. **Feature Flags** → Controls feature availability using Edge Config or PostHog adapters
+1. **Web** (Next.js) → Resolves brand via **@shofar/brand-config**
+2. **Brand Runtime** → Determines brand by BRAND_KEY or host
+3. **API Client** → Uses Apollo Client with channel-specific tokens
+4. **Vendure** → Returns data through Shop API (public) or Admin API (authenticated)
+5. **Feature Flags** → Controls feature availability using Edge Config or PostHog adapters
 
 ### Package Dependencies
 ```
 ┌─────────────────────────────────────────────────┐
-│                   Storefront                     │
+│                      Web                         │
 │                  (Next.js App)                   │
 └─────────┬──────────┬──────────┬─────────────────┘
           │          │          │
@@ -50,7 +91,7 @@ Each channel has isolated:
 ```
 SOURCE_CODE/
 ├── apps/
-│   ├── storefront/         # Next.js 14+ App Router, customer-facing
+│   ├── web/                # Next.js 14+ App Router, customer-facing
 │   │   ├── src/
 │   │   │   ├── app/       # App Router pages & layouts
 │   │   │   ├── components/# React components
@@ -74,6 +115,12 @@ SOURCE_CODE/
 │   │       ├── queries/   # GraphQL queries
 │   │       ├── mutations/ # GraphQL mutations
 │   │       └── generated/ # Auto-generated types
+│   │
+│   ├── brand-config/     # Multi-tenant brand configuration
+│   │   └── src/
+│   │       ├── brands/    # Brand-specific configs (tooly, peptides)
+│   │       ├── types.ts   # BrandConfig, BrandKey types
+│   │       └── index.ts   # Brand resolution functions
 │   │
 │   ├── feature-flags/    # Feature flag system
 │   │   └── src/
@@ -101,7 +148,7 @@ pnpm install
 pnpm dev
 
 # Run specific app
-pnpm --filter @shofar/storefront dev
+pnpm --filter @shofar/web dev
 pnpm --filter @shofar/vendure dev
 
 # Build all packages
@@ -111,7 +158,7 @@ pnpm build
 pnpm lint
 
 # Type check all packages
-pnpm --filter @shofar/storefront typecheck
+pnpm --filter @shofar/web typecheck
 pnpm --filter @shofar/vendure typecheck
 
 # Format code
@@ -232,6 +279,57 @@ git commit -m "chore(deps): update dependencies"
 - Decorative images: `alt=""` or `aria-hidden="true"`
 - ARIA live regions for dynamic content
 - Meaningful link text (not "click here")
+
+## Brand Resolution & Multi-Tenant Setup
+
+### Brand Resolution Flow
+```typescript
+// apps/web/src/lib/brand-runtime.ts
+1. Check BRAND_KEY env → Mode A (Production)
+2. Check host header → Mode B (Staging)
+3. Dev cookie override → ONLY if ALLOW_BRAND_COOKIE_OVERRIDE=true
+4. Fallback to default brand (TOOLY)
+```
+
+### Environment Variables for Brands
+```bash
+# Mode A - Pin brand for production
+BRAND_KEY=tooly  # or 'peptides'
+
+# Mode B - Host-based resolution
+# Leave BRAND_KEY unset
+
+# Dev only - NEVER in production
+ALLOW_BRAND_COOKIE_OVERRIDE=false
+JWT_SECRET=your-secret-key
+```
+
+### Monitoring Hooks
+Unknown hosts are logged for monitoring:
+- Check middleware.ts for unknown host detection
+- In production, send to monitoring service (Sentry, DataDog, etc.)
+- Helps identify misconfigurations or new domain requirements
+
+### Cache Headers Strategy
+```javascript
+// next.config.mjs
+- Static assets: max-age=31536000, immutable (1 year)
+- Images: max-age=31536000, must-revalidate
+- API responses: Controlled by Vendure
+```
+
+### Security Considerations
+
+#### Authorize.Net Integration
+- **NO wildcard origins** in communicator.html
+- Explicit domain allowlist only
+- Strict postMessage validation
+- Frame-ancestors CSP for payment iframe
+
+#### Asset Security
+- S3/R2 with signed URLs for private assets
+- CDN with proper CORS headers
+- Image optimization through Next.js Image component
 
 ## Key Architectural Decisions
 

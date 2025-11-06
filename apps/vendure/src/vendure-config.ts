@@ -78,6 +78,21 @@ export const config: VendureConfig = {
       route: 'assets',
       assetUploadDir: path.join(__dirname, '..', process.env.ASSET_UPLOAD_DIR || './static/assets'),
       assetUrlPrefix: process.env.ASSET_URL_PREFIX || 'http://localhost:3001/assets/',
+      // S3/R2 Configuration (uncomment and configure for production)
+      // storageStrategyFactory: configureS3AssetStorage({
+      //   bucket: process.env.S3_BUCKET || 'shofar-assets',
+      //   credentials: {
+      //     accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+      //     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+      //   },
+      //   region: process.env.S3_REGION || 'us-east-1',
+      //   // For Cloudflare R2:
+      //   // endpoint: process.env.R2_ENDPOINT || 'https://your-account.r2.cloudflarestorage.com',
+      // }),
+      // CDN configuration for production
+      assetUrlPrefix: process.env.CDN_URL
+        ? `${process.env.CDN_URL}/assets/`
+        : process.env.ASSET_URL_PREFIX || 'http://localhost:3001/assets/',
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
     DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),

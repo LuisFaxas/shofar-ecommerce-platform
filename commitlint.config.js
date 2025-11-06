@@ -22,7 +22,7 @@ module.exports = {
       2,
       'always',
       [
-        'storefront',
+        'web',
         'vendure',
         'ui',
         'api-client',

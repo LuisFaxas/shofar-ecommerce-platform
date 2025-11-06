@@ -4,18 +4,18 @@ test.describe('Homepage', () => {
   test('should display welcome message', async ({ page }) => {
     await page.goto('/');
 
-    // Check for main heading
-    await expect(page.locator('h1')).toContainText('Welcome to SHOFAR Storefront');
+    // Check for main heading - will be brand-specific
+    await expect(page.locator('h1')).toContainText('Welcome');
 
     // Check for description
-    await expect(page.locator('p')).toContainText('A modern e-commerce platform');
+    await expect(page.locator('p')).toContainText('platform');
   });
 
   test('should have proper meta tags', async ({ page }) => {
     await page.goto('/');
 
-    // Check title
-    await expect(page).toHaveTitle(/SHOFAR Storefront/);
+    // Check title - will be brand-specific
+    await expect(page).toHaveTitle(/TOOLY|PEPTIDES/);
   });
 
   test('should be accessible', async ({ page }) => {
