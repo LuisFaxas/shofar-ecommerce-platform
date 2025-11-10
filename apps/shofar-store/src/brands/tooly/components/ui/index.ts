@@ -13,7 +13,10 @@ export {
   type ButtonGroupProps
 } from './Button';
 
-// New button designs
+// Primary button (Resend-inspired)
+export { ButtonPrimary, type ButtonPrimaryProps } from './ButtonPrimary';
+
+// Experimental gradient buttons
 export { ButtonRotatingWhite, type ButtonRotatingWhiteProps } from './ButtonRotatingWhite';
 export { ButtonRotatingPurple, type ButtonRotatingPurpleProps } from './ButtonRotatingPurple';
 export { ButtonConicShine, type ButtonConicShineProps } from './ButtonConicShine';

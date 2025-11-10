@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { PointerVarsProvider } from '@/components/providers/PointerVarsProvider';
+import { ButtonPrimary } from '@/brands/tooly/components/ui/ButtonPrimary';
 import { ButtonGraphite } from '@/brands/tooly/components/ui/ButtonGraphite';
 import { ButtonPill, ButtonPillGroup } from '@/brands/tooly/components/ui/ButtonPill';
 import { ButtonRotatingWhite } from '@/brands/tooly/components/ui/ButtonRotatingWhite';
@@ -146,11 +147,11 @@ export default function DesignSystemPage() {
           description="Dark gunmetal surfaces • Cool frosted glass • Reactive animations • Rainbow accents"
           actions={
             <div className="flex flex-wrap gap-4 justify-center">
-              <ButtonGraphite variant="primary" size="lg">
-                Explore Components
-              </ButtonGraphite>
+              <ButtonPrimary size="lg" showArrow>
+                Shop TOOLY Now
+              </ButtonPrimary>
               <ButtonGraphite variant="secondary" size="lg">
-                View Documentation
+                View Catalog
               </ButtonGraphite>
             </div>
           }
@@ -214,10 +215,71 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* Premium Button Collection */}
+        {/* Primary Button - Resend-Inspired */}
         <Section
-          title="Premium Button Collection"
-          subtitle="Advanced gradient and animation effects"
+          title="Primary Button System"
+          subtitle="Premium button design inspired by Resend.com"
+          containerSize="lg"
+          spacing="lg"
+        >
+          <Card glass padding="xl">
+            <CardHeader bordered>
+              <h3 className="text-xl font-semibold text-white">
+                ButtonPrimary - Animated Rainbow Border
+              </h3>
+              <p className="text-white/60 text-sm mt-2">
+                Inspired by Resend.com's "Launch Week" button design
+              </p>
+            </CardHeader>
+            <CardBody className="space-y-8">
+              {/* Size Variants */}
+              <div className="space-y-4">
+                <p className="text-white/50 text-sm uppercase tracking-wider">Size Variants</p>
+                <div className="flex flex-wrap gap-4 items-center justify-center">
+                  <ButtonPrimary size="sm">Small Button</ButtonPrimary>
+                  <ButtonPrimary size="md">Medium Button</ButtonPrimary>
+                  <ButtonPrimary size="lg">Large Button</ButtonPrimary>
+                </div>
+              </div>
+
+              {/* With Arrow Icons */}
+              <div className="space-y-4">
+                <p className="text-white/50 text-sm uppercase tracking-wider">With Arrow Icon</p>
+                <div className="flex flex-wrap gap-4 items-center justify-center">
+                  <ButtonPrimary showArrow size="sm">Shop TOOLY Now</ButtonPrimary>
+                  <ButtonPrimary showArrow size="md">Shop TOOLY Now</ButtonPrimary>
+                  <ButtonPrimary showArrow size="lg">Shop TOOLY Now</ButtonPrimary>
+                </div>
+              </div>
+
+              {/* States */}
+              <div className="space-y-4">
+                <p className="text-white/50 text-sm uppercase tracking-wider">States</p>
+                <div className="flex flex-wrap gap-4 items-center justify-center">
+                  <ButtonPrimary showArrow>Default</ButtonPrimary>
+                  <ButtonPrimary loading>Loading</ButtonPrimary>
+                  <ButtonPrimary disabled showArrow>Disabled</ButtonPrimary>
+                  <ButtonPrimary fullWidth showArrow>Full Width</ButtonPrimary>
+                </div>
+              </div>
+
+              {/* Example CTAs */}
+              <div className="space-y-4">
+                <p className="text-white/50 text-sm uppercase tracking-wider">E-Commerce CTAs</p>
+                <div className="flex flex-wrap gap-4 items-center justify-center">
+                  <ButtonPrimary showArrow>Shop Now</ButtonPrimary>
+                  <ButtonPrimary showArrow>Browse Tools</ButtonPrimary>
+                  <ButtonPrimary showArrow>View Collection</ButtonPrimary>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Section>
+
+        {/* Experimental Gradient Buttons */}
+        <Section
+          title="Experimental Gradient Buttons"
+          subtitle="Advanced gradient and animation effects collection"
           containerSize="lg"
           spacing="lg"
         >
@@ -615,9 +677,9 @@ export default function DesignSystemPage() {
           description="Industrial-grade design system for modern web applications"
           actions={
             <div className="flex flex-wrap gap-4 justify-center">
-              <ButtonGraphite variant="primary" size="lg">
-                Start Building
-              </ButtonGraphite>
+              <ButtonPrimary size="lg" showArrow>
+                Buy TOOLY Tools
+              </ButtonPrimary>
               <ButtonPillGroup>
                 <ButtonPill variant="secondary">Components</ButtonPill>
                 <ButtonPill variant="secondary">Docs</ButtonPill>
