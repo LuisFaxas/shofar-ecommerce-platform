@@ -12,6 +12,11 @@ import React from 'react';
 import { PointerVarsProvider } from '@/components/providers/PointerVarsProvider';
 import { ButtonGraphite } from '@/brands/tooly/components/ui/ButtonGraphite';
 import { ButtonPill, ButtonPillGroup } from '@/brands/tooly/components/ui/ButtonPill';
+import { ButtonRotatingWhite } from '@/brands/tooly/components/ui/ButtonRotatingWhite';
+import { ButtonRotatingPurple } from '@/brands/tooly/components/ui/ButtonRotatingPurple';
+import { ButtonConicShine } from '@/brands/tooly/components/ui/ButtonConicShine';
+import { ButtonGlowUp } from '@/brands/tooly/components/ui/ButtonGlowUp';
+import { ButtonRainbowShine } from '@/brands/tooly/components/ui/ButtonRainbowShine';
 import { ToolyWordmark, ToolyWordmarkStacked } from '@/brands/tooly/components/ui/ToolyWordmark';
 import { Watermark, WatermarkGrid, WatermarkAnimated } from '@/brands/tooly/components/ui/Watermark';
 import { ReviewsMarquee, ReviewsMarqueeMultiRow } from '@/brands/tooly/components/ui/ReviewsMarquee';
@@ -209,19 +214,77 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        {/* New Button Components */}
+        {/* Premium Button Collection */}
         <Section
-          title="Button Components"
-          subtitle="Reactive buttons with rainbow accents"
+          title="Premium Button Collection"
+          subtitle="Advanced gradient and animation effects"
           containerSize="lg"
           spacing="lg"
         >
           <div className="space-y-8">
+            {/* Rotating Gradient Buttons */}
+            <Card glass padding="lg">
+              <CardHeader bordered>
+                <h3 className="text-xl font-semibold text-white">
+                  Rotating Gradient Effects
+                </h3>
+              </CardHeader>
+              <CardBody className="space-y-6">
+                <div className="flex flex-wrap gap-6 items-center justify-center">
+                  <ButtonRotatingWhite size="sm">Small White</ButtonRotatingWhite>
+                  <ButtonRotatingWhite size="md">Medium White</ButtonRotatingWhite>
+                  <ButtonRotatingWhite size="lg">Large White</ButtonRotatingWhite>
+                </div>
+                <div className="flex flex-wrap gap-6 items-center justify-center">
+                  <ButtonRotatingPurple size="sm">Small Purple</ButtonRotatingPurple>
+                  <ButtonRotatingPurple size="md">Medium Purple</ButtonRotatingPurple>
+                  <ButtonRotatingPurple size="lg">Large Purple</ButtonRotatingPurple>
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Conic Gradient Buttons */}
+            <Card glass padding="lg">
+              <CardHeader bordered>
+                <h3 className="text-xl font-semibold text-white">
+                  Conic Gradient with Shine
+                </h3>
+              </CardHeader>
+              <CardBody className="space-y-6">
+                <div className="flex flex-wrap gap-6 items-center justify-center">
+                  <ButtonConicShine size="sm">Cyan Shine</ButtonConicShine>
+                  <ButtonConicShine size="md">Cyan Shine</ButtonConicShine>
+                  <ButtonConicShine size="lg">Cyan Shine</ButtonConicShine>
+                </div>
+                <div className="flex flex-wrap gap-6 items-center justify-center">
+                  <ButtonRainbowShine size="sm">Rainbow</ButtonRainbowShine>
+                  <ButtonRainbowShine size="md">Rainbow</ButtonRainbowShine>
+                  <ButtonRainbowShine size="lg">Rainbow</ButtonRainbowShine>
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Glow Effect Button */}
+            <Card glass padding="lg">
+              <CardHeader bordered>
+                <h3 className="text-xl font-semibold text-white">
+                  Glow Up Effect
+                </h3>
+              </CardHeader>
+              <CardBody className="space-y-6">
+                <div className="flex flex-wrap gap-6 items-center justify-center">
+                  <ButtonGlowUp size="sm">Glow</ButtonGlowUp>
+                  <ButtonGlowUp size="md">Button</ButtonGlowUp>
+                  <ButtonGlowUp size="lg">Effect</ButtonGlowUp>
+                </div>
+              </CardBody>
+            </Card>
+
             {/* ButtonGraphite showcase */}
             <Card glass padding="lg">
               <CardHeader bordered>
                 <h3 className="text-xl font-semibold text-white">
-                  ButtonGraphite - Rainbow Ring on Hover
+                  ButtonGraphite - Static Rainbow Border
                 </h3>
               </CardHeader>
               <CardBody className="space-y-6">

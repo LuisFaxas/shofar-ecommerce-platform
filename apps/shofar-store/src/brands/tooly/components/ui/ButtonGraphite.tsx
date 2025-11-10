@@ -1,9 +1,10 @@
 /**
  * ButtonGraphite Component
- * Work Order 2.5.REBOOT
+ * Work Order 2.5.REBOOT - Updated
  *
- * Graphite-inspired button with rainbow ring on hover
+ * Graphite-inspired button with static rainbow border on hover
  * Reactive glow that follows pointer position
+ * Inspired by Resend and Graphite's sophisticated rainbow borders
  */
 
 'use client';
@@ -27,8 +28,8 @@ export interface ButtonGraphiteProps extends React.ButtonHTMLAttributes<HTMLButt
 }
 
 /**
- * Graphite-inspired button with reactive rainbow ring
- * Uses CSS variables from usePointerVars for reactive animations
+ * Graphite-inspired button with static rainbow border on hover
+ * Uses CSS variables from usePointerVars for reactive glow effects
  */
 export const ButtonGraphite = forwardRef<HTMLButtonElement, ButtonGraphiteProps>(
   (
@@ -79,15 +80,15 @@ export const ButtonGraphite = forwardRef<HTMLButtonElement, ButtonGraphiteProps>
         'shadow-[0_6px_18px_rgba(0,0,0,0.25)]',
 
         // Rainbow ring container
-        'before:absolute before:inset-[-1px] before:rounded-lg',
+        'before:absolute before:inset-[-2px] before:rounded-[10px]',
         'before:opacity-0 before:transition-opacity before:duration-300',
+        'before:pointer-events-none',
 
-        // Rainbow gradient border on hover
-        'before:bg-[conic-gradient(from_var(--angle),#ff6231,#ffb931,#14c7ff,#1061ff,#ff6231)]',
-        'before:animate-[spin_3s_linear_infinite]',
+        // Static rainbow gradient border (no spinning)
+        'before:bg-[conic-gradient(from_0deg,#ff6231_0deg,#ffb931_60deg,#ffcc00_120deg,#14c7ff_180deg,#1061ff_240deg,#ff1493_300deg,#ff6231_360deg)]',
 
         // Mask to create border effect
-        'after:absolute after:inset-0 after:rounded-lg',
+        'after:absolute after:inset-[1px] after:rounded-[9px]',
         'after:bg-white/[0.08] after:backdrop-blur-md',
 
         // Hover state
