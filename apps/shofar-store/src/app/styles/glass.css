@@ -1,0 +1,359 @@
+/**
+ * TOOLY Design System - Glassmorphism Utilities
+ * Work Order 2.5.1 - Cool Frosted Glass Refinement
+ *
+ * Industrial glass effects with cool tints and precision
+ * Optimized for dark gunmetal surfaces
+ */
+
+/* ===========================
+   BASE GLASS UTILITIES
+   Cool frosted glass with inner highlight
+   =========================== */
+
+/* Standard glass - cool frosted effect */
+.glass {
+  background: var(--glass-tint);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elev-1);
+  position: relative;
+  transition: all var(--duration-base) var(--transition-precision);
+}
+
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, var(--glass-inner-highlight), transparent 30%);
+  pointer-events: none;
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: var(--elev-1);
+}
+
+/* Dark glass - slightly denser for high contrast */
+.glass-dark {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: var(--elev-0);
+  position: relative;
+  transition: all var(--duration-base) var(--transition-precision);
+}
+
+.glass-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent 40%);
+  pointer-events: none;
+}
+
+/* Heavy glass - for hero panels only */
+.glass-heavy {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--elev-2);
+  position: relative;
+  transition: all var(--duration-base) var(--transition-precision);
+}
+
+.glass-heavy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.10), transparent 25%);
+  pointer-events: none;
+}
+
+/* Cool tinted glass variants */
+.glass-blue {
+  background: rgba(11, 78, 139, 0.08); /* Cool blue tint */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(11, 78, 139, 0.2);
+  box-shadow: var(--elev-1);
+  position: relative;
+  transition: all var(--duration-base) var(--transition-precision);
+}
+
+.glass-blue::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(100, 200, 255, 0.05), transparent 30%);
+  pointer-events: none;
+}
+
+/* Subtle accent glass */
+.glass-accent {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 193, 7, 0.1); /* Subtle accent border */
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.05);
+  position: relative;
+  transition: all var(--duration-base) var(--transition-precision);
+}
+
+/* ===========================
+   GLASS COMPONENTS
+   Pre-composed glass elements
+   =========================== */
+
+/* Glass card with industrial precision */
+.glass-card {
+  background: var(--glass-tint);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px; /* Tighter radius */
+  box-shadow: var(--elev-1);
+  position: relative;
+  transition: all var(--duration-base) var(--transition-precision);
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, var(--glass-inner-highlight), transparent 30%);
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: var(--elev-1);
+}
+
+/* Glass button */
+.glass-button {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2) var(--spacing-4);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--duration-200) var(--transition-ease);
+  cursor: pointer;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.glass-button:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass input */
+.glass-input {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-2) var(--spacing-3);
+  transition: all var(--duration-200) var(--transition-ease);
+  color: inherit;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Glass panel/surface */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-6);
+  box-shadow:
+    0 4px 24px 0 rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ===========================
+   BLUR UTILITIES
+   Standalone blur effects
+   =========================== */
+
+.blur-none {
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+}
+
+.blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.blur-md {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.blur-lg {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.blur-xl {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.blur-2xl {
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.blur-3xl {
+  backdrop-filter: blur(64px);
+  -webkit-backdrop-filter: blur(64px);
+}
+
+/* ===========================
+   OVERLAY UTILITIES
+   For modal/drawer backgrounds
+   =========================== */
+
+.glass-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-overlay-light {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-overlay-heavy {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ===========================
+   GRADIENT GLASS
+   Combining gradients with glass
+   =========================== */
+
+.glass-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-gradient-radial {
+  background: radial-gradient(
+    circle at 20% 50%,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 70%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* ===========================
+   BROWSER COMPATIBILITY
+   Fallbacks for unsupported browsers
+   =========================== */
+
+/* Check for backdrop-filter support */
+@supports not (backdrop-filter: blur(12px)) {
+  .glass,
+  .glass-dark,
+  .glass-heavy,
+  .glass-card,
+  .glass-button,
+  .glass-input,
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* ===========================
+   NOISE OVERLAY
+   Subtle texture for depth
+   =========================== */
+
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  /* Base64 encoded tiny noise texture - 100x100px monochrome */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity: var(--surface-noise-opacity);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Alternative CSS-only noise for performance */
+.noise-css::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    );
+  opacity: var(--surface-noise-opacity);
+  pointer-events: none;
+  z-index: 1;
+}
