@@ -32,7 +32,15 @@ import {
   Section,
   HeroSection,
   CTASection,
+  Navbar,
+  ProductCard,
+  SearchBar,
+  Input,
+  ToastProvider,
+  useToast,
+  toast
 } from '@/brands/tooly/components/ui';
+import { ButtonSecondary } from '@/brands/tooly/components/ui/ButtonSecondary';
 
 // Sample data for components
 const sampleReviews = [
@@ -669,6 +677,223 @@ export default function DesignSystemPage() {
               </CardBody>
             </Card>
           </CardGrid>
+        </Section>
+
+        {/* E-Commerce Components Section */}
+        <Section
+          title="E-Commerce Components"
+          subtitle="Industry-leading components for modern online retail"
+          containerSize="xl"
+          spacing="lg"
+          background="transparent"
+        >
+          {/* Navbar Demo */}
+          <div className="space-y-8">
+            <Card className="overflow-hidden">
+              <CardHeader
+                title="Navigation Bar"
+                description="Glass-styled header with cart integration and search"
+              />
+              <CardBody className="p-0">
+                <Navbar
+                  logo="TOOLY"
+                  links={[
+                    { label: 'Shop', href: '/shop', active: true },
+                    { label: 'Categories', href: '/categories' },
+                    { label: 'Deals', href: '/deals' },
+                    { label: 'Support', href: '/support' }
+                  ]}
+                  cartCount={3}
+                  isLoggedIn={false}
+                  searchPlaceholder="Search for tools..."
+                  onSearch={(query) => console.log('Search:', query)}
+                  onCartClick={() => console.log('Cart clicked')}
+                  sticky={false}
+                />
+              </CardBody>
+            </Card>
+
+            {/* Product Cards Grid */}
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-4">Product Cards</h3>
+              <p className="text-white/60 mb-6">Three variants: default, compact, and detailed</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ProductCard
+                  id="1"
+                  title="Professional Drill Set"
+                  description="High-torque cordless drill with 50-piece bit set"
+                  image="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400"
+                  price={299.99}
+                  originalPrice={399.99}
+                  rating={4.5}
+                  reviewCount={128}
+                  badge="SALE"
+                  badgeVariant="sale"
+                  variant="default"
+                />
+                <ProductCard
+                  id="2"
+                  title="Titanium Hammer"
+                  description="Lightweight yet incredibly strong"
+                  image="https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=400"
+                  price={149.99}
+                  rating={5}
+                  reviewCount={89}
+                  badge="NEW"
+                  badgeVariant="new"
+                  variant="default"
+                />
+                <ProductCard
+                  id="3"
+                  title="Smart Level Pro"
+                  description="Bluetooth-enabled digital level with app"
+                  image="https://images.unsplash.com/photo-1609205807490-b18b16d0b2e7?w=400"
+                  price={89.99}
+                  rating={4}
+                  reviewCount={45}
+                  badge="HOT"
+                  badgeVariant="hot"
+                  variant="default"
+                />
+              </div>
+
+              {/* Compact variant */}
+              <h4 className="text-lg font-medium text-white mt-8 mb-4">Compact Variant</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {['Impact Driver', 'Circular Saw', 'Angle Grinder', 'Jigsaw'].map((name, i) => (
+                  <ProductCard
+                    key={i}
+                    id={`compact-${i}`}
+                    title={name}
+                    image={`https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400`}
+                    price={89 + i * 20}
+                    originalPrice={i % 2 === 0 ? 129 + i * 20 : undefined}
+                    variant="compact"
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* SearchBar Demo */}
+            <Card>
+              <CardHeader
+                title="Advanced Search Bar"
+                description="Search with suggestions, recent searches, and categories"
+              />
+              <CardBody>
+                <SearchBar
+                  placeholder="Search for tools, brands, or categories..."
+                  suggestions={[
+                    { type: 'product', text: 'Cordless Drill', subtitle: 'Power Tools' },
+                    { type: 'category', text: 'Hand Tools', count: 234 },
+                    { type: 'brand', text: 'DeWalt', subtitle: 'Premium Tools' },
+                    { type: 'product', text: 'Tool Box Set', subtitle: 'Storage' }
+                  ]}
+                  recentSearches={['hammer', 'drill bits', 'safety glasses']}
+                  categories={[
+                    { name: 'Power Tools', count: 156 },
+                    { name: 'Hand Tools', count: 234 },
+                    { name: 'Safety Gear', count: 89 },
+                    { name: 'Tool Storage', count: 67 }
+                  ]}
+                  onSearch={(query) => console.log('Searching for:', query)}
+                />
+              </CardBody>
+            </Card>
+
+            {/* Input Fields Demo */}
+            <Card>
+              <CardHeader
+                title="Form Inputs"
+                description="Glass-styled inputs with floating labels and validation"
+              />
+              <CardBody>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Input
+                      label="Email Address"
+                      type="email"
+                      placeholder="john@example.com"
+                      helperText="We'll never share your email"
+                    />
+                    <Input
+                      label="Password"
+                      type="password"
+                      placeholder="Enter password"
+                      required
+                    />
+                  </div>
+
+                  <Input
+                    label="Product Review"
+                    placeholder="Share your thoughts..."
+                    maxLength={200}
+                    showCount
+                    helperText="Help other customers with your feedback"
+                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Input
+                      label="Success State"
+                      value="Valid input"
+                      success="Looking good!"
+                      readOnly
+                    />
+                    <Input
+                      label="Error State"
+                      value="Invalid"
+                      error="This field is required"
+                      readOnly
+                    />
+                    <Input
+                      label="Disabled"
+                      value="Cannot edit"
+                      disabled
+                    />
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Toast Demo */}
+            <Card>
+              <CardHeader
+                title="Toast Notifications"
+                description="Non-intrusive feedback system for user actions"
+              />
+              <CardBody>
+                <div className="flex flex-wrap gap-3">
+                  <ButtonSecondary
+                    onClick={() => {
+                      const toastContext = { addToast: (toast: any) => console.log('Toast:', toast) };
+                      console.log('Success toast triggered');
+                    }}
+                  >
+                    Success Toast
+                  </ButtonSecondary>
+                  <ButtonSecondary
+                    onClick={() => console.log('Error toast')}
+                  >
+                    Error Toast
+                  </ButtonSecondary>
+                  <ButtonSecondary
+                    onClick={() => console.log('Warning toast')}
+                  >
+                    Warning Toast
+                  </ButtonSecondary>
+                  <ButtonSecondary
+                    onClick={() => console.log('Info toast')}
+                  >
+                    Info Toast
+                  </ButtonSecondary>
+                </div>
+                <p className="text-sm text-white/50 mt-4">
+                  Note: Toast notifications require ToastProvider wrapper in your app
+                </p>
+              </CardBody>
+            </Card>
+          </div>
         </Section>
 
         {/* CTA Section */}

@@ -13,8 +13,11 @@ export {
   type ButtonGroupProps
 } from './Button';
 
-// Primary button (Resend-inspired)
+// Primary button (Uiverse-inspired with static rainbow)
 export { ButtonPrimary, type ButtonPrimaryProps } from './ButtonPrimary';
+
+// Secondary button (Glass style for supporting actions)
+export { ButtonSecondary, type ButtonSecondaryProps } from './ButtonSecondary';
 
 // Experimental gradient buttons
 export { ButtonRotatingWhite, type ButtonRotatingWhiteProps } from './ButtonRotatingWhite';
@@ -55,3 +58,19 @@ export {
   type FeatureSectionProps,
   type CTASectionProps
 } from './Section';
+
+// E-commerce Components
+export { Navbar, type NavbarProps } from './Navbar';
+export { ProductCard, type ProductCardProps } from './ProductCard';
+export { SearchBar, type SearchBarProps, type SearchSuggestion } from './SearchBar';
+export { Input, type InputProps } from './Input';
+
+// Notification System
+export {
+  ToastProvider,
+  useToast,
+  toast,
+  type ToastProps,
+  type ToastVariant,
+  type ToastPosition
+} from './Toast';
