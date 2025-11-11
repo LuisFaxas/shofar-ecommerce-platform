@@ -1,20 +1,27 @@
 # TOOLY Design System Technical Report
 
-**Version:** 2.5.REBOOT
+**Version:** 2.5.2-RESTORED
 **Date:** November 2024
-**Status:** Production Ready
-**Components:** 22 Total
+**Status:** Production Ready with Critical Rainbow Button Restoration
+**Components:** 30+ Total (Including WO 2.5.2 Additions)
 
 ---
 
+## CRITICAL UPDATE - Rainbow Button Restoration
+**⚠️ Version 2.5.2-RESTORED successfully restores the principal rainbow gradient ButtonPrimary that was accidentally replaced in Work Order 2.5.2. The rainbow gradient button that we spent significant time perfecting is now properly restored as the primary CTA component.**
+
 ## Executive Summary
 
-The TOOLY Design System represents an industry-leading collection of 22 meticulously crafted components built with React, TypeScript, and Tailwind CSS. This comprehensive design system implements a sophisticated glass morphism aesthetic layered over a dark gunmetal palette, punctuated by strategic rainbow gradient accents. The system prioritizes performance, accessibility, and developer experience while maintaining a cohesive visual language throughout.
+The TOOLY Design System represents an industry-leading collection of 30+ meticulously crafted components built with React, TypeScript, and Tailwind CSS. This comprehensive design system implements a sophisticated glass morphism aesthetic layered over a dark gunmetal palette, punctuated by strategic rainbow gradient accents. The system prioritizes performance, accessibility, and developer experience while maintaining a cohesive visual language throughout.
 
 ### Key Achievements
-- ✅ **22 Production-Ready Components** across 4 categories
+- ✅ **30+ Production-Ready Components** across 5 categories
+- ✅ **Rainbow ButtonPrimary Restored** - The principal CTA with static gradient and blur glow
+- ✅ **Complete Button Hierarchy** - Primary (Rainbow), Brand (Orange), Secondary, Tertiary, Destructive, Link
 - ✅ **Comprehensive E-Commerce Suite** with cart, search, and product displays
-- ✅ **WCAG AA Compliant** with full keyboard navigation
+- ✅ **Checkout Primitives** - Dialog, Popover, QuantityStepper components
+- ✅ **Design Tokens System** - CSS custom properties for consistent theming
+- ✅ **WCAG AA Compliant** with full keyboard navigation and contrast checking
 - ✅ **Performance Optimized** with lazy loading and code splitting
 - ✅ **Responsive Design** from mobile to desktop
 - ✅ **Motion-Safe** respecting user preferences
@@ -102,11 +109,11 @@ The foundation of our design system built on cool blue-gray metallic tones:
 
 ## Component Library
 
-### Button Components (11 Total)
+### Button Components (16 Total)
 
-#### 1. **ButtonPrimary**
-**Purpose:** Primary CTAs requiring maximum visual prominence
-**Design:** Uiverse-inspired with static rainbow gradient border
+#### 1. **ButtonPrimary** 🌈 THE PRINCIPAL RAINBOW BUTTON
+**Purpose:** Primary CTAs requiring maximum visual prominence - THE MAIN BUTTON WE PERFECTED
+**Design:** Uiverse-inspired with static rainbow gradient border - RESTORED after accidental removal
 
 ```typescript
 interface ButtonPrimaryProps {
@@ -119,10 +126,11 @@ interface ButtonPrimaryProps {
 ```
 
 **Key Features:**
-- Static rainbow gradient border (2px)
-- Blur glow effect on hover
-- No rotation animations
+- **RAINBOW GRADIENT BORDER** (2px): `linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%)`
+- Blur glow effect on hover (1.2em blur)
+- NO SPINNING/ROTATING ANIMATIONS (as originally requested)
 - Active scale transform (0.98)
+- Dark gunmetal center (#0b0e14)
 
 **Implementation:**
 ```jsx
@@ -131,9 +139,41 @@ interface ButtonPrimaryProps {
 </ButtonPrimary>
 ```
 
+**CRITICAL NOTE:** This is the principal rainbow button that was painstakingly perfected and must remain as the primary CTA. It was temporarily replaced with an orange version in WO 2.5.2 but has been restored in version 2.5.2-RESTORED.
+
 ---
 
-#### 2. **ButtonSecondary**
+#### 2. **ButtonBrand** (NEW - WO 2.5.2)
+**Purpose:** Brand-colored CTAs using TOOLY orange
+**Design:** Solid orange background for brand-specific actions
+
+```typescript
+interface ButtonBrandProps {
+  size?: 'sm' | 'md' | 'lg';
+  fullWidth?: boolean;
+  loading?: boolean;
+  iconLeft?: React.ReactNode;
+  iconRight?: React.ReactNode;
+}
+```
+
+**Key Features:**
+- Brand orange background (#FF6B35)
+- Hover state with darker orange (#FF5722)
+- Active state with pressed effect
+- Focus ring for accessibility
+- Icon support (left/right)
+
+**Implementation:**
+```jsx
+<ButtonBrand size="md" iconRight={<ArrowIcon />}>
+  Brand Action
+</ButtonBrand>
+```
+
+---
+
+#### 3. **ButtonSecondary**
 **Purpose:** Supporting actions without competing with primary CTAs
 **Design:** Glass morphism with subtle white borders
 
@@ -154,7 +194,66 @@ interface ButtonSecondaryProps {
 
 ---
 
-#### 3. **ButtonPill**
+#### 4. **ButtonTertiary** (NEW - WO 2.5.2)
+**Purpose:** Low-priority actions with minimal visual weight
+**Design:** Ghost style with transparent background
+
+```typescript
+interface ButtonTertiaryProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'sm' | 'md' | 'lg';
+  fullWidth?: boolean;
+  loading?: boolean;
+}
+```
+
+**Key Features:**
+- Transparent background
+- White text and border
+- Subtle hover state with glass effect
+- Minimal visual weight
+
+---
+
+#### 5. **ButtonDestructive** (NEW - WO 2.5.2)
+**Purpose:** Dangerous actions requiring caution
+**Design:** Red color scheme for deletion/removal actions
+
+```typescript
+interface ButtonDestructiveProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'sm' | 'md' | 'lg';
+  fullWidth?: boolean;
+  loading?: boolean;
+}
+```
+
+**Key Features:**
+- Red background (#ef4444)
+- High contrast warning color
+- Hover state intensifies red
+- Clear danger indication
+
+---
+
+#### 6. **ButtonLink** (NEW - WO 2.5.2)
+**Purpose:** Inline text links styled as buttons
+**Design:** Minimal text-link appearance
+
+```typescript
+interface ButtonLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'sm' | 'md' | 'lg';
+  underline?: boolean;
+}
+```
+
+**Key Features:**
+- No background or border
+- Underline on hover
+- Inline with text flow
+- Minimal visual interruption
+
+---
+
+#### 7. **ButtonPill**
 **Purpose:** Compact CTAs and toggle groups
 **Design:** Resend-inspired with rounded-full borders
 
@@ -378,6 +477,103 @@ interface ToastProps {
 - Action buttons
 - Toast stacking with limit
 - Entrance/exit animations
+
+---
+
+### Checkout Primitives (3 Total) - NEW WO 2.5.2
+
+#### 1. **Dialog**
+**Purpose:** Modal overlays for forms and confirmations
+**Design:** Glass modal with backdrop and focus trap
+
+```typescript
+interface DialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title?: string;
+  description?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  closeOnOverlayClick?: boolean;
+  closeOnEscape?: boolean;
+  showCloseButton?: boolean;
+  children: React.ReactNode;
+}
+```
+
+**Key Features:**
+- Focus trap for accessibility
+- Backdrop blur effect
+- ESC key to close
+- Smooth enter/exit animations
+- Scroll lock when open
+- Portal rendering
+
+**Implementation:**
+```jsx
+<Dialog isOpen={isOpen} onClose={handleClose} title="Checkout">
+  <CheckoutForm />
+</Dialog>
+```
+
+---
+
+#### 2. **Popover**
+**Purpose:** Contextual overlays for dropdowns and tooltips
+**Design:** Floating panel with smart positioning
+
+```typescript
+interface PopoverProps {
+  trigger: React.ReactElement;
+  content: React.ReactNode;
+  placement?: 'top' | 'bottom' | 'left' | 'right';
+  align?: 'start' | 'center' | 'end';
+  sideOffset?: number;
+  closeOnClickOutside?: boolean;
+  closeOnEscape?: boolean;
+}
+```
+
+**Key Features:**
+- Smart collision detection
+- Auto-repositioning
+- Click outside to close
+- Keyboard navigation
+- Smooth transitions
+
+---
+
+#### 3. **QuantityStepper**
+**Purpose:** Numeric input for cart quantities
+**Design:** Increment/decrement controls with input
+
+```typescript
+interface QuantityStepperProps {
+  value: number;
+  onChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+}
+```
+
+**Key Features:**
+- Plus/minus buttons
+- Direct input editing
+- Min/max validation
+- Keyboard shortcuts (up/down arrows)
+- Loading states for async updates
+
+**Implementation:**
+```jsx
+<QuantityStepper
+  value={quantity}
+  onChange={setQuantity}
+  min={1}
+  max={99}
+/>
+```
 
 ---
 
@@ -615,32 +811,113 @@ function StorePage() {
 
 ---
 
+## Work Order 2.5.2 Implementation Details
+
+### Design Tokens System
+The WO 2.5.2 implementation introduced a comprehensive design tokens system using CSS custom properties:
+
+#### tokens.css
+```css
+:root {
+  /* Glass Effects */
+  --glass-tint-light: rgba(255, 255, 255, 0.08);
+  --glass-tint-medium: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.14);
+
+  /* Elevation System */
+  --elev-0: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --elev-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --elev-2: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+  /* Brand Colors */
+  --brand-orange: #FF6B35;
+  --brand-orange-hover: #FF5722;
+  --brand-orange-active: #F4511E;
+}
+```
+
+#### motion.css
+```css
+:root {
+  /* Timing Functions */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Durations */
+  --motion-fast: 160ms;
+  --motion-base: 240ms;
+  --motion-slow: 360ms;
+}
+```
+
+### Component Organization
+
+#### Canonical Components (/ui)
+- Core design system components
+- Consistent API and behavior
+- Production-ready and tested
+- Used throughout the application
+
+#### Experimental Components (/ui/experiments)
+- Marketing-specific components
+- Animated/special effects buttons
+- Not part of canonical hierarchy
+- Use sparingly for special cases
+
+### Button Hierarchy (Post-Restoration)
+
+1. **ButtonPrimary** - Rainbow gradient border (Main CTA) ✨
+2. **ButtonBrand** - Orange background (Brand actions)
+3. **ButtonSecondary** - Glass style (Supporting)
+4. **ButtonTertiary** - Ghost style (Low priority)
+5. **ButtonDestructive** - Red (Dangerous actions)
+6. **ButtonLink** - Text link style (Inline navigation)
+7. **ButtonPill** - Rounded pills (Toggles/filters)
+
+### The Critical Fix
+Version 2.5.2-RESTORED addresses the accidental replacement of the rainbow ButtonPrimary with an orange version. The rainbow gradient button that was carefully perfected through multiple iterations has been restored as the primary CTA component, while the orange variant has been preserved as ButtonBrand for alternative use cases.
+
 ## File Structure
 
 ```
-apps/shofar-store/src/brands/tooly/components/ui/
-├── Button.tsx                 # Base button component
-├── ButtonPrimary.tsx          # Primary CTA button
-├── ButtonSecondary.tsx        # Secondary actions
-├── ButtonPill.tsx             # Pill-shaped buttons
-├── ButtonGraphite.tsx         # Graphite variant
-├── ButtonRotatingWhite.tsx    # Animated white
-├── ButtonRotatingPurple.tsx   # Animated purple
-├── ButtonConicShine.tsx       # Conic gradient
-├── ButtonGlowUp.tsx           # Glow effect
-├── ButtonRainbowShine.tsx     # Rainbow animation
-├── Card.tsx                   # Card components
-├── Section.tsx                # Layout sections
-├── Navbar.tsx                 # Navigation bar
-├── ProductCard.tsx            # Product display
-├── SearchBar.tsx              # Advanced search
-├── Input.tsx                  # Form inputs
-├── Toast.tsx                  # Notifications
-├── FeatureRail.tsx            # Feature showcase
-├── ReviewsMarquee.tsx         # Review carousel
-├── ToolyWordmark.tsx          # Brand logo
-├── Watermark.tsx              # Background branding
-└── index.ts                   # Exports
+apps/shofar-store/src/brands/tooly/
+├── styles/
+│   ├── tokens.css             # Design tokens
+│   └── motion.css             # Motion tokens
+├── components/ui/
+│   ├── ButtonPrimary.tsx      # RAINBOW gradient primary
+│   ├── ButtonBrand.tsx        # Orange brand button
+│   ├── ButtonSecondary.tsx    # Glass secondary
+│   ├── ButtonTertiary.tsx     # Ghost tertiary
+│   ├── ButtonDestructive.tsx  # Red destructive
+│   ├── ButtonLink.tsx         # Text link button
+│   ├── ButtonPill.tsx         # Pill buttons
+│   ├── ButtonGraphite.tsx     # Graphite variant
+│   ├── Card.tsx               # Card system
+│   ├── Section.tsx            # Layout sections
+│   ├── Navbar.tsx             # Navigation
+│   ├── ProductCard.tsx        # Product cards
+│   ├── SearchBar.tsx          # Search component
+│   ├── Input.tsx              # Form inputs
+│   ├── Toast.tsx              # Notifications
+│   ├── Dialog.tsx             # Modal dialogs
+│   ├── Popover.tsx            # Popovers
+│   ├── QuantityStepper.tsx    # Quantity control
+│   ├── FeatureRail.tsx        # Feature showcase
+│   ├── ReviewsMarquee.tsx     # Reviews
+│   ├── ToolyWordmark.tsx      # Logo
+│   ├── Watermark.tsx          # Watermarks
+│   ├── experiments/           # Experimental components
+│   │   ├── ButtonMarketingPrimary.tsx
+│   │   ├── ButtonRotatingWhite.tsx
+│   │   ├── ButtonRotatingPurple.tsx
+│   │   ├── ButtonConicShine.tsx
+│   │   ├── ButtonGlowUp.tsx
+│   │   ├── ButtonRainbowShine.tsx
+│   │   └── index.ts
+│   └── index.ts               # Main exports
+└── lib/
+    └── contrast-checker.ts    # WCAG contrast utility
 ```
 
 ---
@@ -679,13 +956,25 @@ apps/shofar-store/src/brands/tooly/components/ui/
 
 ## Conclusion
 
-The TOOLY Design System represents a comprehensive, production-ready component library that successfully balances aesthetic sophistication with practical functionality. With 22 components covering buttons, e-commerce, layout, and branding needs, the system provides a solid foundation for building modern, accessible, and performant web applications.
+The TOOLY Design System represents a comprehensive, production-ready component library that successfully balances aesthetic sophistication with practical functionality. With 30+ components covering buttons, e-commerce, checkout primitives, layout, and branding needs, the system provides a solid foundation for building modern, accessible, and performant web applications.
 
-The combination of gunmetal aesthetics, glass morphism, and strategic rainbow accents creates a unique visual identity that sets TOOLY apart in the competitive tools and hardware market. The system's commitment to accessibility, performance, and developer experience ensures it will scale effectively as the platform grows.
+**Most importantly, Version 2.5.2-RESTORED successfully preserves the principal rainbow gradient ButtonPrimary that was painstakingly perfected through multiple iterations.** The rainbow button remains the centerpiece of our CTA strategy, with its static gradient border and blur glow effect creating maximum visual impact without unwanted spinning animations.
+
+The combination of gunmetal aesthetics, glass morphism, and strategic rainbow accents creates a unique visual identity that sets TOOLY apart in the competitive tools and hardware market. The implementation of Work Order 2.5.2 added crucial checkout primitives (Dialog, Popover, QuantityStepper), a complete button hierarchy (Primary, Brand, Secondary, Tertiary, Destructive, Link), and a comprehensive design tokens system for consistent theming.
+
+The system's commitment to accessibility (WCAG AA compliance, contrast checking), performance (lazy loading, GPU-accelerated animations), and developer experience (TypeScript, clear APIs) ensures it will scale effectively as the platform grows.
+
+### Key Lessons Learned
+- The rainbow ButtonPrimary is sacred and must not be altered without explicit direction
+- Design tokens provide consistency and maintainability
+- Experimental components should be clearly separated from canonical ones
+- Accessibility features must be built-in, not bolted-on
+- Performance optimization starts at the component level
 
 ---
 
-**Document Version:** 1.0
+**Document Version:** 2.0-RESTORED
 **Last Updated:** November 2024
+**Critical Update:** Rainbow ButtonPrimary restored after accidental removal
 **Maintained By:** TOOLY Design System Team
 **License:** Proprietary - TOOLY/SHOFAR Platform
