@@ -8,7 +8,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ButtonPrimary } from './ButtonPrimary';
+import { ButtonPrimary } from './index';
 import { ButtonSecondary } from './ButtonSecondary';
 
 export interface ProductCardProps {

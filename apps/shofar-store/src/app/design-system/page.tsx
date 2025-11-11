@@ -10,14 +10,18 @@
 
 import React from 'react';
 import { PointerVarsProvider } from '@/components/providers/PointerVarsProvider';
-import { ButtonPrimary } from '@/brands/tooly/components/ui/ButtonPrimary';
+import { ButtonPrimary } from '@/brands/tooly/components/ui';
 import { ButtonGraphite } from '@/brands/tooly/components/ui/ButtonGraphite';
 import { ButtonPill, ButtonPillGroup } from '@/brands/tooly/components/ui/ButtonPill';
-import { ButtonRotatingWhite } from '@/brands/tooly/components/ui/ButtonRotatingWhite';
-import { ButtonRotatingPurple } from '@/brands/tooly/components/ui/ButtonRotatingPurple';
-import { ButtonConicShine } from '@/brands/tooly/components/ui/ButtonConicShine';
-import { ButtonGlowUp } from '@/brands/tooly/components/ui/ButtonGlowUp';
-import { ButtonRainbowShine } from '@/brands/tooly/components/ui/ButtonRainbowShine';
+// Import experimental buttons from their new location
+import {
+  ButtonMarketingPrimary,
+  ButtonRotatingWhite,
+  ButtonRotatingPurple,
+  ButtonConicShine,
+  ButtonGlowUp,
+  ButtonRainbowShine
+} from '@/brands/tooly/components/ui/experiments';
 import { ToolyWordmark, ToolyWordmarkStacked } from '@/brands/tooly/components/ui/ToolyWordmark';
 import { Watermark, WatermarkGrid, WatermarkAnimated } from '@/brands/tooly/components/ui/Watermark';
 import { ReviewsMarquee, ReviewsMarqueeMultiRow } from '@/brands/tooly/components/ui/ReviewsMarquee';

@@ -9,8 +9,11 @@
 // Canonical Button Components
 // ============================================
 
-// Primary button (Brand orange for main CTAs)
+// Primary button (Rainbow gradient border for main CTAs)
 export { ButtonPrimary, type ButtonPrimaryProps } from './ButtonPrimary';
+
+// Brand button (Orange background for brand CTAs)
+export { ButtonBrand, type ButtonBrandProps } from './ButtonBrand';
 
 // Secondary button (Glass style for supporting actions)
 export { ButtonSecondary, type ButtonSecondaryProps } from './ButtonSecondary';
