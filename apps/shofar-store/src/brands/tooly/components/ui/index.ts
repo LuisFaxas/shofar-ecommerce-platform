@@ -1,34 +1,34 @@
 /**
  * TOOLY Design System - Component Exports
- * Work Order 2.5 Implementation
+ * Work Order 2.5.2 - Final Polish & API Normalization
  *
- * Central export point for all UI components
+ * Canonical components only - experimental components in /experiments
  */
 
-// Button components
-export {
-  Button,
-  ButtonGroup,
-  type ButtonProps,
-  type ButtonGroupProps
-} from './Button';
+// ============================================
+// Canonical Button Components
+// ============================================
 
-// Primary button (Uiverse-inspired with static rainbow)
+// Primary button (Brand orange for main CTAs)
 export { ButtonPrimary, type ButtonPrimaryProps } from './ButtonPrimary';
 
 // Secondary button (Glass style for supporting actions)
 export { ButtonSecondary, type ButtonSecondaryProps } from './ButtonSecondary';
 
-// Experimental gradient buttons
-export { ButtonRotatingWhite, type ButtonRotatingWhiteProps } from './ButtonRotatingWhite';
-export { ButtonRotatingPurple, type ButtonRotatingPurpleProps } from './ButtonRotatingPurple';
-export { ButtonConicShine, type ButtonConicShineProps } from './ButtonConicShine';
-export { ButtonGlowUp, type ButtonGlowUpProps } from './ButtonGlowUp';
-export { ButtonRainbowShine, type ButtonRainbowShineProps } from './ButtonRainbowShine';
+// Tertiary button (Ghost style for low-priority actions)
+export { ButtonTertiary, type ButtonTertiaryProps } from './ButtonTertiary';
 
-// Additional button components
-export { ButtonGraphite, type ButtonGraphiteProps } from './ButtonGraphite';
+// Destructive button (Red for dangerous actions)
+export { ButtonDestructive, type ButtonDestructiveProps } from './ButtonDestructive';
+
+// Link button (Text link style for inline navigation)
+export { ButtonLink, type ButtonLinkProps } from './ButtonLink';
+
+// Pill button (Compact rounded buttons)
 export { ButtonPill, ButtonPillGroup, type ButtonPillProps } from './ButtonPill';
+
+// Note: Experimental buttons (rainbow gradients, rotating effects) are available
+// in ./experiments/ but not exported by default to maintain design consistency
 
 // Card components
 export {
@@ -74,3 +74,16 @@ export {
   type ToastVariant,
   type ToastPosition
 } from './Toast';
+
+// ============================================
+// Checkout Primitives
+// ============================================
+
+// Dialog/Modal with focus trap and accessibility
+export { Dialog, type DialogProps } from './Dialog';
+
+// Popover/Dropdown for menus and selectors
+export { Popover, type PopoverProps } from './Popover';
+
+// Quantity stepper for cart/checkout
+export { QuantityStepper, type QuantityStepperProps } from './QuantityStepper';

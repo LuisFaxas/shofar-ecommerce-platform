@@ -1,0 +1,234 @@
+/**
+ * TOOLY Design System Motion Tokens
+ * Work Order 2.5.2 - Motion System
+ *
+ * Precise, industrial motion patterns - no bouncy defaults
+ */
+
+:root {
+  /* ============================================
+     Timing Tokens
+     ============================================ */
+
+  /* Duration values for consistent motion */
+  --motion-fast: 160ms;
+  --motion-base: 200ms;
+  --motion-slow: 260ms;
+  --motion-slower: 320ms;
+  --motion-slowest: 400ms;
+
+  /* ============================================
+     Easing Functions
+     ============================================ */
+
+  /* Primary easing - smooth deceleration */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Secondary easings */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-linear: linear;
+
+  /* Specialized easings */
+  --ease-back-out: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ============================================
+     Transition Properties
+     ============================================ */
+
+  /* Common transition groups */
+  --transition-colors: background-color var(--motion-fast) var(--ease-out),
+                      border-color var(--motion-fast) var(--ease-out),
+                      color var(--motion-fast) var(--ease-out),
+                      fill var(--motion-fast) var(--ease-out),
+                      stroke var(--motion-fast) var(--ease-out);
+
+  --transition-transform: transform var(--motion-base) var(--ease-out);
+
+  --transition-opacity: opacity var(--motion-base) var(--ease-out);
+
+  --transition-shadow: box-shadow var(--motion-base) var(--ease-out);
+
+  --transition-all: all var(--motion-base) var(--ease-out);
+
+  /* Button-specific transition */
+  --transition-button: transform var(--motion-fast) var(--ease-out),
+                       box-shadow var(--motion-fast) var(--ease-out),
+                       background-color var(--motion-fast) var(--ease-out),
+                       border-color var(--motion-fast) var(--ease-out),
+                       color var(--motion-fast) var(--ease-out);
+
+  /* Card-specific transition */
+  --transition-card: transform var(--motion-base) var(--ease-out),
+                     box-shadow var(--motion-base) var(--ease-out),
+                     border-color var(--motion-base) var(--ease-out);
+
+  /* ============================================
+     Animation Keyframes
+     ============================================ */
+
+  /* Scale values for interactions */
+  --scale-pressed: 0.98;
+  --scale-hover: 1.02;
+  --scale-focus: 1.01;
+}
+
+/* ============================================
+   Motion Utility Classes
+   ============================================ */
+
+/* Transition utilities */
+.transition-colors { transition: var(--transition-colors); }
+.transition-transform { transition: var(--transition-transform); }
+.transition-opacity { transition: var(--transition-opacity); }
+.transition-shadow { transition: var(--transition-shadow); }
+.transition-all { transition: var(--transition-all); }
+.transition-button { transition: var(--transition-button); }
+.transition-card { transition: var(--transition-card); }
+
+/* Duration utilities */
+.duration-fast { transition-duration: var(--motion-fast); }
+.duration-base { transition-duration: var(--motion-base); }
+.duration-slow { transition-duration: var(--motion-slow); }
+.duration-slower { transition-duration: var(--motion-slower); }
+.duration-slowest { transition-duration: var(--motion-slowest); }
+
+/* Easing utilities */
+.ease-out { transition-timing-function: var(--ease-out); }
+.ease-in-out { transition-timing-function: var(--ease-in-out); }
+.ease-in { transition-timing-function: var(--ease-in); }
+.ease-linear { transition-timing-function: var(--ease-linear); }
+
+/* ============================================
+   Prefers Reduced Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Speed up all animations to near-instant */
+    --motion-fast: 0.01ms;
+    --motion-base: 0.01ms;
+    --motion-slow: 0.01ms;
+    --motion-slower: 0.01ms;
+    --motion-slowest: 0.01ms;
+
+    /* Disable transform scales */
+    --scale-pressed: 1;
+    --scale-hover: 1;
+    --scale-focus: 1;
+  }
+
+  /* Force instant transitions globally */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Standard Animations (Industrial/Precise)
+   ============================================ */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% center;
+  }
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* ============================================
+   Animation Utilities
+   ============================================ */
+
+.animate-fade-in {
+  animation: fade-in var(--motion-base) var(--ease-out);
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up var(--motion-base) var(--ease-out);
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down var(--motion-base) var(--ease-out);
+}
+
+.animate-scale-in {
+  animation: scale-in var(--motion-base) var(--ease-out);
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+
+/* ============================================
+   Hover/Active State Utilities
+   ============================================ */
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-scale:hover {
+  transform: scale(var(--scale-hover));
+}
+
+.active-scale:active {
+  transform: scale(var(--scale-pressed));
+}
+
+/* Disable hover transforms on touch */
+@media (hover: none) and (pointer: coarse) {
+  .hover-lift:hover,
+  .hover-scale:hover {
+    transform: none;
+  }
+}

@@ -1,7 +1,7 @@
 /**
- * ButtonPrimary Component
- * Brand-orange primary button for main CTAs
- * WCAG AA compliant with consistent API
+ * ButtonLink Component
+ * Text button styled as a link
+ * For inline actions and navigation
  */
 
 'use client';
@@ -9,7 +9,7 @@
 import React, { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonLinkProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
   size?: 'sm' | 'md' | 'lg';
   /** Full width button */
@@ -23,10 +23,10 @@ export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButto
 }
 
 /**
- * Primary button with brand-orange background
- * Follows WO 2.5.2 design tokens and motion system
+ * Link-styled button for inline navigation and text actions
+ * Minimal visual footprint with underline interaction
  */
-export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
+export const ButtonLink = forwardRef<HTMLButtonElement, ButtonLinkProps>(
   (
     {
       className,
@@ -41,11 +41,11 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
     },
     ref
   ) => {
-    // Size classes following consistent system
+    // Size classes - minimal padding for link style
     const sizeClasses = {
-      sm: 'h-9 px-4 text-sm',
-      md: 'h-11 px-5 text-base',
-      lg: 'h-13 px-6 text-lg'
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg'
     };
 
     return (
@@ -53,43 +53,38 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
         ref={ref}
         className={cn(
           // Base styles
-          'relative inline-flex items-center justify-center gap-2',
-          'rounded-[10px] font-medium',
+          'relative inline-flex items-center justify-center gap-1',
+          'font-medium',
 
-          // Brand orange background
-          'bg-[var(--brand-orange,#FF6B35)]',
-          'text-white',
-
-          // Shadow and border
-          'shadow-[var(--elev-0)] border-0',
+          // Link style
+          'bg-transparent border-0 p-0',
+          'text-[var(--brand-orange,#FF6B35)]',
+          'underline decoration-1 underline-offset-2',
 
           // Transitions using motion tokens
           'transition-all duration-[var(--motion-fast,160ms)] ease-[cubic-bezier(0.22,1,0.36,1)]',
 
           // Hover state
-          'hover:bg-[var(--brand-orange-hover,#FF5722)]',
-          'hover:shadow-[var(--elev-1)]',
-          'hover:scale-[1.01]',
+          'hover:text-[var(--brand-orange-hover,#FF5722)]',
+          'hover:decoration-2',
 
           // Active state
-          'active:bg-[var(--brand-orange-active,#F4511E)]',
+          'active:text-[var(--brand-orange-active,#F4511E)]',
           'active:scale-[var(--scale-pressed,0.98)]',
 
           // Focus state
           'focus-visible:outline-none',
           'focus-visible:ring-2 focus-visible:ring-[var(--focus-ring-color,rgba(255,255,255,0.5))]',
           'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,#0b0e14)]',
+          'focus-visible:rounded-sm',
 
           // Size
           sizeClasses[size],
 
           // States
           fullWidth && 'w-full',
-          disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
+          disabled && 'opacity-50 cursor-not-allowed pointer-events-none no-underline',
           loading && 'cursor-wait',
-
-          // Disable hover scale on touch
-          'no-touch-zoom',
 
           className
         )}
@@ -133,6 +128,6 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
   }
 );
 
-ButtonPrimary.displayName = 'ButtonPrimary';
+ButtonLink.displayName = 'ButtonLink';
 
-export default ButtonPrimary;
+export default ButtonLink;

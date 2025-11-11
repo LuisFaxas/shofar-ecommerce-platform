@@ -1,7 +1,7 @@
 /**
- * ButtonPrimary Component
- * Brand-orange primary button for main CTAs
- * WCAG AA compliant with consistent API
+ * ButtonTertiary Component
+ * Ghost button for tertiary actions
+ * Minimal visual weight for less important actions
  */
 
 'use client';
@@ -9,7 +9,7 @@
 import React, { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonTertiaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
   size?: 'sm' | 'md' | 'lg';
   /** Full width button */
@@ -23,10 +23,10 @@ export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButto
 }
 
 /**
- * Primary button with brand-orange background
- * Follows WO 2.5.2 design tokens and motion system
+ * Tertiary/ghost button with minimal styling
+ * For low-priority actions that shouldn't compete for attention
  */
-export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
+export const ButtonTertiary = forwardRef<HTMLButtonElement, ButtonTertiaryProps>(
   (
     {
       className,
@@ -43,9 +43,9 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
   ) => {
     // Size classes following consistent system
     const sizeClasses = {
-      sm: 'h-9 px-4 text-sm',
-      md: 'h-11 px-5 text-base',
-      lg: 'h-13 px-6 text-lg'
+      sm: 'h-9 px-3 text-sm',
+      md: 'h-11 px-4 text-base',
+      lg: 'h-13 px-5 text-lg'
     };
 
     return (
@@ -56,23 +56,22 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
           'relative inline-flex items-center justify-center gap-2',
           'rounded-[10px] font-medium',
 
-          // Brand orange background
-          'bg-[var(--brand-orange,#FF6B35)]',
-          'text-white',
+          // Ghost style - transparent background
+          'bg-transparent',
+          'text-[var(--text-secondary,rgba(255,255,255,0.70))]',
 
-          // Shadow and border
-          'shadow-[var(--elev-0)] border-0',
+          // No border or shadow by default
+          'border-0 shadow-none',
 
           // Transitions using motion tokens
           'transition-all duration-[var(--motion-fast,160ms)] ease-[cubic-bezier(0.22,1,0.36,1)]',
 
           // Hover state
-          'hover:bg-[var(--brand-orange-hover,#FF5722)]',
-          'hover:shadow-[var(--elev-1)]',
-          'hover:scale-[1.01]',
+          'hover:bg-[var(--glass-tint-light,rgba(255,255,255,0.08))]',
+          'hover:text-[var(--text-primary,rgba(255,255,255,0.95))]',
 
           // Active state
-          'active:bg-[var(--brand-orange-active,#F4511E)]',
+          'active:bg-[var(--glass-tint-medium,rgba(255,255,255,0.12))]',
           'active:scale-[var(--scale-pressed,0.98)]',
 
           // Focus state
@@ -133,6 +132,6 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
   }
 );
 
-ButtonPrimary.displayName = 'ButtonPrimary';
+ButtonTertiary.displayName = 'ButtonTertiary';
 
-export default ButtonPrimary;
+export default ButtonTertiary;

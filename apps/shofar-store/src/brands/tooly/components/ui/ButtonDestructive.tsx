@@ -1,7 +1,7 @@
 /**
- * ButtonPrimary Component
- * Brand-orange primary button for main CTAs
- * WCAG AA compliant with consistent API
+ * ButtonDestructive Component
+ * Red button for dangerous/destructive actions
+ * Clear warning signal for irreversible operations
  */
 
 'use client';
@@ -9,7 +9,7 @@
 import React, { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonDestructiveProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
   size?: 'sm' | 'md' | 'lg';
   /** Full width button */
@@ -23,10 +23,10 @@ export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButto
 }
 
 /**
- * Primary button with brand-orange background
- * Follows WO 2.5.2 design tokens and motion system
+ * Destructive button for dangerous actions (delete, remove, cancel)
+ * Uses semantic error color with WCAG AA compliance
  */
-export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
+export const ButtonDestructive = forwardRef<HTMLButtonElement, ButtonDestructiveProps>(
   (
     {
       className,
@@ -56,8 +56,8 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
           'relative inline-flex items-center justify-center gap-2',
           'rounded-[10px] font-medium',
 
-          // Brand orange background
-          'bg-[var(--brand-orange,#FF6B35)]',
+          // Error red background
+          'bg-[var(--color-error,#ef4444)]',
           'text-white',
 
           // Shadow and border
@@ -67,17 +67,17 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
           'transition-all duration-[var(--motion-fast,160ms)] ease-[cubic-bezier(0.22,1,0.36,1)]',
 
           // Hover state
-          'hover:bg-[var(--brand-orange-hover,#FF5722)]',
+          'hover:bg-red-600',
           'hover:shadow-[var(--elev-1)]',
           'hover:scale-[1.01]',
 
           // Active state
-          'active:bg-[var(--brand-orange-active,#F4511E)]',
+          'active:bg-red-700',
           'active:scale-[var(--scale-pressed,0.98)]',
 
           // Focus state
           'focus-visible:outline-none',
-          'focus-visible:ring-2 focus-visible:ring-[var(--focus-ring-color,rgba(255,255,255,0.5))]',
+          'focus-visible:ring-2 focus-visible:ring-red-500/50',
           'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,#0b0e14)]',
 
           // Size
@@ -133,6 +133,6 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
   }
 );
 
-ButtonPrimary.displayName = 'ButtonPrimary';
+ButtonDestructive.displayName = 'ButtonDestructive';
 
-export default ButtonPrimary;
+export default ButtonDestructive;

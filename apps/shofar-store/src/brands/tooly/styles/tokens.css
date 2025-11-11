@@ -1,0 +1,183 @@
+/**
+ * TOOLY Design System Tokens
+ * Work Order 2.5.2 - Final Design System Polish
+ *
+ * Unified design tokens for glass effects, elevation, and core values
+ */
+
+:root {
+  /* ============================================
+     Glass Morphism Tokens
+     ============================================ */
+
+  /* Glass Tint Values */
+  --glass-tint-light: rgba(255, 255, 255, 0.08);
+  --glass-tint-medium: rgba(255, 255, 255, 0.12);
+  --glass-tint-heavy: rgba(255, 255, 255, 0.16);
+  --glass-tint-dark: rgba(0, 0, 0, 0.4);
+
+  /* Glass Border Values */
+  --glass-border-subtle: rgba(255, 255, 255, 0.08);
+  --glass-border-default: rgba(255, 255, 255, 0.14);
+  --glass-border-strong: rgba(255, 255, 255, 0.20);
+  --glass-border-active: rgba(255, 255, 255, 0.30);
+
+  /* Glass Inner Highlight */
+  --glass-inner-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  --glass-inner-highlight-strong: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+
+  /* Backdrop Blur Values */
+  --blur-sm: 8px;
+  --blur-md: 12px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+
+  /* ============================================
+     Elevation System
+     ============================================ */
+
+  --elev-0: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --elev-1: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --elev-2: 0 4px 16px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.12);
+  --elev-3: 0 8px 32px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.24);
+
+  /* ============================================
+     Core Colors
+     ============================================ */
+
+  /* Surface Backgrounds */
+  --surface-bg: #0b0e14;
+  --surface-bg-secondary: #0d1218;
+  --surface-bg-elevated: #121822;
+
+  /* Brand Colors */
+  --brand-orange: #FF6B35;
+  --brand-orange-hover: #FF5722;
+  --brand-orange-active: #F4511E;
+
+  --brand-blue: #0B4E8B;
+  --brand-yellow: #FFC107;
+
+  /* Text Colors */
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.70);
+  --text-tertiary: rgba(255, 255, 255, 0.50);
+  --text-disabled: rgba(255, 255, 255, 0.30);
+
+  /* Semantic Colors */
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  /* ============================================
+     Spacing & Layout
+     ============================================ */
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Focus Ring */
+  --focus-ring-color: rgba(255, 255, 255, 0.5);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  /* ============================================
+     Mobile Performance Adjustments
+     ============================================ */
+
+  @media (max-width: 768px) {
+    --blur-sm: 6px;
+    --blur-md: 8px;
+    --blur-lg: 10px;
+    --blur-xl: 16px;
+
+    --elev-0: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --elev-1: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --elev-2: 0 4px 12px rgba(0, 0, 0, 0.16);
+    --elev-3: 0 6px 24px rgba(0, 0, 0, 0.32);
+  }
+}
+
+/* ============================================
+   Glass Effect Classes
+   ============================================ */
+
+.glass {
+  background: var(--glass-tint-light);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  border: 1px solid var(--glass-border-default);
+  box-shadow: var(--glass-inner-highlight), var(--elev-0);
+}
+
+.glass-dark {
+  background: var(--glass-tint-dark);
+  backdrop-filter: blur(var(--blur-lg));
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-inner-highlight), var(--elev-1);
+}
+
+.glass-heavy {
+  background: var(--glass-tint-heavy);
+  backdrop-filter: blur(var(--blur-xl));
+  -webkit-backdrop-filter: blur(var(--blur-xl));
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--glass-inner-highlight-strong), var(--elev-2);
+}
+
+/* ============================================
+   Noise Overlay Utility
+   ============================================ */
+
+.noise {
+  position: relative;
+}
+
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@media (max-width: 768px) {
+  .noise::before {
+    opacity: 0.02; /* Lighter on mobile for performance */
+  }
+}
+
+/* ============================================
+   Elevation Utilities
+   ============================================ */
+
+.elevation-0 { box-shadow: var(--elev-0); }
+.elevation-1 { box-shadow: var(--elev-1); }
+.elevation-2 { box-shadow: var(--elev-2); }
+.elevation-3 { box-shadow: var(--elev-3); }
+
+/* ============================================
+   Focus States
+   ============================================ */
+
+.focus-ring:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ============================================
+   Disable Hover on Touch Devices
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .no-touch-zoom:hover {
+    transform: none !important;
+  }
+}
