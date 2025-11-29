@@ -2,7 +2,13 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: 'http://localhost:3001/shop-api',
+  schema: {
+    'http://localhost:3001/shop-api': {
+      headers: {
+        'vendure-token': 'tooly',
+      },
+    },
+  },
   documents: 'src/**/*.graphql',
   generates: {
     'src/generated/': {

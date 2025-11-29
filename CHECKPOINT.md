@@ -184,12 +184,81 @@ Each store maintains internal multi-brand support using:
 - Structured data per brand
 - Sitemap generation per store
 
+## ✅ Phase 0 Complete - Vendure Integration Foundation
+
+### Completed: 2025-11-28
+
+#### Implementation Summary:
+Established the foundation for Vendure backend integration with the shofar-store, including channel configuration, API proxy, GraphQL codegen, and seed data.
+
+#### Completed Tasks:
+
+1. **✅ Port Configuration**:
+   - shofar-store now runs on port 3000 (`next dev -p 3000`)
+   - Vendure remains on port 3001
+   - Proper separation of frontend and backend
+
+2. **✅ Idempotent Seed Script** (`seed-tooly-full.ts`):
+   - Channel-scoped to `tooly` channel
+   - Production guard: requires channel to exist first
+   - Upserts facets: `finish` (DLC, Cerakote), `color` (6 values), `category` (main-product, accessory)
+   - Upserts TOOLY main product with 6 variants (DLC Gunmetal, Cerakote colors)
+   - Upserts 4 accessory products (Silicone Case, Chains, Cleaning Kit)
+   - Upserts Accessories collection
+   - Gracefully handles existing data (no duplicates, no errors)
+
+3. **✅ GraphQL Codegen Configuration**:
+   - Updated `codegen-shop.ts` with `vendure-token: tooly` header
+   - Targets `http://localhost:3001/shop-api`
+   - Generates types to `src/generated/shop-types.ts`
+
+4. **✅ Apollo Client Cookie Support**:
+   - `shop-client.ts` has `credentials: 'include'` by default
+   - Enables session persistence across requests
+
+5. **✅ API Proxy Route** (`/api/shop`):
+   - Located at `apps/shofar-store/src/app/api/shop/route.ts`
+   - Proxies POST and GET requests to Vendure Shop API
+   - Injects `vendure-token: tooly` header
+   - Forwards cookies for session management
+   - 1MB request body limit
+
+6. **✅ Vendure Setup & Seeding**:
+   - Fixed zone creation for channel requirements
+   - Created `tooly` and `future` channels
+   - Seeded TOOLY product catalog
+   - All curl tests pass
+
+#### Verification Results:
+```bash
+# Products query - 6 products returned
+curl -H "vendure-token: tooly" localhost:3001/shop-api
+→ TOOLY, Silicone Case for TOOLY, Silicone Case + Glass Vial,
+  Carry Chain - Gold, Carry Chain - Silver, Cleaning Kit
+
+# Collections query - Accessories collection found
+curl -H "vendure-token: tooly" localhost:3001/shop-api
+→ Accessories collection (ID: 2)
+
+# Product variants - DLC Gunmetal at $149
+curl -H "vendure-token: tooly" localhost:3001/shop-api
+→ TOOLY - DLC Gunmetal, SKU: TOOLY-DLC-GM, $149.00
+```
+
+#### Files Created/Modified:
+- `apps/shofar-store/package.json` - port 3000
+- `apps/vendure/src/initial-data/seed-tooly-full.ts` - idempotent seed script
+- `apps/vendure/src/initial-data/setup-channels.ts` - zone creation fix
+- `apps/vendure/package.json` - `seed:tooly` script
+- `packages/api-client/codegen-shop.ts` - vendure-token header
+- `apps/shofar-store/src/app/api/shop/route.ts` - API proxy
+
 ## Next Steps
 
-1. Update CLAUDE.md with current architecture
-2. Begin Work Order 3.0 - Vendure Integration
-3. Set up development environment with all stores running
-4. Configure Vendure channels for each store
+1. Begin Phase 1 - Product Display
+2. Implement product listing page using generated types
+3. Create product detail view with variant selection
+4. Add to cart functionality
 
 ## Critical Invariants Maintained
 

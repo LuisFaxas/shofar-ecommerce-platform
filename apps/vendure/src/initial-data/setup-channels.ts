@@ -2,11 +2,60 @@ import {
   ChannelService,
   RoleService,
   AdministratorService,
+  ZoneService,
+  CountryService,
   RequestContext,
   Permission,
   LanguageCode,
   ID,
 } from '@vendure/core';
+
+/**
+ * Ensure basic zones exist for channel creation
+ */
+async function ensureZones(app: any, ctx: RequestContext): Promise<{ zoneId: ID }> {
+  const zoneService = app.get(ZoneService);
+  const countryService = app.get(CountryService);
+
+  // Check if zones already exist
+  const existingZones = await zoneService.findAll(ctx);
+  if (existingZones.items.length > 0) {
+    console.log('✅ Zones already exist');
+    return { zoneId: existingZones.items[0].id };
+  }
+
+  // Create USA country if it doesn't exist
+  let usaCountry;
+  try {
+    const countries = await countryService.findAll(ctx);
+    usaCountry = countries.items.find((c: any) => c.code === 'US');
+    if (!usaCountry) {
+      usaCountry = await countryService.create(ctx, {
+        code: 'US',
+        enabled: true,
+        translations: [{ languageCode: LanguageCode.en, name: 'United States' }],
+      });
+      console.log('✅ Created country: US');
+    }
+  } catch (error) {
+    console.log('⚠️ Country creation skipped');
+  }
+
+  // Create default zone
+  try {
+    const zone = await zoneService.create(ctx, {
+      name: 'North America',
+      memberIds: usaCountry ? [usaCountry.id] : [],
+    });
+    console.log('✅ Created zone: North America');
+    return { zoneId: zone.id };
+  } catch (error: any) {
+    console.log('⚠️ Zone creation failed:', error?.message);
+    // Return first zone if creation failed (might already exist)
+    const zones = await zoneService.findAll(ctx);
+    return { zoneId: zones.items[0]?.id || ('1' as ID) };
+  }
+}
 
 /**
  * Set up channels and RBAC roles
@@ -30,6 +79,9 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
 
     console.log('🚀 Setting up channels...');
 
+    // Ensure zones exist first
+    const { zoneId } = await ensureZones(app, superadminContext);
+
     // Create Tooly channel
     try {
       await channelService.create(superadminContext, {
@@ -40,12 +92,17 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
         pricesIncludeTax: false,
         currencyCode: 'USD',
         defaultCurrencyCode: 'USD',
-        defaultShippingZoneId: '1' as ID,
-        defaultTaxZoneId: '1' as ID,
+        defaultShippingZoneId: zoneId,
+        defaultTaxZoneId: zoneId,
       });
       console.log('✅ Created channel: tooly');
-    } catch (error) {
-      console.log('⚠️ Could not create tooly channel (may already exist)');
+    } catch (error: any) {
+      // Check if it's a duplicate error
+      if (error?.message?.includes('duplicate') || error?.message?.includes('already exists')) {
+        console.log('ℹ️ Channel tooly already exists');
+      } else {
+        console.log('⚠️ Could not create tooly channel:', error?.message || 'unknown error');
+      }
     }
 
     // Create Future channel
@@ -58,12 +115,16 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
         pricesIncludeTax: false,
         currencyCode: 'USD',
         defaultCurrencyCode: 'USD',
-        defaultShippingZoneId: '1' as ID,
-        defaultTaxZoneId: '1' as ID,
+        defaultShippingZoneId: zoneId,
+        defaultTaxZoneId: zoneId,
       });
       console.log('✅ Created channel: future');
-    } catch (error) {
-      console.log('⚠️ Could not create future channel (may already exist)');
+    } catch (error: any) {
+      if (error?.message?.includes('duplicate') || error?.message?.includes('already exists')) {
+        console.log('ℹ️ Channel future already exists');
+      } else {
+        console.log('⚠️ Could not create future channel:', error?.message || 'unknown error');
+      }
     }
 
     // Get channels
