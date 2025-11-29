@@ -181,3 +181,18 @@
     transform: none !important;
   }
 }
+
+/* ============================================
+   Smooth Scroll Behavior
+   WO 3.1 Implementation
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

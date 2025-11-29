@@ -2,25 +2,42 @@
  * Navbar Component
  * Glass-styled navigation header with cart integration
  * Core navigation component for TOOLY e-commerce
+ *
+ * WO 3.1 Enhancements:
+ * - Wire cart badge to useCart().itemCount (or cartCount prop fallback)
+ * - Add anchor links for one-page navigation
+ * - Add focus-trap-react for mobile menu accessibility
+ * - Add data-testid attributes
+ * - ESC key closes mobile menu
  */
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+import FocusTrap from 'focus-trap-react';
 import { cn } from '@/lib/utils';
 import { ButtonSecondary } from './ButtonSecondary';
 import { ButtonPill } from './ButtonPill';
 
+// Default anchor links for one-page navigation
+const NAV_LINKS: Array<{ href: string; label: string; active?: boolean }> = [
+  { href: '#product', label: 'Shop' },
+  { href: '#technology', label: 'Technology' },
+  { href: '#reviews', label: 'Reviews' },
+  { href: '#faq', label: 'FAQ' },
+];
+
 export interface NavbarProps {
   /** Logo element or text */
   logo?: React.ReactNode;
-  /** Navigation links */
+  /** Navigation links (defaults to anchor links) */
   links?: Array<{
     label: string;
     href: string;
     active?: boolean;
   }>;
-  /** Cart item count */
+  /** Cart item count (fallback if not using CartContext) */
   cartCount?: number;
   /** User logged in state */
   isLoggedIn?: boolean;
@@ -30,7 +47,7 @@ export interface NavbarProps {
   searchPlaceholder?: string;
   /** On search callback */
   onSearch?: (query: string) => void;
-  /** On cart click */
+  /** On cart click (fallback if not using CartContext) */
   onCartClick?: () => void;
   /** On user menu click */
   onUserClick?: () => void;
@@ -46,8 +63,8 @@ export interface NavbarProps {
  */
 export const Navbar: React.FC<NavbarProps> = ({
   logo = 'TOOLY',
-  links = [],
-  cartCount = 0,
+  links = NAV_LINKS,
+  cartCount,
   isLoggedIn = false,
   userName,
   searchPlaceholder = 'Search for tools...',
@@ -61,12 +78,49 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  // Use props for cart (provided by parent component using CartContext)
+  const itemCount = cartCount ?? 0;
+  const handleCartClick = useCallback(() => {
+    if (onCartClick) {
+      onCartClick();
+    }
+  }, [onCartClick]);
+
+  // Handle ESC key to close mobile menu
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isMobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (onSearch && searchQuery.trim()) {
       onSearch(searchQuery.trim());
     }
-  };
+  }, [onSearch, searchQuery]);
+
+  const handleMobileNavClick = useCallback(() => {
+    // Close mobile menu when clicking a nav link
+    setIsMobileMenuOpen(false);
+  }, []);
 
   return (
     <nav
@@ -82,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               {typeof logo === 'string' ? (
                 <span className="text-2xl font-bold bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe] bg-clip-text text-transparent">
                   {logo}
@@ -90,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               ) : (
                 logo
               )}
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -170,13 +224,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-3">
             {/* Cart Button */}
             <button
-              onClick={onCartClick}
+              onClick={handleCartClick}
+              data-testid="cart-drawer-toggle"
               className={cn(
                 'relative p-2 rounded-lg',
                 'text-white/80 hover:text-white',
-                'hover:bg-white/[0.08] transition-all duration-200'
+                'hover:bg-white/[0.08] transition-all duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50'
               )}
-              aria-label={`Cart with ${cartCount} items`}
+              aria-label={`Cart with ${itemCount} items`}
             >
               <svg
                 className="w-6 h-6"
@@ -192,9 +248,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 />
               </svg>
               {/* Cart Badge */}
-              {cartCount > 0 && (
+              {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-r from-[#02fcef] to-[#a02bfe] text-[10px] font-bold text-white">
-                  {cartCount > 99 ? '99+' : cartCount}
+                  {itemCount > 99 ? '99+' : itemCount}
                 </span>
               )}
             </button>
@@ -242,9 +298,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={cn(
                 'lg:hidden p-2 rounded-lg',
                 'text-white/80 hover:text-white',
-                'hover:bg-white/[0.08] transition-all duration-200'
+                'hover:bg-white/[0.08] transition-all duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50'
               )}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               <svg
                 className="w-6 h-6"
@@ -263,9 +322,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-white/[0.08]">
+        {/* Mobile Menu with Focus Trap */}
+        <FocusTrap active={isMobileMenuOpen}>
+          <div
+            id="mobile-menu"
+            className={cn(
+              'lg:hidden',
+              'overflow-hidden transition-all duration-300',
+              isMobileMenuOpen ? 'max-h-screen py-4 border-t border-white/[0.08]' : 'max-h-0'
+            )}
+            aria-hidden={!isMobileMenuOpen}
+          >
             {/* Mobile Search */}
             <form onSubmit={handleSearchSubmit} className="mb-4">
               <div className="relative">
@@ -274,6 +341,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={searchPlaceholder}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
                   className={cn(
                     'w-full h-10 pl-10 pr-4 rounded-lg',
                     'bg-white/[0.08] backdrop-blur-md',
@@ -304,6 +372,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <a
                   key={index}
                   href={link.href}
+                  onClick={handleMobileNavClick}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
                   className={cn(
                     'block px-3 py-2 rounded-lg text-sm font-medium',
                     'transition-all duration-200',
@@ -322,16 +392,27 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Sign In/Up */}
             {!isLoggedIn && (
               <div className="mt-4 flex items-center gap-2 sm:hidden">
-                <ButtonPill variant="ghost" size="sm" fullWidth onClick={onUserClick}>
+                <ButtonPill
+                  variant="ghost"
+                  size="sm"
+                  className="flex-1"
+                  onClick={onUserClick}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                >
                   Sign In
                 </ButtonPill>
-                <ButtonSecondary size="sm" fullWidth onClick={onUserClick}>
+                <ButtonSecondary
+                  size="sm"
+                  fullWidth
+                  onClick={onUserClick}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                >
                   Sign Up
                 </ButtonSecondary>
               </div>
             )}
           </div>
-        )}
+        </FocusTrap>
       </div>
 
       {/* Glass shine effect */}
