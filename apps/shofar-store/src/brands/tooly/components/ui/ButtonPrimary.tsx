@@ -128,6 +128,7 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
         <style jsx>{`
           .button-container {
             background: linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%);
+            isolation: isolate;
           }
 
           .button-container::before {
@@ -144,7 +145,7 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
           }
 
           .button-container:hover::before {
-            filter: blur(1.2em);
+            filter: blur(0.85em);
           }
 
           .button-container:active::before {
