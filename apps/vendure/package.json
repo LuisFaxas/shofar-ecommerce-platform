@@ -9,16 +9,19 @@
     "setup": "ts-node src/init-vendure.ts",
     "populate": "ts-node src/populate-db.ts",
     "seed:tooly": "ts-node src/initial-data/seed-tooly-full.ts",
+    "bulk:assets": "ts-node src/cli/bulk-attach-assets.ts",
     "migrate": "vendure migrate",
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.940.0",
+    "@aws-sdk/lib-storage": "^3.940.0",
     "@vendure/admin-ui-plugin": "^3.1.1",
     "@vendure/asset-server-plugin": "^3.1.1",
+    "@vendure/cli": "^3.1.1",
     "@vendure/core": "^3.1.1",
     "@vendure/email-plugin": "^3.1.1",
-    "@vendure/cli": "^3.1.1",
     "better-sqlite3": "^11.7.0",
     "dotenv": "^16.4.7"
   },

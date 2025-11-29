@@ -3958,6 +3958,131 @@ export type GetCollectionQuery = {
   } | null;
 };
 
+export type GetAccessoriesCollectionQueryVariables = Exact<{
+  slug: Scalars["String"]["input"];
+}>;
+
+export type GetAccessoriesCollectionQuery = {
+  __typename?: "Query";
+  collection?: {
+    __typename?: "Collection";
+    id: string;
+    name: string;
+    slug: string;
+    description: string;
+    productVariants: {
+      __typename?: "ProductVariantList";
+      totalItems: number;
+      items: Array<{
+        __typename?: "ProductVariant";
+        id: string;
+        name: string;
+        sku: string;
+        price: number;
+        priceWithTax: number;
+        currencyCode: CurrencyCode;
+        featuredAsset?: {
+          __typename?: "Asset";
+          id: string;
+          preview: string;
+          source: string;
+        } | null;
+        product: {
+          __typename?: "Product";
+          id: string;
+          name: string;
+          slug: string;
+          description: string;
+          featuredAsset?: {
+            __typename?: "Asset";
+            id: string;
+            preview: string;
+            source: string;
+          } | null;
+        };
+      }>;
+    };
+  } | null;
+};
+
+export type GetProductGalleryQueryVariables = Exact<{
+  slug: Scalars["String"]["input"];
+}>;
+
+export type GetProductGalleryQuery = {
+  __typename?: "Query";
+  product?: {
+    __typename?: "Product";
+    id: string;
+    name: string;
+    assets: Array<{
+      __typename?: "Asset";
+      id: string;
+      name: string;
+      preview: string;
+      source: string;
+    }>;
+  } | null;
+};
+
+export type GetToolyProductQueryVariables = Exact<{
+  slug: Scalars["String"]["input"];
+}>;
+
+export type GetToolyProductQuery = {
+  __typename?: "Query";
+  product?: {
+    __typename?: "Product";
+    id: string;
+    name: string;
+    slug: string;
+    description: string;
+    featuredAsset?: {
+      __typename?: "Asset";
+      id: string;
+      preview: string;
+      source: string;
+    } | null;
+    assets: Array<{
+      __typename?: "Asset";
+      id: string;
+      preview: string;
+      source: string;
+      name: string;
+    }>;
+    variants: Array<{
+      __typename?: "ProductVariant";
+      id: string;
+      name: string;
+      sku: string;
+      price: number;
+      priceWithTax: number;
+      currencyCode: CurrencyCode;
+      stockLevel: string;
+      featuredAsset?: {
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+      } | null;
+      facetValues: Array<{
+        __typename?: "FacetValue";
+        id: string;
+        code: string;
+        name: string;
+        facet: { __typename?: "Facet"; id: string; code: string; name: string };
+      }>;
+    }>;
+    facetValues: Array<{
+      __typename?: "FacetValue";
+      id: string;
+      code: string;
+      name: string;
+      facet: { __typename?: "Facet"; id: string; code: string; name: string };
+    }>;
+  } | null;
+};
+
 export const GetActiveOrderDocument = gql`
   query GetActiveOrder {
     activeOrder {
@@ -4669,4 +4794,335 @@ export type GetCollectionSuspenseQueryHookResult = ReturnType<
 export type GetCollectionQueryResult = Apollo.QueryResult<
   GetCollectionQuery,
   GetCollectionQueryVariables
+>;
+export const GetAccessoriesCollectionDocument = gql`
+  query GetAccessoriesCollection($slug: String!) {
+    collection(slug: $slug) {
+      id
+      name
+      slug
+      description
+      productVariants(options: { take: 10 }) {
+        items {
+          id
+          name
+          sku
+          price
+          priceWithTax
+          currencyCode
+          featuredAsset {
+            id
+            preview
+            source
+          }
+          product {
+            id
+            name
+            slug
+            description
+            featuredAsset {
+              id
+              preview
+              source
+            }
+          }
+        }
+        totalItems
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetAccessoriesCollectionQuery__
+ *
+ * To run a query within a React component, call `useGetAccessoriesCollectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAccessoriesCollectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAccessoriesCollectionQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetAccessoriesCollectionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetAccessoriesCollectionQuery,
+    GetAccessoriesCollectionQueryVariables
+  > &
+    (
+      | { variables: GetAccessoriesCollectionQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAccessoriesCollectionQuery,
+    GetAccessoriesCollectionQueryVariables
+  >(GetAccessoriesCollectionDocument, options);
+}
+export function useGetAccessoriesCollectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAccessoriesCollectionQuery,
+    GetAccessoriesCollectionQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAccessoriesCollectionQuery,
+    GetAccessoriesCollectionQueryVariables
+  >(GetAccessoriesCollectionDocument, options);
+}
+export function useGetAccessoriesCollectionSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetAccessoriesCollectionQuery,
+        GetAccessoriesCollectionQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAccessoriesCollectionQuery,
+    GetAccessoriesCollectionQueryVariables
+  >(GetAccessoriesCollectionDocument, options);
+}
+export type GetAccessoriesCollectionQueryHookResult = ReturnType<
+  typeof useGetAccessoriesCollectionQuery
+>;
+export type GetAccessoriesCollectionLazyQueryHookResult = ReturnType<
+  typeof useGetAccessoriesCollectionLazyQuery
+>;
+export type GetAccessoriesCollectionSuspenseQueryHookResult = ReturnType<
+  typeof useGetAccessoriesCollectionSuspenseQuery
+>;
+export type GetAccessoriesCollectionQueryResult = Apollo.QueryResult<
+  GetAccessoriesCollectionQuery,
+  GetAccessoriesCollectionQueryVariables
+>;
+export const GetProductGalleryDocument = gql`
+  query GetProductGallery($slug: String!) {
+    product(slug: $slug) {
+      id
+      name
+      assets {
+        id
+        name
+        preview
+        source
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetProductGalleryQuery__
+ *
+ * To run a query within a React component, call `useGetProductGalleryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductGalleryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductGalleryQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetProductGalleryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProductGalleryQuery,
+    GetProductGalleryQueryVariables
+  > &
+    (
+      | { variables: GetProductGalleryQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProductGalleryQuery,
+    GetProductGalleryQueryVariables
+  >(GetProductGalleryDocument, options);
+}
+export function useGetProductGalleryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProductGalleryQuery,
+    GetProductGalleryQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProductGalleryQuery,
+    GetProductGalleryQueryVariables
+  >(GetProductGalleryDocument, options);
+}
+export function useGetProductGallerySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetProductGalleryQuery,
+        GetProductGalleryQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetProductGalleryQuery,
+    GetProductGalleryQueryVariables
+  >(GetProductGalleryDocument, options);
+}
+export type GetProductGalleryQueryHookResult = ReturnType<
+  typeof useGetProductGalleryQuery
+>;
+export type GetProductGalleryLazyQueryHookResult = ReturnType<
+  typeof useGetProductGalleryLazyQuery
+>;
+export type GetProductGallerySuspenseQueryHookResult = ReturnType<
+  typeof useGetProductGallerySuspenseQuery
+>;
+export type GetProductGalleryQueryResult = Apollo.QueryResult<
+  GetProductGalleryQuery,
+  GetProductGalleryQueryVariables
+>;
+export const GetToolyProductDocument = gql`
+  query GetToolyProduct($slug: String!) {
+    product(slug: $slug) {
+      id
+      name
+      slug
+      description
+      featuredAsset {
+        id
+        preview
+        source
+      }
+      assets {
+        id
+        preview
+        source
+        name
+      }
+      variants {
+        id
+        name
+        sku
+        price
+        priceWithTax
+        currencyCode
+        stockLevel
+        featuredAsset {
+          id
+          preview
+          source
+        }
+        facetValues {
+          id
+          code
+          name
+          facet {
+            id
+            code
+            name
+          }
+        }
+      }
+      facetValues {
+        id
+        code
+        name
+        facet {
+          id
+          code
+          name
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetToolyProductQuery__
+ *
+ * To run a query within a React component, call `useGetToolyProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetToolyProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetToolyProductQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetToolyProductQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetToolyProductQuery,
+    GetToolyProductQueryVariables
+  > &
+    (
+      | { variables: GetToolyProductQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetToolyProductQuery, GetToolyProductQueryVariables>(
+    GetToolyProductDocument,
+    options,
+  );
+}
+export function useGetToolyProductLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetToolyProductQuery,
+    GetToolyProductQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetToolyProductQuery,
+    GetToolyProductQueryVariables
+  >(GetToolyProductDocument, options);
+}
+export function useGetToolyProductSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetToolyProductQuery,
+        GetToolyProductQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetToolyProductQuery,
+    GetToolyProductQueryVariables
+  >(GetToolyProductDocument, options);
+}
+export type GetToolyProductQueryHookResult = ReturnType<
+  typeof useGetToolyProductQuery
+>;
+export type GetToolyProductLazyQueryHookResult = ReturnType<
+  typeof useGetToolyProductLazyQuery
+>;
+export type GetToolyProductSuspenseQueryHookResult = ReturnType<
+  typeof useGetToolyProductSuspenseQuery
+>;
+export type GetToolyProductQueryResult = Apollo.QueryResult<
+  GetToolyProductQuery,
+  GetToolyProductQueryVariables
 >;

@@ -1,0 +1,57 @@
+# TOOLY Product Query
+# Used by: HeroSection, ProductSection
+# Fetches main TOOLY product with all variant details for display and purchase
+
+query GetToolyProduct($slug: String!) {
+  product(slug: $slug) {
+    id
+    name
+    slug
+    description
+    featuredAsset {
+      id
+      preview
+      source
+    }
+    assets {
+      id
+      preview
+      source
+      name
+    }
+    variants {
+      id
+      name
+      sku
+      price
+      priceWithTax
+      currencyCode
+      stockLevel
+      featuredAsset {
+        id
+        preview
+        source
+      }
+      facetValues {
+        id
+        code
+        name
+        facet {
+          id
+          code
+          name
+        }
+      }
+    }
+    facetValues {
+      id
+      code
+      name
+      facet {
+        id
+        code
+        name
+      }
+    }
+  }
+}

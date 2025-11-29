@@ -1,13 +1,14 @@
 /**
  * TOOLY Brand - Tools & Hardware Store
- * WO 3.1 Implementation - Page Shell & Cart Context
+ * WO 3.1 / 3.2 Implementation - Page Shell & Cart Context
  *
  * Features:
  * - CartProvider wraps all content
  * - Navbar with anchor links and cart integration
- * - 9 styled placeholder sections
+ * - 9 styled sections with Vendure data integration
  * - CartDrawer with focus trap
  * - Smooth scroll navigation
+ * - Server-side data fetching with graceful fallbacks
  */
 
 'use client';
@@ -27,12 +28,18 @@ import {
   FaqSection,
   FooterSection,
 } from './sections';
+import type { ToolyPageData } from './lib/fetchers';
 
 // Import design tokens
 import './styles/tokens.css';
 
+interface ToolyAppProps {
+  /** Page data fetched server-side from Vendure */
+  pageData?: ToolyPageData | null;
+}
+
 // Inner component that uses the cart context
-function ToolyAppInner(): React.ReactElement {
+function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
   const { itemCount, toggleDrawer } = useCart();
 
   return (
@@ -42,12 +49,15 @@ function ToolyAppInner(): React.ReactElement {
 
       {/* Main Content */}
       <main>
-        <HeroSection />
+        <HeroSection
+          featuredAsset={pageData?.product?.featuredAsset}
+          productName={pageData?.product?.name}
+        />
         <CredibilitySection />
         <TechnologySection />
-        <GallerySection />
-        <ProductSection />
-        <AccessoriesSection />
+        <GallerySection assets={pageData?.gallery?.assets} />
+        <ProductSection product={pageData?.product} />
+        <AccessoriesSection accessories={pageData?.accessories} />
         <ReviewsSection />
         <FaqSection />
       </main>
@@ -61,10 +71,10 @@ function ToolyAppInner(): React.ReactElement {
   );
 }
 
-export default function ToolyApp(): React.ReactElement {
+export default function ToolyApp({ pageData }: ToolyAppProps): React.ReactElement {
   return (
     <CartProvider>
-      <ToolyAppInner />
+      <ToolyAppInner pageData={pageData} />
     </CartProvider>
   );
 }

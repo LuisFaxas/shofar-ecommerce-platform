@@ -12,8 +12,12 @@ import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
 import path from 'path';
 import * as dotenv from 'dotenv';
+import { configureS3AssetStorage } from './config/s3-asset-storage';
 
 dotenv.config();
+
+// Get S3 storage strategy if configured
+const s3StorageStrategy = configureS3AssetStorage();
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
@@ -81,17 +85,9 @@ export const config: VendureConfig = {
       assetUrlPrefix: process.env.CDN_URL
         ? `${process.env.CDN_URL}/assets/`
         : process.env.ASSET_URL_PREFIX || 'http://localhost:3001/assets/',
-      // S3/R2 Configuration (uncomment and configure for production)
-      // storageStrategyFactory: configureS3AssetStorage({
-      //   bucket: process.env.S3_BUCKET || 'shofar-assets',
-      //   credentials: {
-      //     accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-      //     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-      //   },
-      //   region: process.env.S3_REGION || 'us-east-1',
-      //   // For Cloudflare R2:
-      //   // endpoint: process.env.R2_ENDPOINT || 'https://your-account.r2.cloudflarestorage.com',
-      // }),
+      // S3/R2 storage strategy (auto-configured from env vars when ASSET_STORAGE=s3)
+      // Falls back to local file storage if S3 not configured
+      ...(s3StorageStrategy && { storageStrategyFactory: () => s3StorageStrategy }),
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
     DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),

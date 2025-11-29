@@ -1,0 +1,16 @@
+# TOOLY Gallery Query
+# Used by: GallerySection
+# Fetches product assets for the image gallery (up to 6 images)
+
+query GetProductGallery($slug: String!) {
+  product(slug: $slug) {
+    id
+    name
+    assets {
+      id
+      name
+      preview
+      source
+    }
+  }
+}

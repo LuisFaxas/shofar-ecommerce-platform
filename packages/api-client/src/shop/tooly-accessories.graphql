@@ -1,0 +1,39 @@
+# TOOLY Accessories Query
+# Used by: AccessoriesSection
+# Fetches accessory products from the accessories collection
+
+query GetAccessoriesCollection($slug: String!) {
+  collection(slug: $slug) {
+    id
+    name
+    slug
+    description
+    productVariants(options: { take: 10 }) {
+      items {
+        id
+        name
+        sku
+        price
+        priceWithTax
+        currencyCode
+        featuredAsset {
+          id
+          preview
+          source
+        }
+        product {
+          id
+          name
+          slug
+          description
+          featuredAsset {
+            id
+            preview
+            source
+          }
+        }
+      }
+      totalItems
+    }
+  }
+}
