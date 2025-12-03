@@ -7,25 +7,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Monorepo Structure
 This is a **Turborepo + pnpm** monorepo with strict TypeScript configuration. The architecture follows **ISOLATED STORE ARCHITECTURE** with complete separation between business categories.
 
-### Isolated Store Architecture (CRITICAL - WO 2.3/2.4)
+### Isolated Store Architecture (CRITICAL)
 
 #### Three Completely Isolated Stores
 The platform consists of THREE independent Next.js applications, each serving a distinct business category:
 
-1. **@shofar/shofar-store** (Port 3001)
-   - Business: Tools & Hardware
-   - Brands: TOOLY (future tool brands)
-   - Path: `apps/shofar-store`
+| Store | Package | Port | Business | Brands |
+|-------|---------|------|----------|--------|
+| shofar-store | `@shofar/shofar-store` | 3000 | Tools & Hardware | TOOLY |
+| pharma-store | `@shofar/pharma-store` | 3002 | Medical & Research | PEPTIDES |
+| faxas-store | `@shofar/faxas-store` | 3003 | Fashion (placeholder) | TBD |
 
-2. **@shofar/pharma-store** (Port 3002)
-   - Business: Medical & Research
-   - Brands: PEPTIDES (future pharma brands)
-   - Path: `apps/pharma-store`
-
-3. **@shofar/faxas-store** (Port 3003)
-   - Business: Fashion (placeholder)
-   - Brands: Future fashion brands
-   - Path: `apps/faxas-store`
+**Vendure Backend**: Port 3001 (Admin UI at `http://localhost:3001/admin`)
 
 **CRITICAL SECURITY REQUIREMENT**: Customers on TOOLY must NEVER discover PEPTIDES exists. Complete isolation achieved.
 
@@ -100,6 +93,7 @@ Each store maintains internal multi-brand support using:
 Vendure is configured with multiple sales channels:
 - **default**: Default channel
 - **tooly**: Tool-focused products channel
+- **peptide**: Research peptides channel (pharma-store exclusive)
 - **future**: Future products channel
 
 Each channel has isolated:
@@ -187,10 +181,10 @@ SOURCE_CODE/
 # Install dependencies
 pnpm install
 
-# Run specific store in dev mode
-pnpm dev:shofar    # TOOLY store on :3001
-pnpm dev:pharma    # PEPTIDES store on :3002
-pnpm dev:faxas     # Fashion store on :3003
+# Run specific store in dev mode (includes Vendure backend)
+pnpm dev:shofar    # TOOLY store on :3000, Vendure on :3001
+pnpm dev:pharma    # PEPTIDES store on :3002, Vendure on :3001
+pnpm dev:faxas     # Fashion store on :3003, Vendure on :3001
 
 # Run all stores simultaneously
 pnpm dev:all-stores
@@ -226,12 +220,20 @@ pnpm --filter @shofar/vendure run setup
 # Populate additional test data
 pnpm --filter @shofar/vendure run populate
 
+# Seed full TOOLY product catalog
+pnpm --filter @shofar/vendure run seed:tooly
+
+# Bulk attach assets to products
+pnpm --filter @shofar/vendure run bulk:assets
+
 # Run database migrations
 pnpm --filter @shofar/vendure migrate
 
 # Start production build
 pnpm --filter @shofar/vendure start
 ```
+
+**Admin UI**: http://localhost:3001/admin (after starting Vendure)
 
 ### Testing
 ```bash
@@ -487,10 +489,11 @@ Adapter-based architecture in `@shofar/feature-flags`:
 
 ### Storefront (.env.local)
 ```bash
-NEXT_PUBLIC_VENDURE_API_URL=http://localhost:3001/shop-api
+NEXT_PUBLIC_VENDURE_SHOP_API_URL=http://localhost:3001/shop-api
 NEXT_PUBLIC_POSTHOG_KEY=your-key-here
 NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 EDGE_CONFIG=your-edge-config-url
+BRAND_KEY=tooly  # Mode A production brand pinning
 ```
 
 ### Vendure (.env)
@@ -499,7 +502,7 @@ NODE_ENV=development
 DB_TYPE=better-sqlite3  # or 'postgres' for production
 DATABASE_URL=vendure-db.sqlite  # or PostgreSQL connection string
 SUPERADMIN_USERNAME=superadmin
-SUPERADMIN_PASSWORD=superadmin123  # change in production
+SUPERADMIN_PASSWORD=superadmin123
 COOKIE_SECRET=change-in-production
 PORT=3001
 ```
@@ -507,42 +510,6 @@ PORT=3001
 ### Default Credentials
 - **Superadmin**: superadmin / superadmin123
 - **Tooly Manager**: manager@tooly.com / manager123
-
-## Manual Test Steps Template
-
-For each feature implementation, provide:
-
-### Feature: [Feature Name]
-
-**Setup:**
-1. Ensure both servers are running (`pnpm dev`)
-2. Clear browser cache and cookies
-3. Open http://localhost:3000
-
-**Test Steps:**
-1. [Step 1 - User action]
-   - Expected: [What should happen]
-2. [Step 2 - User action]
-   - Expected: [What should happen]
-3. [Continue for all steps...]
-
-**Accessibility Checks:**
-- [ ] Keyboard navigation works
-- [ ] Screen reader announces correctly
-- [ ] Focus indicators visible
-- [ ] No color-only information
-- [ ] Respects reduced motion preference
-
-**Edge Cases:**
-- [ ] Works with slow network (throttle to 3G)
-- [ ] Handles errors gracefully
-- [ ] Works on mobile viewport
-- [ ] Functions with JavaScript disabled (if applicable)
-
-**Acceptance Criteria:**
-- [ ] [Criterion 1]
-- [ ] [Criterion 2]
-- [ ] [All criteria that must pass]
 
 ## Common Issues & Solutions
 
@@ -579,35 +546,77 @@ pnpm prepare
 chmod +x .husky/*  # Make hooks executable
 ```
 
-## VSCode Recommended Extensions
+---
 
-```json
-{
-  "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "bradlc.vscode-tailwindcss",
-    "prisma.prisma",
-    "graphql.vscode-graphql",
-    "ms-playwright.playwright",
-    "streetsidesoftware.code-spell-checker"
-  ]
-}
-```
-
-## Deployment Checklist
-
-- [ ] All environment variables set in production
-- [ ] Database migrations run
-- [ ] Static assets uploaded to CDN
-- [ ] SSL certificates configured
-- [ ] Rate limiting enabled
-- [ ] Error monitoring setup (Sentry)
-- [ ] Analytics configured
-- [ ] Feature flags reviewed
-- [ ] Security headers configured
-- [ ] Backup strategy in place
+**Remember:** Always read existing code before implementing. Never guess or fabricate APIs. Test everything manually before committing.
 
 ---
 
-**Remember:** Always read existing code before implementing. Never guess or fabricate APIs. Provide complete context in diffs. Test everything manually before committing.
+## Peptide Store Addendum (Append-Only)
+
+This section documents pharma-store (PEPTIDES brand) specific requirements. These constraints are **mandatory** for all pharma-store development.
+
+### API Channel Header Requirement
+All Shop API calls from pharma-store **must** include the channel header:
+```typescript
+// Required header for all pharma-store API requests
+headers: {
+  'vendure-token': 'peptide'
+}
+```
+
+### Privacy & Cookie Policy
+- **Cookie prefix**: Use `__Host-` prefix for all cookies (e.g., `__Host-session`)
+- **SameSite**: All cookies must be `SameSite=Strict`
+- **No PII in logs**: Never log personally identifiable information
+- **Separate analytics**: Use dedicated analytics property isolated from other stores
+
+### Compliance Copy Requirements
+**CRITICAL**: All product pages, checkout flows, and marketing materials must display:
+```
+"For Research Use Only / Not for human use."
+```
+
+**Prohibited content**:
+- No health claims
+- No medical claims
+- No therapeutic claims
+- No dosage recommendations for human consumption
+
+### Blog ↔ PDP Cross-Links
+Blog articles and Product Detail Pages are linked via metadata:
+```typescript
+// Product custom field
+peptideSlugs: string[]  // Related blog article slugs
+
+// Blog frontmatter
+relatedPeptides: string[]  // Related product slugs
+```
+
+### Search Implementation (v1)
+- **Synonyms**: Map common alternate names (e.g., "BPC-157" ↔ "Body Protection Compound")
+- **Fuzzy matching**: Tolerate typos in peptide names
+- **Goal facets**: Filter by research goals/categories
+- **Semantic search**: Optional future enhancement (not v1)
+
+### Catalog View Modes
+| View | Description | Default |
+|------|-------------|---------|
+| Thumbnail | Grid of product cards | ✓ |
+| Detail | Content-style expanded cards | |
+| Quick View | Modal overlay (links to canonical PDP) | |
+
+**Note**: Quick View modal must link to canonical PDP page (no in-modal checkout).
+
+### SEO Requirements
+- **Dedicated routes**: `/products/[slug]` (PDP), `/research/[slug]` (Blog)
+- **JSON-LD**: Implement `Product` schema for PDPs, `Article` schema for blog posts
+- **Sitemap**: Auto-generated sitemap including all PDPs and blog articles
+- **Canonical URLs**: Every page must have explicit canonical tag
+
+### UI Isolation Enforcement
+**CRITICAL**: pharma-store UI must remain completely isolated:
+- NO shared components with shofar-store or faxas-store
+- NO cross-store imports
+- All UI lives in `apps/pharma-store/src/`
+- Brand theming via `@shofar/pharma-brand-config` only
