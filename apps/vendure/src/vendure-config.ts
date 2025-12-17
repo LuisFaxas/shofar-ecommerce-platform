@@ -10,6 +10,7 @@ import {
 import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
+import { StripePlugin } from "@vendure/payments-plugin/package/stripe";
 import path from "path";
 import * as dotenv from "dotenv";
 import { configureS3AssetStorage } from "./config/s3-asset-storage";
@@ -319,6 +320,11 @@ export const config: VendureConfig = {
         defaultLanguage: LanguageCode.en,
         availableLanguages: [LanguageCode.en],
       },
+    }),
+    // Stripe Payment Integration
+    // API key and webhook secret are configured per PaymentMethod in Admin UI
+    StripePlugin.init({
+      storeCustomersInStripe: true,
     }),
   ],
 };
