@@ -33,7 +33,9 @@
 | Payment        | ✅     | Test Payment (dummy) in tooly channel                    |
 | Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled           |
 | Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm) |
-| Product Images | ⚠️     | Infrastructure ready, awaiting user images               |
+| Product Images | ✅     | 11 images uploaded to R2 bucket                          |
+| Asset Hosting  | ✅     | Cloudflare R2 configured and working                     |
+| Admin Organize | ⚠️     | Brand facet created, needs assignment to products        |
 | Real Payment   | ❌     | Authorize.Net Accept Hosted (Phase 2)                    |
 
 ---
@@ -119,16 +121,51 @@ packages/
 
 ## PRESALE SPRINT LOG (2025-12-17)
 
-### MILESTONE 5: Product Images (Infrastructure)
+### MILESTONE 7: Admin Organization (Partial)
 
-- **Status**: ⚠️ Ready for user action
-- **Change**: Created asset import infrastructure
-  - `apps/vendure/assets-import/` folder created
-  - `map.json` mapping all 11 SKUs to expected image files
-  - `README.md` with usage instructions
+- **Status**: ⚠️ In Progress
+- **Change**: Created Brand facet for filtering products in Admin UI
+  - Brand facet created with values: TOOLY, PEPTIDE
+  - Allows filtering Products by brand in Admin panel
 - **User Action Required**:
-  1. Add 11 PNG images to `assets-import/` folder
-  2. Run `pnpm --filter @shofar/vendure bulk:assets`
+  1. Go to Products → open each product → add Brand facet value
+  2. TOOLY products → Brand: TOOLY
+  3. PEPTIDE products → Brand: PEPTIDE
+- **Why**: Superadmin sees ALL channels - this enables filtering by brand
+
+### MILESTONE 6: Cloudflare R2 Asset Hosting
+
+- **Status**: ✅ Complete
+- **Change**: Migrated asset storage from local to Cloudflare R2
+  - `apps/vendure/src/config/s3-asset-storage.ts` - Fixed path separator bug (Windows backslash → forward slash)
+  - `apps/shofar-store/next.config.ts` - Added `*.r2.dev` remote pattern for Next/Image
+  - 11 product images uploaded to R2 bucket via `bulk:assets`
+- **R2 Configuration**:
+  - Bucket: `tooly-assets`
+  - Public URL: `https://pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev`
+  - S3 Endpoint: `https://9815cde18ff3728069fccdbaa4da52bf.r2.cloudflarestorage.com`
+- **Verify**: `curl -s -o /dev/null -w "%{http_code}" "https://pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev/preview/36/1v1a8379__preview.jpg"` → 200
+- **Fix Applied**: AdminUiPlugin index.html corruption - reinstalled `@vendure/admin-ui-plugin`
+
+### MILESTONE 5: Product Images (Complete)
+
+- **Status**: ✅ Complete
+- **Change**: Uploaded all product images to R2
+  - `apps/vendure/assets-import/map.json` - 11 SKU→image mappings
+  - Images: 1V1A8379.jpg through 1V1A8480.jpg (user-provided photos)
+  - Bulk import: `pnpm --filter @shofar/vendure bulk:assets` → 11 success, 0 failed
+- **SKU→Image Mapping**:
+  - TOOLY-DLC-GM → 1V1A8379.jpg
+  - TOOLY-CK-MID → 1V1A8395.jpg
+  - TOOLY-CK-ARC → 1V1A8427.jpg
+  - TOOLY-CK-EMB → 1V1A8445.jpg
+  - TOOLY-CK-COB → 1V1A8446.jpg
+  - TOOLY-CK-TIT → 1V1A8448.jpg
+  - ACC-CASE-VIAL → 1V1A8452.jpg
+  - ACC-CHAIN-GLD → 1V1A8464.jpg
+  - ACC-CHAIN-SLV → 1V1A8468.jpg
+  - ACC-CLEAN-KIT → 1V1A8474.jpg
+  - ACC-CASE-001 → 1V1A8480.jpg
 
 ### MILESTONE 4: Minimal Checkout Route
 
