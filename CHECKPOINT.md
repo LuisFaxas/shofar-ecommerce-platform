@@ -121,6 +121,42 @@ packages/
 
 ## PRESALE SPRINT LOG (2025-12-17)
 
+### MILESTONE 8: TOOLY Clean Slate (2025-12-17)
+
+- **Status**: ✅ Complete
+- **Branch**: `feature/tooly-clean-slate`
+- **Commits**:
+  - `b4166b2` feat(vendure): clean slate tooly channel - single gunmetal variant
+  - `8b62df5` feat(web): carousel + accessories coming soon state
+- **Changes**:
+  - Deleted 5 TOOLY variants (kept only TOOLY-DLC-GM Gunmetal)
+  - Deleted 5 accessory products from tooly channel
+  - Uploaded 5 gunmetal product images to R2 via gallery upload CLI
+  - Created `ProductCarousel.tsx` - mobile-first image carousel with swipe, dots, thumbnails
+  - Updated `ProductSection.tsx` - uses carousel, hides color swatches when 1 variant
+  - Updated `AccessoriesSection.tsx` - premium "Coming Soon" empty state
+- **Before/After**:
+  | Metric | Before | After |
+  |--------|--------|-------|
+  | TOOLY variants | 6 | 1 (Gunmetal) |
+  | Accessories (tooly) | 5 | 0 |
+  | Product gallery images | 0 | 5 |
+- **Verify**:
+
+  ```bash
+  # Shop API: 1 variant
+  curl -s http://localhost:3001/shop-api -H "vendure-token: tooly" \
+    -d '{"query":"{ product(slug:\"tooly\"){ variants { sku } } }"}'
+
+  # Shop API: 0 accessories
+  curl -s http://localhost:3001/shop-api -H "vendure-token: tooly" \
+    -d '{"query":"{ collection(slug:\"accessories\"){ productVariants { totalItems } } }"}'
+  ```
+
+- **New Files**:
+  - `apps/vendure/src/cli/upload-gallery.ts` - Gallery image upload CLI
+  - `apps/shofar-store/src/brands/tooly/components/ui/ProductCarousel.tsx` - Image carousel
+
 ### MILESTONE 7: Admin Organization (Partial)
 
 - **Status**: ⚠️ In Progress
@@ -341,18 +377,11 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ### Products in TOOLY Channel
 
-| Product                    | SKU           | Price   | Stock |
-| -------------------------- | ------------- | ------- | ----- |
-| TOOLY - DLC Gunmetal       | TOOLY-DLC-GM  | $149.00 | 100   |
-| TOOLY - Cerakote Midnight  | TOOLY-CK-MID  | $149.00 | 50    |
-| TOOLY - Cerakote Arctic    | TOOLY-CK-ARC  | $149.00 | 50    |
-| TOOLY - Cerakote Ember     | TOOLY-CK-EMB  | $149.00 | 50    |
-| TOOLY - Cerakote Cobalt    | TOOLY-CK-COB  | $149.00 | 50    |
-| TOOLY - Cerakote Titanium  | TOOLY-CK-TIT  | $149.00 | 50    |
-| Silicone Case + Glass Vial | ACC-CASE-VIAL | -       | 200   |
-| Carry Chain - Gold         | ACC-CHAIN-GLD | -       | 150   |
-| Carry Chain - Silver       | ACC-CHAIN-SLV | -       | 150   |
-| Cleaning Kit               | ACC-CLEAN-KIT | -       | 300   |
+| Product              | SKU          | Price   | Stock | Notes                  |
+| -------------------- | ------------ | ------- | ----- | ---------------------- |
+| TOOLY - DLC Gunmetal | TOOLY-DLC-GM | $149.00 | 100   | 5 gallery images on R2 |
+
+> **Note**: As of Milestone 8, only 1 TOOLY variant exists (Gunmetal). Accessories removed from tooly channel but collection slug `accessories` preserved (returns 0 items).
 
 ### Channels
 
