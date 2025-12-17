@@ -121,6 +121,38 @@ packages/
 
 ## PRESALE SPRINT LOG (2025-12-17)
 
+### MILESTONE 9: Vendure Source-of-Truth Audit (2025-12-17)
+
+- **Status**: ✅ Complete
+- **Branch**: `feature/tooly-clean-slate`
+- **Objective**: Verify storefront is 100% driven by Vendure data (no hardcoding)
+- **Audit Results**:
+
+  | Component               | Status     | Behavior                                          |
+  | ----------------------- | ---------- | ------------------------------------------------- |
+  | ProductSection variants | ✅ Dynamic | Reads from `product.variants`                     |
+  | Color swatches          | ✅ Dynamic | Hidden if `variants.length === 1`, shown if >1    |
+  | ProductCarousel         | ✅ Dynamic | Uses `product.assets[]` from Vendure              |
+  | AccessoriesSection      | ✅ Dynamic | Shows "Coming Soon" if empty, grid if items exist |
+  | Prices                  | ✅ Dynamic | From `variant.priceWithTax`                       |
+  | Stock                   | ✅ Dynamic | From `variant.stockLevel`                         |
+
+- **Bug Fixed**: `fetchers.ts` accessories collection slug was `'tooly-accessories'` → fixed to `'accessories'`
+- **Debug Mock Mode**: Added `?debugMock=1` URL param for DEV testing
+  - Simulates additional variants and accessories
+  - Shows amber banner when active
+  - Does NOT ship in production
+
+- **How to Add New Variants/Accessories**:
+  1. **New Variant**: Admin UI → Products → TOOLY → Add Variant → Set color facet
+  2. **New Accessory**: Admin UI → Products → Create → Add to `accessories` collection
+  3. Frontend automatically renders them (no code changes needed)
+
+- **Files Modified**:
+  - `apps/shofar-store/src/brands/tooly/lib/fetchers.ts` - Fixed collection slug
+  - `apps/shofar-store/src/brands/tooly/lib/debug-mock.ts` - NEW debug utility
+  - `apps/shofar-store/src/brands/tooly/index.tsx` - Debug mock integration
+
 ### MILESTONE 8: TOOLY Clean Slate (2025-12-17)
 
 - **Status**: ✅ Complete
