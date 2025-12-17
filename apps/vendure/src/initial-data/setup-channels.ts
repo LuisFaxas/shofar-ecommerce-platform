@@ -8,19 +8,22 @@ import {
   Permission,
   LanguageCode,
   ID,
-} from '@vendure/core';
+} from "@vendure/core";
 
 /**
  * Ensure basic zones exist for channel creation
  */
-async function ensureZones(app: any, ctx: RequestContext): Promise<{ zoneId: ID }> {
+async function ensureZones(
+  app: any,
+  ctx: RequestContext,
+): Promise<{ zoneId: ID }> {
   const zoneService = app.get(ZoneService);
   const countryService = app.get(CountryService);
 
   // Check if zones already exist
   const existingZones = await zoneService.findAll(ctx);
   if (existingZones.items.length > 0) {
-    console.log('✅ Zones already exist');
+    console.log("✅ Zones already exist");
     return { zoneId: existingZones.items[0].id };
   }
 
@@ -28,32 +31,34 @@ async function ensureZones(app: any, ctx: RequestContext): Promise<{ zoneId: ID 
   let usaCountry;
   try {
     const countries = await countryService.findAll(ctx);
-    usaCountry = countries.items.find((c: any) => c.code === 'US');
+    usaCountry = countries.items.find((c: any) => c.code === "US");
     if (!usaCountry) {
       usaCountry = await countryService.create(ctx, {
-        code: 'US',
+        code: "US",
         enabled: true,
-        translations: [{ languageCode: LanguageCode.en, name: 'United States' }],
+        translations: [
+          { languageCode: LanguageCode.en, name: "United States" },
+        ],
       });
-      console.log('✅ Created country: US');
+      console.log("✅ Created country: US");
     }
   } catch (error) {
-    console.log('⚠️ Country creation skipped');
+    console.log("⚠️ Country creation skipped");
   }
 
   // Create default zone
   try {
     const zone = await zoneService.create(ctx, {
-      name: 'North America',
+      name: "North America",
       memberIds: usaCountry ? [usaCountry.id] : [],
     });
-    console.log('✅ Created zone: North America');
+    console.log("✅ Created zone: North America");
     return { zoneId: zone.id };
   } catch (error: any) {
-    console.log('⚠️ Zone creation failed:', error?.message);
+    console.log("⚠️ Zone creation failed:", error?.message);
     // Return first zone if creation failed (might already exist)
     const zones = await zoneService.findAll(ctx);
-    return { zoneId: zones.items[0]?.id || ('1' as ID) };
+    return { zoneId: zones.items[0]?.id || ("1" as ID) };
   }
 }
 
@@ -74,10 +79,10 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
       languageCode: LanguageCode.en,
       isAuthorized: true,
       authorizedAsOwnerOnly: false,
-      apiType: 'admin',
+      apiType: "admin",
     });
 
-    console.log('🚀 Setting up channels...');
+    console.log("🚀 Setting up channels...");
 
     // Ensure zones exist first
     const { zoneId } = await ensureZones(app, superadminContext);
@@ -85,55 +90,95 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
     // Create Tooly channel
     try {
       await channelService.create(superadminContext, {
-        code: 'tooly',
-        token: 'tooly',
+        code: "tooly",
+        token: "tooly",
         defaultLanguageCode: LanguageCode.en,
         availableLanguageCodes: [LanguageCode.en],
         pricesIncludeTax: false,
-        currencyCode: 'USD',
-        defaultCurrencyCode: 'USD',
+        currencyCode: "USD",
+        defaultCurrencyCode: "USD",
         defaultShippingZoneId: zoneId,
         defaultTaxZoneId: zoneId,
       });
-      console.log('✅ Created channel: tooly');
+      console.log("✅ Created channel: tooly");
     } catch (error: any) {
       // Check if it's a duplicate error
-      if (error?.message?.includes('duplicate') || error?.message?.includes('already exists')) {
-        console.log('ℹ️ Channel tooly already exists');
+      if (
+        error?.message?.includes("duplicate") ||
+        error?.message?.includes("already exists")
+      ) {
+        console.log("ℹ️ Channel tooly already exists");
       } else {
-        console.log('⚠️ Could not create tooly channel:', error?.message || 'unknown error');
+        console.log(
+          "⚠️ Could not create tooly channel:",
+          error?.message || "unknown error",
+        );
       }
     }
 
     // Create Future channel
     try {
       await channelService.create(superadminContext, {
-        code: 'future',
-        token: 'future',
+        code: "future",
+        token: "future",
         defaultLanguageCode: LanguageCode.en,
         availableLanguageCodes: [LanguageCode.en],
         pricesIncludeTax: false,
-        currencyCode: 'USD',
-        defaultCurrencyCode: 'USD',
+        currencyCode: "USD",
+        defaultCurrencyCode: "USD",
         defaultShippingZoneId: zoneId,
         defaultTaxZoneId: zoneId,
       });
-      console.log('✅ Created channel: future');
+      console.log("✅ Created channel: future");
     } catch (error: any) {
-      if (error?.message?.includes('duplicate') || error?.message?.includes('already exists')) {
-        console.log('ℹ️ Channel future already exists');
+      if (
+        error?.message?.includes("duplicate") ||
+        error?.message?.includes("already exists")
+      ) {
+        console.log("ℹ️ Channel future already exists");
       } else {
-        console.log('⚠️ Could not create future channel:', error?.message || 'unknown error');
+        console.log(
+          "⚠️ Could not create future channel:",
+          error?.message || "unknown error",
+        );
+      }
+    }
+
+    // Create Peptide channel (for pharma-store / PEPTIDES brand)
+    try {
+      await channelService.create(superadminContext, {
+        code: "peptide",
+        token: "peptide",
+        defaultLanguageCode: LanguageCode.en,
+        availableLanguageCodes: [LanguageCode.en],
+        pricesIncludeTax: false,
+        currencyCode: "USD",
+        defaultCurrencyCode: "USD",
+        defaultShippingZoneId: zoneId,
+        defaultTaxZoneId: zoneId,
+      });
+      console.log("✅ Created channel: peptide");
+    } catch (error: any) {
+      if (
+        error?.message?.includes("duplicate") ||
+        error?.message?.includes("already exists")
+      ) {
+        console.log("ℹ️ Channel peptide already exists");
+      } else {
+        console.log(
+          "⚠️ Could not create peptide channel:",
+          error?.message || "unknown error",
+        );
       }
     }
 
     // Get channels
     const channels = await channelService.findAll(superadminContext);
-    const toolyChannel = channels.items.find((c: any) => c.code === 'tooly');
+    const toolyChannel = channels.items.find((c: any) => c.code === "tooly");
 
     if (toolyChannel) {
       // Create RBAC Roles
-      console.log('🔐 Setting up RBAC roles...');
+      console.log("🔐 Setting up RBAC roles...");
 
       // ToolyStoreManager - Full permissions on tooly channel only
       try {
@@ -178,29 +223,32 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
           Permission.DeletePromotion,
         ];
 
-        const toolyStoreManagerRole = await roleService.create(superadminContext, {
-          code: 'tooly-store-manager',
-          description: 'Full permissions on Tooly channel',
-          permissions: storeManagerPermissions,
-          channelIds: [toolyChannel.id],
-        });
-        console.log('✅ Created role: tooly-store-manager');
+        const toolyStoreManagerRole = await roleService.create(
+          superadminContext,
+          {
+            code: "tooly-store-manager",
+            description: "Full permissions on Tooly channel",
+            permissions: storeManagerPermissions,
+            channelIds: [toolyChannel.id],
+          },
+        );
+        console.log("✅ Created role: tooly-store-manager");
 
         // Create test admin user
         try {
           await adminService.create(superadminContext, {
-            emailAddress: 'manager@tooly.com',
-            firstName: 'Tooly',
-            lastName: 'Manager',
-            password: 'manager123',
+            emailAddress: "manager@tooly.com",
+            firstName: "Tooly",
+            lastName: "Manager",
+            password: "manager123",
             roleIds: [toolyStoreManagerRole.id],
           });
-          console.log('👤 Created test admin: manager@tooly.com');
+          console.log("👤 Created test admin: manager@tooly.com");
         } catch (error) {
-          console.log('⚠️ Admin user might already exist');
+          console.log("⚠️ Admin user might already exist");
         }
       } catch (error) {
-        console.log('⚠️ Could not create tooly-store-manager role');
+        console.log("⚠️ Could not create tooly-store-manager role");
       }
 
       // ToolyFulfillment role
@@ -213,14 +261,14 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
         ];
 
         await roleService.create(superadminContext, {
-          code: 'tooly-fulfillment',
-          description: 'Order fulfillment permissions on Tooly channel',
+          code: "tooly-fulfillment",
+          description: "Order fulfillment permissions on Tooly channel",
           permissions: fulfillmentPermissions,
           channelIds: [toolyChannel.id],
         });
-        console.log('✅ Created role: tooly-fulfillment');
+        console.log("✅ Created role: tooly-fulfillment");
       } catch (error) {
-        console.log('⚠️ Could not create tooly-fulfillment role');
+        console.log("⚠️ Could not create tooly-fulfillment role");
       }
 
       // ToolySupport role
@@ -232,18 +280,137 @@ export async function setupChannelsAndRoles(app: any): Promise<void> {
         ];
 
         await roleService.create(superadminContext, {
-          code: 'tooly-support',
-          description: 'Read-only order support on Tooly channel',
+          code: "tooly-support",
+          description: "Read-only order support on Tooly channel",
           permissions: supportPermissions,
           channelIds: [toolyChannel.id],
         });
-        console.log('✅ Created role: tooly-support');
+        console.log("✅ Created role: tooly-support");
       } catch (error) {
-        console.log('⚠️ Could not create tooly-support role');
+        console.log("⚠️ Could not create tooly-support role");
+      }
+    }
+
+    // Set up Peptide channel roles
+    const peptideChannel = channels.items.find(
+      (c: any) => c.code === "peptide",
+    );
+
+    if (peptideChannel) {
+      console.log("🔐 Setting up PEPTIDE RBAC roles...");
+
+      // PeptideStoreManager - Full permissions on peptide channel only
+      try {
+        const storeManagerPermissions = [
+          Permission.CreateCatalog,
+          Permission.ReadCatalog,
+          Permission.UpdateCatalog,
+          Permission.DeleteCatalog,
+          Permission.CreateSettings,
+          Permission.ReadSettings,
+          Permission.UpdateSettings,
+          Permission.CreateAdministrator,
+          Permission.ReadAdministrator,
+          Permission.UpdateAdministrator,
+          Permission.CreateAsset,
+          Permission.ReadAsset,
+          Permission.UpdateAsset,
+          Permission.DeleteAsset,
+          Permission.CreateCollection,
+          Permission.ReadCollection,
+          Permission.UpdateCollection,
+          Permission.DeleteCollection,
+          Permission.CreateCustomer,
+          Permission.ReadCustomer,
+          Permission.UpdateCustomer,
+          Permission.DeleteCustomer,
+          Permission.CreateFacet,
+          Permission.ReadFacet,
+          Permission.UpdateFacet,
+          Permission.DeleteFacet,
+          Permission.CreateOrder,
+          Permission.ReadOrder,
+          Permission.UpdateOrder,
+          Permission.DeleteOrder,
+          Permission.CreateProduct,
+          Permission.ReadProduct,
+          Permission.UpdateProduct,
+          Permission.DeleteProduct,
+          Permission.CreatePromotion,
+          Permission.ReadPromotion,
+          Permission.UpdatePromotion,
+          Permission.DeletePromotion,
+        ];
+
+        const peptideStoreManagerRole = await roleService.create(
+          superadminContext,
+          {
+            code: "peptide-store-manager",
+            description: "Full permissions on Peptide channel",
+            permissions: storeManagerPermissions,
+            channelIds: [peptideChannel.id],
+          },
+        );
+        console.log("✅ Created role: peptide-store-manager");
+
+        // Create test admin user for peptide
+        try {
+          await adminService.create(superadminContext, {
+            emailAddress: "manager@peptides.com",
+            firstName: "Peptide",
+            lastName: "Manager",
+            password: "manager123",
+            roleIds: [peptideStoreManagerRole.id],
+          });
+          console.log("👤 Created test admin: manager@peptides.com");
+        } catch (error) {
+          console.log("⚠️ Admin user might already exist");
+        }
+      } catch (error) {
+        console.log("⚠️ Could not create peptide-store-manager role");
+      }
+
+      // PeptideFulfillment role
+      try {
+        const fulfillmentPermissions = [
+          Permission.ReadOrder,
+          Permission.UpdateOrder,
+          Permission.ReadCustomer,
+          Permission.ReadProduct,
+        ];
+
+        await roleService.create(superadminContext, {
+          code: "peptide-fulfillment",
+          description: "Order fulfillment permissions on Peptide channel",
+          permissions: fulfillmentPermissions,
+          channelIds: [peptideChannel.id],
+        });
+        console.log("✅ Created role: peptide-fulfillment");
+      } catch (error) {
+        console.log("⚠️ Could not create peptide-fulfillment role");
+      }
+
+      // PeptideSupport role
+      try {
+        const supportPermissions = [
+          Permission.ReadOrder,
+          Permission.ReadCustomer,
+          Permission.ReadProduct,
+        ];
+
+        await roleService.create(superadminContext, {
+          code: "peptide-support",
+          description: "Read-only order support on Peptide channel",
+          permissions: supportPermissions,
+          channelIds: [peptideChannel.id],
+        });
+        console.log("✅ Created role: peptide-support");
+      } catch (error) {
+        console.log("⚠️ Could not create peptide-support role");
       }
     }
   } catch (error: any) {
-    console.error('Error in setupChannelsAndRoles:', error?.message || error);
+    console.error("Error in setupChannelsAndRoles:", error?.message || error);
     throw error;
   }
 }

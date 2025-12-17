@@ -9,10 +9,31 @@
  * Will integrate with Vendure API in production.
  */
 
-import Link from 'next/link';
-import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
-import { ResearchDisclaimer } from '../compliance/ResearchDisclaimer';
+import Link from "next/link";
+import { Badge } from "../ui/Badge";
+import { Button } from "../ui/Button";
+import { ResearchDisclaimer } from "../compliance/ResearchDisclaimer";
+
+/**
+ * Research goal categories
+ */
+type ResearchGoal =
+  | "Recovery"
+  | "Research"
+  | "Longevity"
+  | "Performance"
+  | "Metabolic";
+
+/**
+ * Goal badge colors
+ */
+const GOAL_COLORS: Record<ResearchGoal, { bg: string; text: string }> = {
+  Recovery: { bg: "bg-emerald-100", text: "text-emerald-700" },
+  Research: { bg: "bg-indigo-100", text: "text-indigo-700" },
+  Longevity: { bg: "bg-violet-100", text: "text-violet-700" },
+  Performance: { bg: "bg-amber-100", text: "text-amber-700" },
+  Metabolic: { bg: "bg-rose-100", text: "text-rose-700" },
+};
 
 /**
  * Product data structure (stub for design system)
@@ -25,13 +46,13 @@ export interface Product {
   currency?: string;
   image?: string;
   description?: string;
-  category?: string;
+  category?: ResearchGoal | string;
   inStock?: boolean;
   purity?: string;
   weight?: string;
 }
 
-type ProductCardVariant = 'thumbnail' | 'detail';
+type ProductCardVariant = "thumbnail" | "detail";
 
 interface ProductCardProps {
   product: Product;
@@ -46,17 +67,41 @@ interface ProductCardProps {
 /**
  * Format price for display
  */
-function formatPrice(price: number, currency = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+function formatPrice(price: number, currency = "USD"): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency,
   }).format(price);
 }
 
 /**
+ * Goal Badge component
+ */
+function GoalBadge({ goal }: { goal: string }): JSX.Element {
+  const colors = GOAL_COLORS[goal as ResearchGoal] || {
+    bg: "bg-gray-100",
+    text: "text-gray-700",
+  };
+  return (
+    <span
+      className={`
+        inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium
+        ${colors.bg} ${colors.text}
+      `}
+    >
+      {goal}
+    </span>
+  );
+}
+
+/**
  * Placeholder image component
  */
-function PlaceholderImage({ className = '' }: { className?: string }): JSX.Element {
+function PlaceholderImage({
+  className = "",
+}: {
+  className?: string;
+}): JSX.Element {
   return (
     <div
       className={`
@@ -90,18 +135,21 @@ function ThumbnailCard({
   product,
   showQuickView,
   onQuickView,
-  className = '',
+  className = "",
 }: ProductCardProps): JSX.Element {
   return (
     <article
       className={`
-        group glass-card overflow-hidden
+        group solid-card overflow-hidden
         flex flex-col
         ${className}
       `}
     >
       {/* Image */}
-      <Link href={`/products/${product.slug}`} className="block relative aspect-square">
+      <Link
+        href={`/products/${product.slug}`}
+        className="block relative aspect-square"
+      >
         {product.image ? (
           <img
             src={product.image}
@@ -116,8 +164,8 @@ function ThumbnailCard({
         {showQuickView && onQuickView && (
           <div
             className="
-              absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100
-              transition-opacity flex items-center justify-center
+              absolute inset-0 bg-[var(--peptide-fg)]/30 opacity-0 group-hover:opacity-100
+              transition-opacity flex items-center justify-center backdrop-blur-sm
             "
           >
             <Button
@@ -127,7 +175,7 @@ function ThumbnailCard({
                 e.preventDefault();
                 onQuickView(product);
               }}
-              className="bg-white/90 hover:bg-white"
+              className="bg-white hover:bg-white shadow-lg"
             >
               Quick View
             </Button>
@@ -149,33 +197,46 @@ function ThumbnailCard({
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
-        {/* Category */}
+        {/* Goal Badge */}
         {product.category && (
-          <span className="text-caption uppercase tracking-wide mb-1">
-            {product.category}
-          </span>
+          <div className="mb-2">
+            <GoalBadge goal={product.category} />
+          </div>
         )}
 
         {/* Name */}
         <Link href={`/products/${product.slug}`}>
-          <h3 className="text-body font-medium text-[var(--peptide-fg)] line-clamp-2 hover:text-[var(--peptide-primary)] transition-colors">
+          <h3 className="text-body font-medium text-[var(--peptide-fg-strong)] line-clamp-2 hover:text-[var(--peptide-primary)] transition-colors">
             {product.name}
           </h3>
         </Link>
 
-        {/* Specs */}
+        {/* Specs as chips */}
         {(product.purity || product.weight) && (
-          <div className="flex gap-2 mt-1 text-xs text-[var(--peptide-fg-muted)]">
-            {product.purity && <span>Purity: {product.purity}</span>}
-            {product.weight && <span>{product.weight}</span>}
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {product.purity && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded bg-[var(--peptide-bg-alt)] text-xs text-[var(--peptide-fg)]">
+                {product.purity} Pure
+              </span>
+            )}
+            {product.weight && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded bg-[var(--peptide-bg-alt)] text-xs text-[var(--peptide-fg)]">
+                {product.weight}
+              </span>
+            )}
           </div>
         )}
 
         {/* Price */}
-        <div className="mt-auto pt-3">
-          <span className="text-h4 text-[var(--peptide-fg)]">
+        <div className="mt-auto pt-3 flex items-baseline justify-between">
+          <span className="text-h4 text-[var(--peptide-fg-strong)]">
             {formatPrice(product.price, product.currency)}
           </span>
+          {product.inStock !== false && (
+            <span className="text-xs text-[var(--peptide-accent)]">
+              In Stock
+            </span>
+          )}
         </div>
       </div>
     </article>
@@ -189,12 +250,12 @@ function DetailCard({
   product,
   showQuickView,
   onQuickView,
-  className = '',
+  className = "",
 }: ProductCardProps): JSX.Element {
   return (
     <article
       className={`
-        glass-card overflow-hidden
+        solid-card overflow-hidden
         flex flex-col sm:flex-row
         ${className}
       `}
@@ -229,16 +290,16 @@ function DetailCard({
 
       {/* Content */}
       <div className="p-4 md:p-6 flex flex-col flex-1">
-        {/* Category */}
+        {/* Goal Badge */}
         {product.category && (
-          <Badge variant="secondary" badgeStyle="subtle" size="sm" className="w-fit mb-2">
-            {product.category}
-          </Badge>
+          <div className="mb-2">
+            <GoalBadge goal={product.category} />
+          </div>
         )}
 
         {/* Name */}
         <Link href={`/products/${product.slug}`}>
-          <h3 className="text-h3 text-[var(--peptide-fg)] hover:text-[var(--peptide-primary)] transition-colors">
+          <h3 className="text-h3 text-[var(--peptide-fg-strong)] hover:text-[var(--peptide-primary)] transition-colors">
             {product.name}
           </h3>
         </Link>
@@ -250,25 +311,63 @@ function DetailCard({
           </p>
         )}
 
-        {/* Specs */}
+        {/* Specs as grid */}
         {(product.purity || product.weight) && (
-          <div className="flex flex-wrap gap-3 mt-3">
+          <div className="flex flex-wrap gap-2 mt-3">
             {product.purity && (
-              <span className="text-xs text-[var(--peptide-fg-muted)] bg-[var(--peptide-bg-alt)] px-2 py-1 rounded">
-                Purity: {product.purity}
-              </span>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--peptide-bg-alt)] border border-[var(--peptide-border-light)]">
+                <svg
+                  className="w-4 h-4 text-[var(--peptide-accent)]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span className="text-xs font-medium text-[var(--peptide-fg)]">
+                  {product.purity} Purity
+                </span>
+              </div>
             )}
             {product.weight && (
-              <span className="text-xs text-[var(--peptide-fg-muted)] bg-[var(--peptide-bg-alt)] px-2 py-1 rounded">
-                {product.weight}
-              </span>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--peptide-bg-alt)] border border-[var(--peptide-border-light)]">
+                <svg
+                  className="w-4 h-4 text-[var(--peptide-primary)]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                  />
+                </svg>
+                <span className="text-xs font-medium text-[var(--peptide-fg)]">
+                  {product.weight}
+                </span>
+              </div>
+            )}
+            {product.inStock !== false && (
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-xs font-medium text-emerald-700">
+                  In Stock
+                </span>
+              </div>
             )}
           </div>
         )}
 
         {/* Footer: Price + Actions */}
         <div className="mt-auto pt-4 flex items-center justify-between gap-4">
-          <span className="text-h3 text-[var(--peptide-fg)]">
+          <span className="text-h3 text-[var(--peptide-fg-strong)]">
             {formatPrice(product.price, product.currency)}
           </span>
 
@@ -289,7 +388,7 @@ function DetailCard({
         </div>
 
         {/* Compliance */}
-        <div className="mt-3 pt-3 border-t border-[var(--peptide-border)]/50">
+        <div className="mt-3 pt-3 border-t border-[var(--peptide-border-light)]">
           <ResearchDisclaimer variant="inline" />
         </div>
       </div>
@@ -301,9 +400,9 @@ function DetailCard({
  * Main ProductCard component
  */
 export function ProductCard(props: ProductCardProps): JSX.Element {
-  const { variant = 'thumbnail' } = props;
+  const { variant = "thumbnail" } = props;
 
-  if (variant === 'detail') {
+  if (variant === "detail") {
     return <DetailCard {...props} />;
   }
 
@@ -315,47 +414,48 @@ export function ProductCard(props: ProductCardProps): JSX.Element {
  */
 export const MOCK_PRODUCTS: Product[] = [
   {
-    id: '1',
-    name: 'BPC-157 (5mg)',
-    slug: 'bpc-157-5mg',
+    id: "1",
+    name: "BPC-157 (5mg)",
+    slug: "bpc-157-5mg",
     price: 49.99,
-    description: 'High-purity BPC-157 pentadecapeptide for research applications.',
-    category: 'Recovery',
+    description:
+      "High-purity BPC-157 pentadecapeptide for research applications.",
+    category: "Recovery",
     inStock: true,
-    purity: '99%+',
-    weight: '5mg',
+    purity: "99%+",
+    weight: "5mg",
   },
   {
-    id: '2',
-    name: 'TB-500 (5mg)',
-    slug: 'tb-500-5mg',
+    id: "2",
+    name: "TB-500 (5mg)",
+    slug: "tb-500-5mg",
     price: 59.99,
-    description: 'Thymosin Beta-4 fragment for laboratory research.',
-    category: 'Recovery',
+    description: "Thymosin Beta-4 fragment for laboratory research.",
+    category: "Recovery",
     inStock: true,
-    purity: '98%+',
-    weight: '5mg',
+    purity: "98%+",
+    weight: "5mg",
   },
   {
-    id: '3',
-    name: 'PT-141 (10mg)',
-    slug: 'pt-141-10mg',
+    id: "3",
+    name: "PT-141 (10mg)",
+    slug: "pt-141-10mg",
     price: 44.99,
-    description: 'Bremelanotide peptide for research purposes.',
-    category: 'Research',
+    description: "Bremelanotide peptide for research purposes.",
+    category: "Research",
     inStock: false,
-    purity: '99%+',
-    weight: '10mg',
+    purity: "99%+",
+    weight: "10mg",
   },
   {
-    id: '4',
-    name: 'Epithalon (10mg)',
-    slug: 'epithalon-10mg',
+    id: "4",
+    name: "Epithalon (10mg)",
+    slug: "epithalon-10mg",
     price: 39.99,
-    description: 'Epitalon tetrapeptide for longevity research.',
-    category: 'Longevity',
+    description: "Epitalon tetrapeptide for longevity research.",
+    category: "Longevity",
     inStock: true,
-    purity: '99%+',
-    weight: '10mg',
+    purity: "99%+",
+    weight: "10mg",
   },
 ];

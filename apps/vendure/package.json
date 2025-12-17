@@ -9,6 +9,7 @@
     "setup": "ts-node src/init-vendure.ts",
     "populate": "ts-node src/populate-db.ts",
     "seed:tooly": "ts-node src/initial-data/seed-tooly-full.ts",
+    "seed:peptides": "ts-node src/initial-data/seed-peptides.ts",
     "bulk:assets": "ts-node src/cli/bulk-attach-assets.ts",
     "migrate": "vendure migrate",
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",

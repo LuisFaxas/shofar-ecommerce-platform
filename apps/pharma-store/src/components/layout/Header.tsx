@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * Header Component
@@ -10,8 +10,8 @@
  * - Mobile menu support
  */
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState } from "react";
+import Link from "next/link";
 
 interface NavLink {
   href: string;
@@ -19,15 +19,15 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/products', label: 'Products' },
-  { href: '/research', label: 'Research' },
-  { href: '/about', label: 'About' },
+  { href: "/products", label: "Products" },
+  { href: "/research", label: "Research" },
+  { href: "/about", label: "About" },
 ];
 
 /**
  * Search icon
  */
-function SearchIcon({ className = '' }: { className?: string }): JSX.Element {
+function SearchIcon({ className = "" }: { className?: string }): JSX.Element {
   return (
     <svg
       className={className}
@@ -50,7 +50,7 @@ function SearchIcon({ className = '' }: { className?: string }): JSX.Element {
 /**
  * Menu icon (hamburger)
  */
-function MenuIcon({ className = '' }: { className?: string }): JSX.Element {
+function MenuIcon({ className = "" }: { className?: string }): JSX.Element {
   return (
     <svg
       className={className}
@@ -74,7 +74,7 @@ function MenuIcon({ className = '' }: { className?: string }): JSX.Element {
 /**
  * Close icon (X)
  */
-function CloseIcon({ className = '' }: { className?: string }): JSX.Element {
+function CloseIcon({ className = "" }: { className?: string }): JSX.Element {
   return (
     <svg
       className={className}
@@ -97,7 +97,7 @@ function CloseIcon({ className = '' }: { className?: string }): JSX.Element {
 /**
  * Cart icon
  */
-function CartIcon({ className = '' }: { className?: string }): JSX.Element {
+function CartIcon({ className = "" }: { className?: string }): JSX.Element {
   return (
     <svg
       className={className}
@@ -122,15 +122,15 @@ interface HeaderProps {
   className?: string;
 }
 
-export function Header({ className = '' }: HeaderProps): JSX.Element {
+export function Header({ className = "" }: HeaderProps): JSX.Element {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     if (searchQuery.trim()) {
       // TODO: Implement search navigation
-      console.log('Search:', searchQuery);
+      console.log("Search:", searchQuery);
     }
   };
 
@@ -138,8 +138,9 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
     <header
       className={`
         sticky top-0 z-40
-        bg-[var(--peptide-bg)]/80 backdrop-blur-lg
+        bg-[var(--glass-bg)] backdrop-blur-[var(--glass-blur)]
         border-b border-[var(--peptide-border)]
+        shadow-header
         ${className}
       `}
     >
@@ -162,14 +163,17 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
+          <nav
+            className="hidden md:flex items-center gap-6"
+            aria-label="Main navigation"
+          >
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className="
-                  text-sm font-medium text-[var(--peptide-fg-muted)]
-                  hover:text-[var(--peptide-fg)] transition-colors
+                  text-sm font-medium text-[var(--peptide-fg)]
+                  hover:text-[var(--peptide-primary)] transition-colors
                   focus-ring rounded px-1
                 "
               >
@@ -192,11 +196,11 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="
                   w-full pl-10 pr-4 py-2
-                  bg-[var(--peptide-bg-alt)] border border-[var(--peptide-border)]
-                  rounded-lg text-sm
+                  bg-[var(--peptide-bg-alt)] border border-[var(--peptide-border-light)]
+                  rounded-lg text-sm text-[var(--peptide-fg)]
                   placeholder:text-[var(--peptide-fg-muted)]
-                  focus:outline-none focus:ring-2 focus:ring-[var(--peptide-primary)] focus:border-transparent
-                  transition-shadow
+                  focus:outline-none focus:ring-2 focus:ring-[var(--peptide-primary)]/30 focus:border-[var(--peptide-primary)]
+                  transition-all duration-200
                 "
               />
             </div>
@@ -233,7 +237,7 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
                 transition-colors focus-ring
               "
               aria-expanded={isMobileMenuOpen}
-              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
               {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
@@ -241,10 +245,7 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
         </div>
 
         {/* Mobile Search - below header on mobile */}
-        <form
-          onSubmit={handleSearchSubmit}
-          className="sm:hidden pb-3"
-        >
+        <form onSubmit={handleSearchSubmit} className="sm:hidden pb-3">
           <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--peptide-fg-muted)]" />
             <input
@@ -254,10 +255,11 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="
                 w-full pl-10 pr-4 py-2
-                bg-[var(--peptide-bg-alt)] border border-[var(--peptide-border)]
-                rounded-lg text-sm
+                bg-[var(--peptide-bg-alt)] border border-[var(--peptide-border-light)]
+                rounded-lg text-sm text-[var(--peptide-fg)]
                 placeholder:text-[var(--peptide-fg-muted)]
-                focus:outline-none focus:ring-2 focus:ring-[var(--peptide-primary)] focus:border-transparent
+                focus:outline-none focus:ring-2 focus:ring-[var(--peptide-primary)]/30 focus:border-[var(--peptide-primary)]
+                transition-all duration-200
               "
             />
           </div>
@@ -267,7 +269,7 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
         <nav
-          className="md:hidden border-t border-[var(--peptide-border)] bg-[var(--peptide-bg)]"
+          className="md:hidden border-t border-[var(--peptide-border-light)] bg-[var(--peptide-bg-elevated)]"
           aria-label="Mobile navigation"
         >
           <div className="px-4 py-3 space-y-1">
@@ -278,8 +280,8 @@ export function Header({ className = '' }: HeaderProps): JSX.Element {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="
                   block px-3 py-2 rounded-lg
-                  text-base font-medium text-[var(--peptide-fg-muted)]
-                  hover:text-[var(--peptide-fg)] hover:bg-[var(--peptide-bg-alt)]
+                  text-base font-medium text-[var(--peptide-fg)]
+                  hover:text-[var(--peptide-primary)] hover:bg-[var(--peptide-bg-alt)]
                   transition-colors focus-ring
                 "
               >

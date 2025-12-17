@@ -12,11 +12,11 @@
  * - card: Standalone card for product pages
  */
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-const DISCLAIMER_TEXT = 'For Research Use Only / Not for human use.';
+const DISCLAIMER_TEXT = "For Research Use Only / Not for human use.";
 
-type DisclaimerVariant = 'banner' | 'inline' | 'footer' | 'card';
+type DisclaimerVariant = "banner" | "inline" | "footer" | "card";
 
 interface ResearchDisclaimerProps {
   variant?: DisclaimerVariant;
@@ -27,7 +27,7 @@ interface ResearchDisclaimerProps {
 /**
  * Flask/beaker icon for scientific context
  */
-function ScienceIcon({ className = '' }: { className?: string }): JSX.Element {
+function ScienceIcon({ className = "" }: { className?: string }): JSX.Element {
   return (
     <svg
       className={className}
@@ -51,7 +51,11 @@ function ScienceIcon({ className = '' }: { className?: string }): JSX.Element {
 /**
  * Banner variant - Full-width gradient banner at top of page
  */
-function BannerDisclaimer({ className = '' }: { className?: string }): JSX.Element {
+function BannerDisclaimer({
+  className = "",
+}: {
+  className?: string;
+}): JSX.Element {
   return (
     <div
       role="banner"
@@ -67,7 +71,11 @@ function BannerDisclaimer({ className = '' }: { className?: string }): JSX.Eleme
 /**
  * Inline variant - Compact text with icon for inline use
  */
-function InlineDisclaimer({ className = '' }: { className?: string }): JSX.Element {
+function InlineDisclaimer({
+  className = "",
+}: {
+  className?: string;
+}): JSX.Element {
   return (
     <div
       className={`inline-flex items-center gap-1.5 text-xs text-[var(--peptide-fg-muted)] ${className}`}
@@ -81,7 +89,11 @@ function InlineDisclaimer({ className = '' }: { className?: string }): JSX.Eleme
 /**
  * Footer variant - Subtle text for page footers
  */
-function FooterDisclaimer({ className = '' }: { className?: string }): JSX.Element {
+function FooterDisclaimer({
+  className = "",
+}: {
+  className?: string;
+}): JSX.Element {
   return (
     <p
       className={`text-xs text-[var(--peptide-fg-muted)] text-center ${className}`}
@@ -96,7 +108,7 @@ function FooterDisclaimer({ className = '' }: { className?: string }): JSX.Eleme
  * Card variant - Standalone card for prominent display on product pages
  */
 function CardDisclaimer({
-  className = '',
+  className = "",
   children,
 }: {
   className?: string;
@@ -107,7 +119,7 @@ function CardDisclaimer({
       className={`
         rounded-lg border border-[var(--peptide-border)]
         bg-gradient-to-r from-[var(--peptide-secondary)]/5 to-[var(--peptide-primary)]/5
-        p-4 ${className}
+        shadow-elevated p-4 ${className}
       `}
     >
       <div className="flex items-start gap-3">
@@ -115,13 +127,11 @@ function CardDisclaimer({
           <ScienceIcon className="w-4 h-4 text-[var(--peptide-secondary)]" />
         </div>
         <div className="flex-1">
-          <p className="font-semibold text-sm text-[var(--peptide-fg)]">
+          <p className="font-semibold text-sm text-[var(--peptide-fg-strong)]">
             {DISCLAIMER_TEXT}
           </p>
           {children && (
-            <p className="mt-1 text-xs text-[var(--peptide-fg-muted)]">
-              {children}
-            </p>
+            <p className="mt-1 text-xs text-[var(--peptide-fg)]">{children}</p>
           )}
         </div>
       </div>
@@ -151,18 +161,18 @@ function CardDisclaimer({
  * ```
  */
 export function ResearchDisclaimer({
-  variant = 'banner',
-  className = '',
+  variant = "banner",
+  className = "",
   children,
 }: ResearchDisclaimerProps): JSX.Element {
   switch (variant) {
-    case 'banner':
+    case "banner":
       return <BannerDisclaimer className={className} />;
-    case 'inline':
+    case "inline":
       return <InlineDisclaimer className={className} />;
-    case 'footer':
+    case "footer":
       return <FooterDisclaimer className={className} />;
-    case 'card':
+    case "card":
       return <CardDisclaimer className={className}>{children}</CardDisclaimer>;
     default:
       return <BannerDisclaimer className={className} />;

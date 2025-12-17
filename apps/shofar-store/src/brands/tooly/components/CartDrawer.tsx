@@ -12,22 +12,23 @@
  * - Empty state with "Shop Now" CTA
  */
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
-import FocusTrap from 'focus-trap-react';
-import { cn } from '@/lib/utils';
-import { useCart, type OrderLine } from '@/contexts/CartContext';
-import { ButtonPrimary } from './ui/ButtonPrimary';
-import { ButtonSecondary } from './ui/ButtonSecondary';
-import { QuantityStepper } from './ui/QuantityStepper';
+import * as React from "react";
+import { useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import FocusTrap from "focus-trap-react";
+import { cn } from "@/lib/utils";
+import { useCart, type OrderLine } from "@/contexts/CartContext";
+import { ButtonPrimary } from "./ui/ButtonPrimary";
+import { ButtonSecondary } from "./ui/ButtonSecondary";
+import { QuantityStepper } from "./ui/QuantityStepper";
 
 // Format price from cents to currency string
-function formatPrice(cents: number, currencyCode: string = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+function formatPrice(cents: number, currencyCode: string = "USD"): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency: currencyCode,
   }).format(cents / 100);
 }
@@ -69,7 +70,12 @@ function CartLineItem({
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white/30">
-            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-8 h-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -104,14 +110,19 @@ function CartLineItem({
             onClick={() => onRemove(line.id)}
             disabled={disabled}
             className={cn(
-              'p-1.5 rounded-md text-white/50 hover:text-red-400',
-              'hover:bg-red-400/10 transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50',
-              disabled && 'opacity-50 cursor-not-allowed'
+              "p-1.5 rounded-md text-white/50 hover:text-red-400",
+              "hover:bg-red-400/10 transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50",
+              disabled && "opacity-50 cursor-not-allowed",
             )}
             aria-label={`Remove ${line.productVariant.name} from cart`}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -131,7 +142,11 @@ function CartLineItem({
   );
 }
 
-function EmptyCartState({ onShopNow }: { onShopNow: () => void }): React.ReactElement {
+function EmptyCartState({
+  onShopNow,
+}: {
+  onShopNow: () => void;
+}): React.ReactElement {
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 py-12 text-center">
       <div className="w-16 h-16 mb-4 rounded-full bg-white/[0.08] flex items-center justify-center">
@@ -149,7 +164,9 @@ function EmptyCartState({ onShopNow }: { onShopNow: () => void }): React.ReactEl
           />
         </svg>
       </div>
-      <h3 className="text-lg font-medium text-white mb-2">Your cart is empty</h3>
+      <h3 className="text-lg font-medium text-white mb-2">
+        Your cart is empty
+      </h3>
       <p className="text-sm text-white/60 mb-6">
         Add some premium tools to get started
       </p>
@@ -161,6 +178,7 @@ function EmptyCartState({ onShopNow }: { onShopNow: () => void }): React.ReactEl
 }
 
 export function CartDrawer(): React.ReactElement {
+  const router = useRouter();
   const {
     order,
     loading,
@@ -178,24 +196,24 @@ export function CartDrawer(): React.ReactElement {
   // Handle ESC key to close drawer
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isDrawerOpen) {
+      if (e.key === "Escape" && isDrawerOpen) {
         closeDrawer();
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isDrawerOpen, closeDrawer]);
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
     if (isDrawerOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isDrawerOpen]);
 
@@ -206,16 +224,16 @@ export function CartDrawer(): React.ReactElement {
   const handleShopNow = useCallback(() => {
     closeDrawer();
     // Smooth scroll to product section
-    const productSection = document.getElementById('product');
+    const productSection = document.getElementById("product");
     if (productSection) {
-      productSection.scrollIntoView({ behavior: 'smooth' });
+      productSection.scrollIntoView({ behavior: "smooth" });
     }
   }, [closeDrawer]);
 
   const handleCheckout = useCallback(() => {
-    // For now, just log - checkout implementation in later phase
-    console.log('Proceed to checkout with order:', order?.code);
-  }, [order]);
+    closeDrawer();
+    router.push("/checkout");
+  }, [closeDrawer, router]);
 
   const hasItems = order && order.lines.length > 0;
 
@@ -225,9 +243,9 @@ export function CartDrawer(): React.ReactElement {
       <div
         data-testid="cart-drawer-overlay"
         className={cn(
-          'fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm',
-          'transition-opacity duration-300',
-          isDrawerOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          "fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm",
+          "transition-opacity duration-300",
+          isDrawerOpen ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={handleOverlayClick}
         aria-hidden="true"
@@ -239,12 +257,12 @@ export function CartDrawer(): React.ReactElement {
           ref={drawerRef}
           data-testid="cart-drawer"
           className={cn(
-            'fixed top-0 right-0 z-[70] h-full w-full max-w-md',
-            'bg-[#0b0e14] border-l border-white/[0.08]',
-            'shadow-[-8px_0_32px_rgba(0,0,0,0.5)]',
-            'flex flex-col',
-            'transform transition-transform duration-300 ease-out',
-            isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
+            "fixed top-0 right-0 z-[70] h-full w-full max-w-md",
+            "bg-[#0b0e14] border-l border-white/[0.08]",
+            "shadow-[-8px_0_32px_rgba(0,0,0,0.5)]",
+            "flex flex-col",
+            "transform transition-transform duration-300 ease-out",
+            isDrawerOpen ? "translate-x-0" : "translate-x-full",
           )}
           role="dialog"
           aria-modal="true"
@@ -257,7 +275,7 @@ export function CartDrawer(): React.ReactElement {
               Your Cart
               {itemCount > 0 && (
                 <span className="ml-2 text-sm font-normal text-white/60">
-                  ({itemCount} {itemCount === 1 ? 'item' : 'items'})
+                  ({itemCount} {itemCount === 1 ? "item" : "items"})
                 </span>
               )}
             </h2>
@@ -265,20 +283,34 @@ export function CartDrawer(): React.ReactElement {
               data-testid="cart-drawer-close"
               onClick={closeDrawer}
               className={cn(
-                'p-2 rounded-lg text-white/60 hover:text-white',
-                'hover:bg-white/[0.08] transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50'
+                "p-2 rounded-lg text-white/60 hover:text-white",
+                "hover:bg-white/[0.08] transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
               )}
               aria-label="Close cart"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </header>
 
           {/* Cart Contents */}
-          <div className="flex-1 overflow-y-auto" aria-live="polite" aria-atomic="false">
+          <div
+            className="flex-1 overflow-y-auto"
+            aria-live="polite"
+            aria-atomic="false"
+          >
             {!hasItems ? (
               <EmptyCartState onShopNow={handleShopNow} />
             ) : (
@@ -329,9 +361,9 @@ export function CartDrawer(): React.ReactElement {
               <button
                 onClick={closeDrawer}
                 className={cn(
-                  'w-full py-2 text-sm text-white/60 hover:text-white',
-                  'transition-colors text-center',
-                  'focus-visible:outline-none focus-visible:underline'
+                  "w-full py-2 text-sm text-white/60 hover:text-white",
+                  "transition-colors text-center",
+                  "focus-visible:outline-none focus-visible:underline",
                 )}
               >
                 Continue Shopping
@@ -344,6 +376,6 @@ export function CartDrawer(): React.ReactElement {
   );
 }
 
-CartDrawer.displayName = 'CartDrawer';
+CartDrawer.displayName = "CartDrawer";
 
 export default CartDrawer;

@@ -19,10 +19,10 @@ import {
   Children,
   cloneElement,
   isValidElement,
-} from 'react';
+} from "react";
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
-type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -48,12 +48,14 @@ const variantStyles: Record<ButtonVariant, string> = {
     bg-gradient-to-r from-[var(--peptide-primary)] to-[var(--peptide-secondary)]
     text-white font-medium
     hover:from-[var(--peptide-primary-dark)] hover:to-[var(--peptide-secondary-dark)]
-    shadow-sm hover:shadow-md
+    shadow-md hover:shadow-lg
+    hover:shadow-[var(--peptide-primary)]/25
   `,
   secondary: `
     bg-transparent border-2 border-[var(--peptide-primary)]
     text-[var(--peptide-primary)] font-medium
-    hover:bg-[var(--peptide-primary)]/10
+    hover:bg-[var(--peptide-primary)] hover:text-white
+    transition-colors
   `,
   ghost: `
     bg-transparent
@@ -63,14 +65,14 @@ const variantStyles: Record<ButtonVariant, string> = {
   danger: `
     bg-red-500 text-white font-medium
     hover:bg-red-600
-    shadow-sm hover:shadow-md
+    shadow-md hover:shadow-lg hover:shadow-red-500/25
   `,
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-sm rounded-md gap-1.5',
-  md: 'px-4 py-2 text-sm rounded-lg gap-2',
-  lg: 'px-6 py-3 text-base rounded-lg gap-2',
+  sm: "px-3 py-1.5 text-sm rounded-md gap-1.5",
+  md: "px-4 py-2 text-sm rounded-lg gap-2",
+  lg: "px-6 py-3 text-base rounded-lg gap-2",
 };
 
 /**
@@ -110,7 +112,7 @@ function getButtonClassName(
   size: ButtonSize,
   fullWidth: boolean,
   isDisabled: boolean,
-  className: string
+  className: string,
 ): string {
   return `
     inline-flex items-center justify-center
@@ -118,27 +120,35 @@ function getButtonClassName(
     focus-ring
     ${variantStyles[variant]}
     ${sizeStyles[size]}
-    ${fullWidth ? 'w-full' : ''}
-    ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+    ${fullWidth ? "w-full" : ""}
+    ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
     ${className}
-  `.trim().replace(/\s+/g, ' ');
+  `
+    .trim()
+    .replace(/\s+/g, " ");
 }
 
 export function Button({
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   children,
   isLoading = false,
   fullWidth = false,
   leftIcon,
   rightIcon,
   disabled,
-  className = '',
+  className = "",
   asChild = false,
   ...props
 }: ButtonProps): JSX.Element {
   const isDisabled = disabled || isLoading;
-  const buttonClassName = getButtonClassName(variant, size, fullWidth, isDisabled, className);
+  const buttonClassName = getButtonClassName(
+    variant,
+    size,
+    fullWidth,
+    isDisabled,
+    className,
+  );
 
   // Build the inner content
   const innerContent = (
@@ -160,30 +170,36 @@ export function Button({
     const child = Children.only(children);
     if (isValidElement(child)) {
       // Get the child's existing className
-      const childProps = child.props as { className?: string; children?: ReactNode };
-      const existingClassName = childProps.className || '';
+      const childProps = child.props as {
+        className?: string;
+        children?: ReactNode;
+      };
+      const existingClassName = childProps.className || "";
       const mergedClassName = `${buttonClassName} ${existingClassName}`.trim();
 
-      return cloneElement(child as ReactElement<{ className?: string; children?: ReactNode }>, {
-        className: mergedClassName,
-        children: (
-          <>
-            {leftIcon && !isLoading && <span className="flex-shrink-0">{leftIcon}</span>}
-            {isLoading && <LoadingSpinner />}
-            {childProps.children}
-            {rightIcon && !isLoading && <span className="flex-shrink-0">{rightIcon}</span>}
-          </>
-        ),
-      });
+      return cloneElement(
+        child as ReactElement<{ className?: string; children?: ReactNode }>,
+        {
+          className: mergedClassName,
+          children: (
+            <>
+              {leftIcon && !isLoading && (
+                <span className="flex-shrink-0">{leftIcon}</span>
+              )}
+              {isLoading && <LoadingSpinner />}
+              {childProps.children}
+              {rightIcon && !isLoading && (
+                <span className="flex-shrink-0">{rightIcon}</span>
+              )}
+            </>
+          ),
+        },
+      );
     }
   }
 
   return (
-    <button
-      disabled={isDisabled}
-      className={buttonClassName}
-      {...props}
-    >
+    <button disabled={isDisabled} className={buttonClassName} {...props}>
       {innerContent}
     </button>
   );

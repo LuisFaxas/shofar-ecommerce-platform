@@ -7,12 +7,13 @@
  * Route: /design-system
  */
 
-import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
-import { DesignSystemContent } from './DesignSystemContent';
+import React from "react";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { DesignSystemContent } from "./DesignSystemContent";
 
 export const metadata: Metadata = {
-  title: 'Design System',
+  title: "Design System",
   robots: { index: false, follow: false },
 };
 
@@ -22,9 +23,9 @@ export const metadata: Metadata = {
  * Thin wrapper that handles dev-only guard and metadata.
  * All interactive content is in DesignSystemContent (Client Component).
  */
-export default function DesignSystemPage(): JSX.Element {
+export default function DesignSystemPage(): React.JSX.Element {
   // Dev-only guard
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== "development") {
     notFound();
   }
 

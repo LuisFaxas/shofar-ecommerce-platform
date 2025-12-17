@@ -17,11 +17,15 @@
  * - ASSET_URL_PREFIX: Public URL prefix for assets
  */
 
-import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
-import { Upload } from '@aws-sdk/lib-storage';
-import { AssetStorageStrategy } from '@vendure/core';
-import { Request } from 'express';
-import { Readable } from 'stream';
+import {
+  S3Client,
+  DeleteObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+import { AssetStorageStrategy } from "@vendure/core";
+import { Request } from "express";
+import { Readable } from "stream";
 
 export interface S3AssetStorageConfig {
   bucket: string;
@@ -43,7 +47,7 @@ export function isS3Configured(): boolean {
   const accessKey = process.env.S3_ACCESS_KEY_ID;
   const secretKey = process.env.S3_SECRET_ACCESS_KEY;
 
-  return storage === 's3' && !!bucket && !!accessKey && !!secretKey;
+  return storage === "s3" && !!bucket && !!accessKey && !!secretKey;
 }
 
 /**
@@ -54,28 +58,44 @@ export function getS3ConfigFromEnv(): S3AssetStorageConfig | null {
     return null;
   }
 
-  return {
+  const config: S3AssetStorageConfig = {
     bucket: process.env.S3_BUCKET!,
-    region: process.env.S3_REGION || 'auto',
-    endpoint: process.env.S3_ENDPOINT || undefined,
+    region: process.env.S3_REGION || "auto",
     credentials: {
       accessKeyId: process.env.S3_ACCESS_KEY_ID!,
       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
     },
-    forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
   };
+
+  // Only set optional properties if they have values
+  if (process.env.S3_ENDPOINT) {
+    config.endpoint = process.env.S3_ENDPOINT;
+  }
+  if (process.env.S3_FORCE_PATH_STYLE === "true") {
+    config.forcePathStyle = true;
+  }
+
+  return config;
 }
 
 /**
  * Create an S3 client with the given configuration
  */
 function createS3Client(config: S3AssetStorageConfig): S3Client {
-  return new S3Client({
-    region: config.region || 'us-east-1',
-    endpoint: config.endpoint,
+  const clientConfig: ConstructorParameters<typeof S3Client>[0] = {
+    region: config.region || "us-east-1",
     credentials: config.credentials,
-    forcePathStyle: config.forcePathStyle,
-  });
+  };
+
+  // Only set optional properties if they have values
+  if (config.endpoint) {
+    clientConfig.endpoint = config.endpoint;
+  }
+  if (config.forcePathStyle !== undefined) {
+    clientConfig.forcePathStyle = config.forcePathStyle;
+  }
+
+  return new S3Client(clientConfig);
 }
 
 /**
@@ -132,9 +152,9 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
 
     return new Promise((resolve, reject) => {
       const chunks: Buffer[] = [];
-      stream.on('data', (chunk) => chunks.push(chunk));
-      stream.on('error', reject);
-      stream.on('end', () => resolve(Buffer.concat(chunks)));
+      stream.on("data", (chunk) => chunks.push(chunk));
+      stream.on("error", reject);
+      stream.on("end", () => resolve(Buffer.concat(chunks)));
     });
   }
 
@@ -174,12 +194,12 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
     // Use ASSET_URL_PREFIX if set, otherwise construct from endpoint/bucket
     const prefix = process.env.ASSET_URL_PREFIX;
     if (prefix) {
-      return `${prefix.replace(/\/$/, '')}/${identifier}`;
+      return `${prefix.replace(/\/$/, "")}/${identifier}`;
     }
 
     // Fallback: construct URL from endpoint and bucket
     if (this.config.endpoint) {
-      const baseUrl = this.config.endpoint.replace(/\/$/, '');
+      const baseUrl = this.config.endpoint.replace(/\/$/, "");
       if (this.config.forcePathStyle) {
         return `${baseUrl}/${this.bucket}/${identifier}`;
       }
@@ -192,19 +212,19 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
   }
 
   private getMimeType(fileName: string): string {
-    const ext = fileName.split('.').pop()?.toLowerCase();
+    const ext = fileName.split(".").pop()?.toLowerCase();
     const mimeTypes: Record<string, string> = {
-      jpg: 'image/jpeg',
-      jpeg: 'image/jpeg',
-      png: 'image/png',
-      gif: 'image/gif',
-      webp: 'image/webp',
-      svg: 'image/svg+xml',
-      pdf: 'application/pdf',
-      mp4: 'video/mp4',
-      webm: 'video/webm',
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      gif: "image/gif",
+      webp: "image/webp",
+      svg: "image/svg+xml",
+      pdf: "application/pdf",
+      mp4: "video/mp4",
+      webm: "video/webm",
     };
-    return mimeTypes[ext || ''] || 'application/octet-stream';
+    return mimeTypes[ext || ""] || "application/octet-stream";
   }
 }
 
@@ -216,16 +236,18 @@ export function configureS3AssetStorage(): S3AssetStorageStrategy | undefined {
   const config = getS3ConfigFromEnv();
 
   if (!config) {
-    if (process.env.ASSET_STORAGE === 's3') {
+    if (process.env.ASSET_STORAGE === "s3") {
       console.warn(
-        '\n⚠️  S3 storage requested but credentials missing!\n' +
-          '   Required env vars: S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY\n' +
-          '   Falling back to local file storage.\n'
+        "\n⚠️  S3 storage requested but credentials missing!\n" +
+          "   Required env vars: S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY\n" +
+          "   Falling back to local file storage.\n",
       );
     }
     return undefined;
   }
 
-  console.log(`✅ S3 asset storage configured: ${config.endpoint || 'AWS S3'} / ${config.bucket}`);
+  console.log(
+    `✅ S3 asset storage configured: ${config.endpoint || "AWS S3"} / ${config.bucket}`,
+  );
   return new S3AssetStorageStrategy(config);
 }

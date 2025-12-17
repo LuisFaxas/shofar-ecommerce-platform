@@ -1,0 +1,13 @@
+{
+  "TOOLY-DLC-GM": "./assets-import/tooly-dlc-gunmetal.png",
+  "TOOLY-CK-MID": "./assets-import/tooly-cerakote-midnight.png",
+  "TOOLY-CK-ARC": "./assets-import/tooly-cerakote-arctic.png",
+  "TOOLY-CK-EMB": "./assets-import/tooly-cerakote-ember.png",
+  "TOOLY-CK-COB": "./assets-import/tooly-cerakote-cobalt.png",
+  "TOOLY-CK-TIT": "./assets-import/tooly-cerakote-titanium.png",
+  "ACC-CASE-VIAL": "./assets-import/accessory-case-vial.png",
+  "ACC-CHAIN-GLD": "./assets-import/accessory-chain-gold.png",
+  "ACC-CHAIN-SLV": "./assets-import/accessory-chain-silver.png",
+  "ACC-CLEAN-KIT": "./assets-import/accessory-cleaning-kit.png",
+  "ACC-CASE-001": "./assets-import/accessory-silicone-case.png"
+}

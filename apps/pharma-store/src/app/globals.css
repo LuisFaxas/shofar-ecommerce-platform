@@ -2,54 +2,84 @@
 
 /**
  * PEPTIDES Brand Design System
- * Theme: Medical/Scientific - Glassmorphic
- * Colors: Indigo primary, Purple secondary, Emerald accent
+ * Theme: Ultra-premium light theme - Clinical, Apple-like, Research-grade
+ * Palette: Indigo primary, Violet secondary, Emerald accent
+ *
+ * Single light theme only. No dark mode toggle.
  */
 
 :root {
-  /* PEPTIDES Brand Colors */
-  --peptide-primary: #6366F1;
-  --peptide-primary-dark: #4F46E5;
-  --peptide-primary-light: #818CF8;
-  --peptide-secondary: #8B5CF6;
-  --peptide-secondary-dark: #7C3AED;
-  --peptide-secondary-light: #A78BFA;
-  --peptide-accent: #10B981;
-  --peptide-accent-dark: #059669;
-  --peptide-accent-light: #34D399;
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * BRAND COLORS - Indigo/Violet/Emerald palette
+   * ═══════════════════════════════════════════════════════════════════════════ */
+  --peptide-primary: #6366F1;          /* Indigo-500 */
+  --peptide-primary-dark: #4F46E5;     /* Indigo-600 */
+  --peptide-primary-light: #818CF8;    /* Indigo-400 */
+  --peptide-secondary: #8B5CF6;        /* Violet-500 */
+  --peptide-secondary-dark: #7C3AED;   /* Violet-600 */
+  --peptide-secondary-light: #A78BFA;  /* Violet-400 */
+  --peptide-accent: #10B981;           /* Emerald-500 */
+  --peptide-accent-dark: #059669;      /* Emerald-600 */
+  --peptide-accent-light: #34D399;     /* Emerald-400 */
 
-  /* Background & Foreground */
-  --peptide-bg: #FAFAFA;
-  --peptide-bg-alt: #F3F4F6;
-  --peptide-fg: #111827;
-  --peptide-fg-muted: #6B7280;
-  --peptide-border: #E5E7EB;
-  --peptide-border-light: #F3F4F6;
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * SURFACES - Ultra-clean light backgrounds
+   * ═══════════════════════════════════════════════════════════════════════════ */
+  --peptide-bg: #FAFBFC;               /* Near-white base */
+  --peptide-bg-alt: #F1F5F9;           /* Slate-100 sections */
+  --peptide-bg-elevated: #FFFFFF;      /* Pure white for cards */
+  --peptide-fg: #0F172A;               /* Slate-900 text */
+  --peptide-fg-strong: #020617;        /* Slate-950 headings (max contrast) */
+  --peptide-fg-muted: #475569;         /* Slate-600 secondary (WCAG AA compliant) */
+  --peptide-border: #CBD5E1;           /* Slate-300 borders (more visible) */
+  --peptide-border-light: #E2E8F0;     /* Slate-200 subtle borders */
 
-  /* Glassmorphism */
-  --glass-opacity: 0.7;
-  --glass-blur: 24px;
-  --glass-border-opacity: 0.2;
-  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * FROSTED GLASS - Premium glassmorphism for light backgrounds
+   * ═══════════════════════════════════════════════════════════════════════════ */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(99, 102, 241, 0.12);      /* Slightly stronger indigo tint */
+  --glass-border-hover: rgba(99, 102, 241, 0.2);
+  --glass-shadow: 0 4px 24px rgba(99, 102, 241, 0.08);
+  --glass-shadow-hover: 0 8px 32px rgba(99, 102, 241, 0.12);
+  --glass-blur: 20px;
 
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * SHADOWS - Enhanced elevation scale
+   * ═══════════════════════════════════════════════════════════════════════════ */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-header: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
 
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * SPACING SCALE
+   * ═══════════════════════════════════════════════════════════════════════════ */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
 
-  /* Legacy mappings */
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * BORDER RADIUS
+   * ═══════════════════════════════════════════════════════════════════════════ */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-2xl: 1.5rem;    /* 24px */
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * LEGACY MAPPINGS (for Tailwind compatibility)
+   * ═══════════════════════════════════════════════════════════════════════════ */
   --background: var(--peptide-bg);
   --foreground: var(--peptide-fg);
 }
 
+/* Tailwind v4 theme integration */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -60,123 +90,137 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --peptide-bg: #0F0F10;
-    --peptide-bg-alt: #18181B;
-    --peptide-fg: #FAFAFA;
-    --peptide-fg-muted: #A1A1AA;
-    --peptide-border: #27272A;
-    --peptide-border-light: #3F3F46;
-    --glass-opacity: 0.15;
-    --glass-border-opacity: 0.1;
-    --background: var(--peptide-bg);
-    --foreground: var(--peptide-fg);
-  }
-}
-
-/* Base Styles */
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * BASE STYLES
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 body {
   background: var(--peptide-bg);
   color: var(--peptide-fg);
   font-family: var(--font-sans, 'Inter', system-ui, -apple-system, sans-serif);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography Scale */
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * TYPOGRAPHY SCALE
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 .text-display {
-  font-size: 3rem;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
   font-weight: 700;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .text-h1 {
-  font-size: 2.25rem;
+  font-size: clamp(1.875rem, 4vw, 2.5rem);
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .text-h2 {
-  font-size: 1.875rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 600;
   line-height: 1.3;
+  letter-spacing: -0.015em;
 }
 
 .text-h3 {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
   font-weight: 600;
   line-height: 1.4;
 }
 
 .text-h4 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 500;
   line-height: 1.4;
 }
 
 .text-body {
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .text-body-sm {
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .text-caption {
   font-size: 0.75rem;
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--peptide-fg-muted);
 }
 
-/* Glassmorphism Utilities */
+.text-overline {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--peptide-fg-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * FROSTED GLASS PANELS
+ * Premium glassmorphism optimized for light backgrounds
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 .glass-panel {
-  background: rgba(255, 255, 255, var(--glass-opacity));
+  background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid rgba(255, 255, 255, var(--glass-border-opacity));
+  border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
 }
 
 .glass-panel-subtle {
-  background: rgba(255, 255, 255, calc(var(--glass-opacity) * 0.5));
-  backdrop-filter: blur(calc(var(--glass-blur) * 0.5));
-  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.5));
-  border: 1px solid rgba(255, 255, 255, calc(var(--glass-border-opacity) * 0.5));
-  border-radius: var(--radius-md);
+  background: var(--glass-bg-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, var(--glass-opacity));
+  background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid rgba(255, 255, 255, var(--glass-border-opacity));
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-  border-radius: var(--radius-lg);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-xl);
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .glass-card:hover {
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--glass-shadow-hover);
+  border-color: var(--glass-border-hover);
   transform: translateY(-2px);
 }
 
-/* Dark mode glass adjustments */
-@media (prefers-color-scheme: dark) {
-  .glass-panel,
-  .glass-panel-subtle,
-  .glass-card {
-    background: rgba(30, 30, 35, var(--glass-opacity));
-    border-color: rgba(255, 255, 255, var(--glass-border-opacity));
-  }
+/* Solid card variant (no glass effect) */
+.solid-card {
+  background: var(--peptide-bg-elevated);
+  border: 1px solid var(--peptide-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* Focus States (Accessibility) */
+.solid-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--peptide-border);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * FOCUS STATES (Accessibility)
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 .focus-ring {
   outline: none;
 }
@@ -186,7 +230,28 @@ body {
   outline-offset: 2px;
 }
 
-/* Reduced Motion */
+/* Focus ring for dark backgrounds */
+.focus-ring-light:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * COMPLIANCE BANNER
+ * Research-only disclaimer styling
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+.compliance-banner {
+  background: linear-gradient(135deg, var(--peptide-secondary) 0%, var(--peptide-primary) 100%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--spacing-xs) var(--spacing-md);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * REDUCED MOTION (Accessibility)
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -198,7 +263,9 @@ body {
   }
 }
 
-/* Skip Link (Accessibility) */
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SKIP LINK (Accessibility)
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 .skip-link {
   position: absolute;
   top: -100%;
@@ -208,23 +275,16 @@ body {
   padding: var(--spacing-sm) var(--spacing-md);
   z-index: 100;
   transition: top 0.2s;
+  border-radius: 0 0 var(--radius-md) 0;
 }
 
 .skip-link:focus {
   top: 0;
 }
 
-/* Compliance Banner Base */
-.compliance-banner {
-  background: linear-gradient(135deg, var(--peptide-secondary) 0%, var(--peptide-primary) 100%);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--spacing-xs) var(--spacing-md);
-}
-
-/* Scrollbar Styling */
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SCROLLBAR STYLING
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -241,4 +301,12 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--peptide-fg-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SELECTION STYLING
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+::selection {
+  background: var(--peptide-primary-light);
+  color: white;
 }
