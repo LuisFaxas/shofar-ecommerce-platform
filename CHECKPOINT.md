@@ -25,18 +25,18 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                    |
-| -------------- | ------ | -------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: 65b565a)          |
-| Stock          | ✅     | All 10 variants IN_STOCK                                 |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                 |
-| Payment        | ✅     | Test Payment (dummy) in tooly channel                    |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled           |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm) |
-| Product Images | ✅     | 11 images uploaded to R2 bucket                          |
-| Asset Hosting  | ✅     | Cloudflare R2 configured and working                     |
-| Admin Organize | ⚠️     | Brand facet created, needs assignment to products        |
-| Real Payment   | ❌     | Authorize.Net Accept Hosted (Phase 2)                    |
+| Item           | Status | Notes                                                       |
+| -------------- | ------ | ----------------------------------------------------------- |
+| Build          | ✅     | lint + typecheck + build PASS (commit: ed21969)             |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                  |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                    |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale           |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled              |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)    |
+| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set        |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)  |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod |
+| Real Payment   | ❌     | Stripe integration (test mode → live)                       |
 
 ---
 
@@ -428,11 +428,17 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ## NEXT STEPS (Phase 2)
 
-1. **Product Images**: User adds images → run bulk:assets
-2. **Real Payment**: Integrate Authorize.Net Accept Hosted
-3. **Order Emails**: Configure email templates
-4. **Production Deploy**: Vercel (frontend) + Railway/Fly (Vendure)
-5. **pharma-store**: Begin PEPTIDES channel setup
+### Immediate (Pre-Launch)
+
+1. **Practice Presale**: Internal rehearsal with dummy payment (3 runs: incognito, normal, mobile)
+2. **Stripe Integration**: Replace dummy with Stripe (test mode → live)
+3. **Production Deploy**: Vercel (frontend) + hosted Vendure + PostgreSQL + Cloudflare R2
+
+### Post-Launch
+
+4. **Order Emails**: Configure transactional email templates
+5. **Policies**: Privacy policy, terms of service, refund policy pages
+6. **pharma-store**: Begin PEPTIDES channel setup (separate store)
 
 ---
 
