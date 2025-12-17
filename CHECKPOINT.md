@@ -25,18 +25,18 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                       |
-| -------------- | ------ | ----------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: ed21969)             |
-| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                  |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                    |
-| Payment        | ✅     | Test Payment (dummy) - ready for practice presale           |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled              |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)    |
-| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set        |
-| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)  |
-| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod |
-| Real Payment   | ❌     | Stripe integration (test mode → live)                       |
+| Item           | Status | Notes                                                             |
+| -------------- | ------ | ----------------------------------------------------------------- |
+| Build          | ✅     | lint + typecheck + build PASS (commit: ed21969)                   |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                        |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                          |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                 |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                    |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)          |
+| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set              |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)        |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod       |
+| Real Payment   | ⚠️     | Stripe plugin + Payment Element ready, needs API keys in Admin UI |
 
 ---
 
@@ -120,6 +120,36 @@ packages/
 ---
 
 ## PRESALE SPRINT LOG (2025-12-17)
+
+### MILESTONE 10: Stripe Payment Integration (2025-12-17)
+
+- **Status**: ⚠️ Code Complete (needs API keys)
+- **Branch**: `feature/stripe-payments`
+- **Commits**:
+  - `6c19a3b` feat(vendure): enable stripe plugin (test mode)
+  - `8ad0360` feat(web): stripe payment element checkout step
+- **Changes**:
+  - Installed `@vendure/payments-plugin` and `stripe@13` in Vendure
+  - Added StripePlugin to vendure-config.ts with webhook at `/payments/stripe`
+  - Installed `@stripe/stripe-js` and `@stripe/react-stripe-js` in storefront
+  - Created `StripePaymentForm.tsx` component with Stripe Payment Element
+  - Checkout page conditionally uses Stripe (if configured) or test payment
+  - Created `docs/STRIPE-TESTING.md` with setup guide
+- **User Action Required**:
+  1. Get Stripe test API keys from https://dashboard.stripe.com/test/apikeys
+  2. Create Payment Method in Admin UI (Settings → Payment Methods → Create)
+     - Handler: "Stripe payments"
+     - Enter API key (sk*test*...) and webhook secret
+     - Assign to tooly channel
+  3. Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...` to `apps/shofar-store/.env.local`
+  4. Run `stripe listen --forward-to localhost:3001/payments/stripe` for webhooks
+- **Test**: After setup, use card `4242 4242 4242 4242` to complete checkout
+- **Files Modified**:
+  - `apps/vendure/src/vendure-config.ts` - Added StripePlugin
+  - `apps/vendure/.env.example` - Documented Stripe setup
+  - `apps/shofar-store/src/app/checkout/page.tsx` - Conditional Stripe/test payment
+  - `apps/shofar-store/src/components/StripePaymentForm.tsx` - NEW Payment Element
+  - `docs/STRIPE-TESTING.md` - NEW testing guide
 
 ### MILESTONE 9: Vendure Source-of-Truth Audit (2025-12-17)
 
