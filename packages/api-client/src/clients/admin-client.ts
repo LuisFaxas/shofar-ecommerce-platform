@@ -4,7 +4,7 @@ import {
   createHttpLink,
   ApolloLink,
   NormalizedCacheObject,
-} from '@apollo/client';
+} from "@apollo/client";
 
 export interface AdminClientConfig {
   apiUrl?: string;
@@ -16,9 +16,12 @@ export interface AdminClientConfig {
 /**
  * Creates a typed Apollo Client for the Vendure Admin API
  */
-export function createAdminClient(config: AdminClientConfig = {}): ApolloClient<NormalizedCacheObject> {
+export function createAdminClient(
+  config: AdminClientConfig = {},
+): ApolloClient<NormalizedCacheObject> {
   const {
-    apiUrl = process.env.NEXT_PUBLIC_VENDURE_ADMIN_API_URL || 'http://localhost:3001/admin-api',
+    apiUrl = process.env.NEXT_PUBLIC_VENDURE_ADMIN_API_URL ||
+      "http://localhost:3001/admin-api",
     channelToken,
     authToken,
     withCredentials = true,
@@ -27,24 +30,26 @@ export function createAdminClient(config: AdminClientConfig = {}): ApolloClient<
   // Create the HTTP link
   const httpLink = createHttpLink({
     uri: apiUrl,
-    credentials: withCredentials ? 'include' : 'same-origin',
+    credentials: withCredentials ? "include" : "same-origin",
   });
 
   // Create middleware to add headers
   const authMiddleware = new ApolloLink((operation, forward) => {
-    operation.setContext(({ headers = {} }) => {
-      const newHeaders = { ...headers };
+    operation.setContext(
+      ({ headers = {} }: { headers?: Record<string, string> }) => {
+        const newHeaders: Record<string, string> = { ...headers };
 
-      if (channelToken) {
-        newHeaders['vendure-token'] = channelToken;
-      }
+        if (channelToken) {
+          newHeaders["vendure-token"] = channelToken;
+        }
 
-      if (authToken) {
-        newHeaders['Authorization'] = `Bearer ${authToken}`;
-      }
+        if (authToken) {
+          newHeaders["Authorization"] = `Bearer ${authToken}`;
+        }
 
-      return { headers: newHeaders };
-    });
+        return { headers: newHeaders };
+      },
+    );
 
     return forward(operation);
   });
@@ -57,40 +62,40 @@ export function createAdminClient(config: AdminClientConfig = {}): ApolloClient<
     cache: new InMemoryCache({
       typePolicies: {
         Administrator: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         Role: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         Channel: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         Product: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         ProductVariant: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         Collection: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         Customer: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         Order: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
       },
     }),
     defaultOptions: {
       watchQuery: {
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: "cache-and-network",
       },
     },
   });
 }
 
 // Admin client instances for each channel
-export const toolyAdminClient = createAdminClient({ channelToken: 'tooly' });
-export const futureAdminClient = createAdminClient({ channelToken: 'future' });
+export const toolyAdminClient = createAdminClient({ channelToken: "tooly" });
+export const futureAdminClient = createAdminClient({ channelToken: "future" });
 export const defaultAdminClient = createAdminClient(); // Uses default channel

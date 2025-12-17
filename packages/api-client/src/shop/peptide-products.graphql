@@ -1,0 +1,101 @@
+# PEPTIDE Product Queries
+# Used by: pharma-store catalog, PDP, homepage featured products
+# Fetches peptide products with custom fields for research peptide display
+
+fragment PeptideProductFields on Product {
+  id
+  name
+  slug
+  description
+  featuredAsset {
+    id
+    preview
+    source
+  }
+  assets {
+    id
+    preview
+    source
+    name
+  }
+  customFields {
+    casNumber
+    sequence
+    family
+    researchGoals
+    sdsUrl
+    coaUrl
+    molecularWeight
+    molecularFormula
+    featured
+    popularity
+  }
+  variants {
+    id
+    name
+    sku
+    price
+    priceWithTax
+    currencyCode
+    stockLevel
+    featuredAsset {
+      id
+      preview
+      source
+    }
+    customFields {
+      purityPercent
+      sizeMg
+      storage
+      administrationRoute
+      form
+    }
+  }
+  facetValues {
+    id
+    code
+    name
+    facet {
+      id
+      code
+      name
+    }
+  }
+}
+
+# Get paginated list of peptide products with filtering support
+query GetPeptideProducts($options: ProductListOptions) {
+  products(options: $options) {
+    items {
+      ...PeptideProductFields
+    }
+    totalItems
+  }
+}
+
+# Get a single peptide product by slug
+query GetPeptideProduct($slug: String!) {
+  product(slug: $slug) {
+    ...PeptideProductFields
+  }
+}
+
+# Get just product slugs for static generation
+query GetPeptideProductSlugs($options: ProductListOptions) {
+  products(options: $options) {
+    items {
+      slug
+    }
+    totalItems
+  }
+}
+
+# Get featured peptide products for homepage
+query GetFeaturedPeptideProducts($options: ProductListOptions) {
+  products(options: $options) {
+    items {
+      ...PeptideProductFields
+    }
+    totalItems
+  }
+}

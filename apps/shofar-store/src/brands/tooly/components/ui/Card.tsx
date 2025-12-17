@@ -6,15 +6,15 @@
  * Optimized for dark gunmetal surfaces
  */
 
-import { HTMLAttributes, forwardRef, ReactNode } from 'react';
+import { HTMLAttributes, forwardRef, ReactNode } from "react";
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   /** Enable glassmorphism effect */
   glass?: boolean;
   /** Visual prominence variant */
-  variant?: 'default' | 'elevated' | 'outlined' | 'glass';
+  variant?: "default" | "elevated" | "outlined" | "glass";
   /** Padding size */
-  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  padding?: "none" | "sm" | "md" | "lg" | "xl";
   /** Make card interactive (hover effects) */
   interactive?: boolean;
   /** Additional CSS classes */
@@ -38,17 +38,18 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
   (
     {
       glass = false,
-      variant = 'default',
-      padding = 'md',
+      variant = "default",
+      padding = "md",
       interactive = false,
-      className = '',
+      className = "",
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Base classes - industrial precision
-    const baseClasses = 'rounded-[10px] transition-all duration-[200ms] ease-out relative';
+    const baseClasses =
+      "rounded-[10px] transition-all duration-[200ms] ease-out relative";
 
     // Variant styles - FLAT DESIGN with glassmorphism
     const variants = {
@@ -64,7 +65,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         bg-transparent backdrop-blur-sm
         border border-gm-600
       `,
-      glass: 'glass-card border border-white/20'
+      glass: "glass-card border border-white/20",
     };
 
     // Use glass variant if glass prop is true
@@ -72,11 +73,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 
     // Padding scales
     const paddings = {
-      none: '',
-      sm: 'p-3',
-      md: 'p-6',
-      lg: 'p-8',
-      xl: 'p-10'
+      none: "",
+      sm: "p-3",
+      md: "p-6",
+      lg: "p-8",
+      xl: "p-10",
     };
 
     // Interactive states - FLAT with glassmorphism enhancement
@@ -88,7 +89,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         focus-visible:ring-gm-400/40 focus-visible:ring-offset-2
         focus-visible:ring-offset-gm-950
       `
-      : '';
+      : "";
 
     return (
       <div
@@ -99,33 +100,47 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           ${paddings[padding]}
           ${interactiveClass}
           ${className}
-        `.replace(/\s+/g, ' ').trim()}
+        `
+          .replace(/\s+/g, " ")
+          .trim()}
         tabIndex={interactive ? 0 : undefined}
-        role={interactive ? 'button' : undefined}
+        role={interactive ? "button" : undefined}
         {...props}
       >
         {children}
       </div>
     );
-  }
+  },
 );
 
-Card.displayName = 'Card';
+Card.displayName = "Card";
 
 /**
  * Card Header component
  */
 export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  /** Header title text */
+  title?: string;
+  /** Header description text */
+  description?: string;
   /** Add a bottom border */
   bordered?: boolean;
   className?: string;
 }
 
 export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
-  ({ bordered = false, className = '', children, ...props }, ref) => {
-    const borderClass = bordered
-      ? 'border-b border-gm-700 pb-4 mb-4'
-      : '';
+  (
+    {
+      title,
+      description,
+      bordered = false,
+      className = "",
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const borderClass = bordered ? "border-b border-gm-700 pb-4 mb-4" : "";
 
     return (
       <div
@@ -133,13 +148,24 @@ export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
         className={`${borderClass} ${className}`.trim()}
         {...props}
       >
-        {children}
+        {title || description ? (
+          <div className="space-y-1">
+            {title && (
+              <h3 className="text-lg font-semibold text-white">{title}</h3>
+            )}
+            {description && (
+              <p className="text-sm text-white/60">{description}</p>
+            )}
+          </div>
+        ) : (
+          children
+        )}
       </div>
     );
-  }
+  },
 );
 
-CardHeader.displayName = 'CardHeader';
+CardHeader.displayName = "CardHeader";
 
 /**
  * Card Body component
@@ -149,20 +175,16 @@ export interface CardBodyProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
-  ({ className = '', children, ...props }, ref) => {
+  ({ className = "", children, ...props }, ref) => {
     return (
-      <div
-        ref={ref}
-        className={`flex-1 ${className}`.trim()}
-        {...props}
-      >
+      <div ref={ref} className={`flex-1 ${className}`.trim()} {...props}>
         {children}
       </div>
     );
-  }
+  },
 );
 
-CardBody.displayName = 'CardBody';
+CardBody.displayName = "CardBody";
 
 /**
  * Card Footer component
@@ -171,24 +193,22 @@ export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
   /** Add a top border */
   bordered?: boolean;
   /** Alignment of footer content */
-  align?: 'left' | 'center' | 'right' | 'between';
+  align?: "left" | "center" | "right" | "between";
   className?: string;
 }
 
 export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
   (
-    { bordered = false, align = 'right', className = '', children, ...props },
-    ref
+    { bordered = false, align = "right", className = "", children, ...props },
+    ref,
   ) => {
-    const borderClass = bordered
-      ? 'border-t border-gm-700 pt-4 mt-4'
-      : '';
+    const borderClass = bordered ? "border-t border-gm-700 pt-4 mt-4" : "";
 
     const alignments = {
-      left: 'justify-start',
-      center: 'justify-center',
-      right: 'justify-end',
-      between: 'justify-between'
+      left: "justify-start",
+      center: "justify-center",
+      right: "justify-end",
+      between: "justify-between",
     };
 
     return (
@@ -199,16 +219,18 @@ export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
           ${alignments[align]}
           ${borderClass}
           ${className}
-        `.replace(/\s+/g, ' ').trim()}
+        `
+          .replace(/\s+/g, " ")
+          .trim()}
         {...props}
       >
         {children}
       </div>
     );
-  }
+  },
 );
 
-CardFooter.displayName = 'CardFooter';
+CardFooter.displayName = "CardFooter";
 
 /**
  * Card Grid component for laying out multiple cards
@@ -223,15 +245,15 @@ export interface CardGridProps extends HTMLAttributes<HTMLDivElement> {
     xl?: number;
   };
   /** Gap between cards */
-  gap?: 'sm' | 'md' | 'lg' | 'xl';
+  gap?: "sm" | "md" | "lg" | "xl";
   className?: string;
   children: ReactNode;
 }
 
 export const CardGrid: React.FC<CardGridProps> = ({
   cols = { default: 1, md: 2, lg: 3 },
-  gap = 'md',
-  className = '',
+  gap = "md",
+  className = "",
   children,
   ...props
 }) => {
@@ -241,16 +263,16 @@ export const CardGrid: React.FC<CardGridProps> = ({
     cols.sm && `sm:grid-cols-${cols.sm}`,
     cols.md && `md:grid-cols-${cols.md}`,
     cols.lg && `lg:grid-cols-${cols.lg}`,
-    cols.xl && `xl:grid-cols-${cols.xl}`
+    cols.xl && `xl:grid-cols-${cols.xl}`,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   const gaps = {
-    sm: 'gap-3',
-    md: 'gap-6',
-    lg: 'gap-8',
-    xl: 'gap-10'
+    sm: "gap-3",
+    md: "gap-6",
+    lg: "gap-8",
+    xl: "gap-10",
   };
 
   return (
@@ -263,12 +285,12 @@ export const CardGrid: React.FC<CardGridProps> = ({
   );
 };
 
-CardGrid.displayName = 'CardGrid';
+CardGrid.displayName = "CardGrid";
 
 /**
  * Feature Card - specialized card for highlighting features
  */
-export interface FeatureCardProps extends Omit<CardProps, 'variant'> {
+export interface FeatureCardProps extends Omit<CardProps, "variant"> {
   /** Icon or image to display */
   icon?: ReactNode;
   /** Title of the feature */
@@ -280,17 +302,7 @@ export interface FeatureCardProps extends Omit<CardProps, 'variant'> {
 }
 
 export const FeatureCard = forwardRef<HTMLDivElement, FeatureCardProps>(
-  (
-    {
-      icon,
-      title,
-      description,
-      action,
-      className = '',
-      ...cardProps
-    },
-    ref
-  ) => {
+  ({ icon, title, description, action, className = "", ...cardProps }, ref) => {
     return (
       <Card
         ref={ref}
@@ -311,14 +323,10 @@ export const FeatureCard = forwardRef<HTMLDivElement, FeatureCardProps>(
             {description}
           </p>
         )}
-        {action && (
-          <div className="mt-auto pt-4">
-            {action}
-          </div>
-        )}
+        {action && <div className="mt-auto pt-4">{action}</div>}
       </Card>
     );
-  }
+  },
 );
 
-FeatureCard.displayName = 'FeatureCard';
+FeatureCard.displayName = "FeatureCard";

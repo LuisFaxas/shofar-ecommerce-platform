@@ -1,8 +1,74 @@
 # CHECKPOINT.md
 
+> **Canonical Progress Log** — This is the ONLY progress file. Do not create additional CHECKPOINT files.
+
+---
+
+## CURRENT TRUTH (Always Up To Date)
+
+| Service      | Port | Status                     |
+| ------------ | ---- | -------------------------- |
+| shofar-store | 3000 | ❌ Build broken            |
+| vendure      | 3001 | ✅ Running                 |
+| pharma-store | 3002 | N/A (not presale priority) |
+
+**BRAND_KEY**: `tooly`
+
+**Presale Priority**: Presale ready with dummy payment end-to-end test
+
+### Status Checklist
+
+- Build: ✅ shofar-store typecheck + build PASS
+- Checkout: ❌ No /checkout route exists
+- Payment: ❌ No payment methods configured in tooly channel
+- Shipping: ❌ No shipping methods configured in tooly channel
+- Stock: ❌ All variants OUT_OF_STOCK
+- Images: ❌ featuredAsset is null
+
+---
+
+## PRESALE SPRINT LOG (Append-Only)
+
+### 2025-12-17 — MILESTONE 1: Build + Tooling Green
+
+- **Change**: Fixed TypeScript/ESLint/Build errors
+  - Created `packages/config/eslint/library.js`
+  - Fixed ESLint path resolution in all packages (.eslintrc.js)
+  - Fixed Button import in design-system/page.tsx
+  - Fixed Dialog.tsx void expression
+  - Fixed Input.tsx comma operator
+  - Fixed Popover.tsx cloneElement typing
+  - Fixed ReviewsMarquee.tsx undefined rating
+  - Fixed usePointerVars.ts useRef typing
+  - Fixed Card.tsx CardHeader props (added title/description)
+  - Fixed Section.tsx CTASection heading prop type
+  - Fixed api-client duplicate exports (namespace exports)
+  - Fixed admin-client.ts header typing
+  - Fixed client-factory.ts Promise types
+  - Fixed faxas-brand-config lint issues
+- **Verify**:
+  - `pnpm --filter @shofar/shofar-store typecheck` → PASS
+  - `pnpm --filter @shofar/shofar-store build` → PASS
+- **Commit**: `fix(storefront): resolve build+lint blockers for presale sprint`
+
+### 2024-12-17 — Sprint Start
+
+- **Change**: Established canonical CHECKPOINT.md + progress protocol
+- **Verify**: `git status` shows this file updated
+- **Commit**: `docs(repo): establish canonical checkpoint + progress protocol`
+
+---
+
+## Historical Work Orders (Reference Only)
+
+> **Note**: Port references in historical sections below may be outdated.
+> shofar-store was originally on port 3001 but is now on **port 3000**.
+> Vendure runs on port 3001.
+
 ## Work Order Status
 
 ### ✅ WO 2.1 Complete - Multi-Tenant Architecture
+
 - Implemented dual-mode brand resolution (Mode A: BRAND_KEY, Mode B: host-based)
 - Created brand-config package with TOOLY and PEPTIDES brands
 - Set up secure dev-only cookie override with JWT
@@ -10,6 +76,7 @@
 - NO production cookies for brand switching (SEO critical)
 
 ### ✅ WO 2.2 Complete - Architecture Reset for Unique Brand Frontends
+
 - Removed 578 lines of premature UI components
 - Created clean brand-specific folder structures
 - Each brand has completely unique frontend (no shared UI)
@@ -18,9 +85,11 @@
 ### ✅ WO 2.3 Complete - Isolated Store Architecture
 
 #### Implementation Summary:
+
 Transformed the SHOFAR platform from a single multi-brand application to THREE completely isolated store applications, each serving a distinct business category with complete code isolation.
 
 #### Completed Tasks:
+
 - ✅ **Created Three Independent Next.js Applications:**
   - `apps/shofar-store` - Tools & Hardware category (Port 3001)
   - `apps/pharma-store` - Medical & Research category (Port 3002)
@@ -69,13 +138,16 @@ Transformed the SHOFAR platform from a single multi-brand application to THREE c
 ```
 
 #### Brand Resolution Implementation (Per Store):
+
 Each store maintains internal multi-brand support using:
+
 - **Mode A**: `BRAND_KEY` environment variable for production SSG/ISR
 - **Mode B**: Host-based resolution for staging SSR only
 - **Dev Override**: JWT-signed cookies (jose library) for development only
 - **Production Rule**: NO cookies in production (critical for SEO)
 
 #### Security & Isolation Achieved:
+
 - ✅ **Complete Business Category Isolation**: Customers on TOOLY will NEVER discover PEPTIDES exists
 - ✅ **No Shared UI Code**: Each store has completely unique components
 - ✅ **Independent Deployments**: Each store can be deployed separately
@@ -83,6 +155,7 @@ Each store maintains internal multi-brand support using:
 - ✅ **Isolated Dependencies**: Store-specific package dependencies
 
 #### Monorepo Scripts Added:
+
 ```json
 {
   "dev:shofar": "BRAND_KEY=tooly pnpm --filter @shofar/shofar-store dev",
@@ -93,6 +166,7 @@ Each store maintains internal multi-brand support using:
 ```
 
 #### Testing & Verification:
+
 - ✅ SHOFAR-STORE running independently with TOOLY brand
 - ✅ PHARMA-STORE running independently with PEPTIDES brand
 - ✅ No cross-store code references or dependencies
@@ -102,6 +176,7 @@ Each store maintains internal multi-brand support using:
 ## ✅ WO 2.4 Complete - Code Audit & Alignment
 
 ### Audit Summary (Completed):
+
 1. ✅ **Deleted Obsolete Code**:
    - Removed `apps/web` (old multi-brand app)
    - Already deleted `packages/ui` (shared UI components)
@@ -129,6 +204,7 @@ Each store maintains internal multi-brand support using:
 ### Current Build State Report:
 
 #### ✅ HEALTHY & PRODUCTION-READY
+
 - **Isolated Store Architecture**: Fully implemented and tested
 - **Brand Resolution**: Mode A (BRAND_KEY) + Mode B (host-based) working
 - **Build Process**: All stores build successfully with TypeScript
@@ -136,12 +212,14 @@ Each store maintains internal multi-brand support using:
 - **Security**: JWT-signed cookies for dev-only, no production cookies
 
 #### 🔧 MINOR PENDING ITEMS
+
 - Old `apps/web` folder deleted (was blocking, now resolved)
 - CLAUDE.md needs updating to reflect current architecture
 
 ### What Should Come Next (Reference):
 
 ## Priority 1: Vendure Integration (Work Order 3.0)
+
 **Goal**: Connect stores to Vendure backend with channel isolation
 
 1. **Setup Vendure Channels**:
@@ -160,6 +238,7 @@ Each store maintains internal multi-brand support using:
    - Add to cart functionality
 
 ## Priority 2: Store-Specific UI Development
+
 **Goal**: Unique brand experiences per store
 
 1. **TOOLY Store (shofar-store)**:
@@ -173,12 +252,14 @@ Each store maintains internal multi-brand support using:
    - Compliance-focused checkout
 
 ## Priority 3: E-commerce Features
+
 - Shopping cart implementation
 - Checkout flow with Authorize.Net
 - Order tracking
 - Customer accounts per store
 
 ## Priority 4: Performance & SEO
+
 - Implement ISR for product pages
 - Image optimization
 - Structured data per brand
@@ -189,6 +270,7 @@ Each store maintains internal multi-brand support using:
 ### Completed: 2025-11-28
 
 #### Implementation Summary:
+
 Established the foundation for Vendure backend integration with the shofar-store, including channel configuration, API proxy, GraphQL codegen, and seed data.
 
 #### Completed Tasks:
@@ -230,6 +312,7 @@ Established the foundation for Vendure backend integration with the shofar-store
    - All curl tests pass
 
 #### Verification Results:
+
 ```bash
 # Products query - 6 products returned
 curl -H "vendure-token: tooly" localhost:3001/shop-api
@@ -246,6 +329,7 @@ curl -H "vendure-token: tooly" localhost:3001/shop-api
 ```
 
 #### Files Created/Modified:
+
 - `apps/shofar-store/package.json` - port 3000
 - `apps/vendure/src/initial-data/seed-tooly-full.ts` - idempotent seed script
 - `apps/vendure/src/initial-data/setup-channels.ts` - zone creation fix

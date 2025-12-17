@@ -1,20 +1,22 @@
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
-import { createShopClient, ShopClientConfig } from './shop-client';
-import { createAdminClient, AdminClientConfig } from './admin-client';
+import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
+import { createShopClient, ShopClientConfig } from "./shop-client";
+import { createAdminClient, AdminClientConfig } from "./admin-client";
 
-export type ChannelToken = 'tooly' | 'future' | 'default';
+export type ChannelToken = "tooly" | "future" | "peptide" | "default";
 
 export interface ClientFactoryOptions {
-  shopConfig?: Omit<ShopClientConfig, 'channelToken'>;
-  adminConfig?: Omit<AdminClientConfig, 'channelToken'>;
+  shopConfig?: Omit<ShopClientConfig, "channelToken">;
+  adminConfig?: Omit<AdminClientConfig, "channelToken">;
 }
 
 /**
  * Factory class for creating typed Vendure API clients
  */
 export class VendureClientFactory {
-  private shopClients: Map<string, ApolloClient<NormalizedCacheObject>> = new Map();
-  private adminClients: Map<string, ApolloClient<NormalizedCacheObject>> = new Map();
+  private shopClients: Map<string, ApolloClient<NormalizedCacheObject>> =
+    new Map();
+  private adminClients: Map<string, ApolloClient<NormalizedCacheObject>> =
+    new Map();
   private options: ClientFactoryOptions;
 
   constructor(options: ClientFactoryOptions = {}) {
@@ -24,8 +26,10 @@ export class VendureClientFactory {
   /**
    * Get or create a Shop API client for a specific channel
    */
-  getShopClient(channelToken: ChannelToken = 'default'): ApolloClient<NormalizedCacheObject> {
-    const token = channelToken === 'default' ? '' : channelToken;
+  getShopClient(
+    channelToken: ChannelToken = "default",
+  ): ApolloClient<NormalizedCacheObject> {
+    const token = channelToken === "default" ? "" : channelToken;
 
     if (!this.shopClients.has(token)) {
       const client = createShopClient({
@@ -41,9 +45,12 @@ export class VendureClientFactory {
   /**
    * Get or create an Admin API client for a specific channel
    */
-  getAdminClient(channelToken: ChannelToken = 'default', authToken?: string): ApolloClient<NormalizedCacheObject> {
-    const token = channelToken === 'default' ? '' : channelToken;
-    const key = `${token}-${authToken || 'no-auth'}`;
+  getAdminClient(
+    channelToken: ChannelToken = "default",
+    authToken?: string,
+  ): ApolloClient<NormalizedCacheObject> {
+    const token = channelToken === "default" ? "" : channelToken;
+    const key = `${token}-${authToken || "no-auth"}`;
 
     if (!this.adminClients.has(key)) {
       const client = createAdminClient({
@@ -69,7 +76,7 @@ export class VendureClientFactory {
    * Clear cache for all clients
    */
   async clearAllCaches(): Promise<void> {
-    const clearPromises: Promise<void>[] = [];
+    const clearPromises: Promise<unknown>[] = [];
 
     this.shopClients.forEach((client) => {
       clearPromises.push(client.clearStore());
@@ -87,10 +94,15 @@ export class VendureClientFactory {
 export const vendureClientFactory = new VendureClientFactory();
 
 // Convenience functions
-export function getShopClient(channelToken: ChannelToken = 'default'): ApolloClient<NormalizedCacheObject> {
+export function getShopClient(
+  channelToken: ChannelToken = "default",
+): ApolloClient<NormalizedCacheObject> {
   return vendureClientFactory.getShopClient(channelToken);
 }
 
-export function getAdminClient(channelToken: ChannelToken = 'default', authToken?: string): ApolloClient<NormalizedCacheObject> {
+export function getAdminClient(
+  channelToken: ChannelToken = "default",
+  authToken?: string,
+): ApolloClient<NormalizedCacheObject> {
   return vendureClientFactory.getAdminClient(channelToken, authToken);
 }

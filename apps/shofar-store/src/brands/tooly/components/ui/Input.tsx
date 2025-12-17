@@ -4,12 +4,13 @@
  * Core form component for TOOLY design system
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef, useState, useId } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef, useState, useId } from "react";
+import { cn } from "@/lib/utils";
 
-export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   /** Input label */
   label?: string;
   /** Helper text below input */
@@ -19,7 +20,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   /** Success message */
   success?: string;
   /** Input size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width input */
   fullWidth?: boolean;
   /** Show character count */
@@ -44,7 +45,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       helperText,
       error,
       success,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       showCount = false,
       leftIcon,
@@ -57,15 +58,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       onBlur,
       disabled,
       required,
-      type = 'text',
+      type = "text",
       placeholder,
       id: providedId,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [internalValue, setInternalValue] = useState(value || '');
+    const [internalValue, setInternalValue] = useState(value || "");
     const autoId = useId();
     const id = providedId || autoId;
 
@@ -75,31 +76,31 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     // Size classes
     const sizeClasses = {
       sm: {
-        input: 'h-9 text-xs',
-        padding: leftIcon ? 'pl-8 pr-3' : rightIcon ? 'pl-3 pr-8' : 'px-3',
-        label: 'text-xs',
-        icon: 'text-sm'
+        input: "h-9 text-xs",
+        padding: leftIcon ? "pl-8 pr-3" : rightIcon ? "pl-3 pr-8" : "px-3",
+        label: "text-xs",
+        icon: "text-sm",
       },
       md: {
-        input: 'h-11 text-sm',
-        padding: leftIcon ? 'pl-10 pr-4' : rightIcon ? 'pl-4 pr-10' : 'px-4',
-        label: 'text-sm',
-        icon: 'text-base'
+        input: "h-11 text-sm",
+        padding: leftIcon ? "pl-10 pr-4" : rightIcon ? "pl-4 pr-10" : "px-4",
+        label: "text-sm",
+        icon: "text-base",
       },
       lg: {
-        input: 'h-13 text-base',
-        padding: leftIcon ? 'pl-12 pr-5' : rightIcon ? 'pl-5 pr-12' : 'px-5',
-        label: 'text-base',
-        icon: 'text-lg'
-      }
+        input: "h-13 text-base",
+        padding: leftIcon ? "pl-12 pr-5" : rightIcon ? "pl-5 pr-12" : "px-5",
+        label: "text-base",
+        icon: "text-lg",
+      },
     };
 
     // State classes
     const stateClasses = error
-      ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20'
+      ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20"
       : success
-      ? 'border-green-500/50 focus:border-green-500 focus:ring-green-500/20'
-      : 'border-white/[0.14] focus:border-white/[0.30] focus:ring-white/20';
+        ? "border-green-500/50 focus:border-green-500 focus:ring-green-500/20"
+        : "border-white/[0.14] focus:border-white/[0.30] focus:ring-white/20";
 
     // Handle internal state
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,33 +119,30 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const currentValue = value !== undefined ? value : internalValue;
-    const charCount = typeof currentValue === 'string' ? currentValue.length : 0;
+    const charCount =
+      typeof currentValue === "string" ? currentValue.length : 0;
 
     return (
-      <div className={cn('relative', fullWidth && 'w-full')}>
+      <div className={cn("relative", fullWidth && "w-full")}>
         {/* Label - floating or static */}
         {label && (
           <label
             htmlFor={id}
             className={cn(
-              'transition-all duration-200',
+              "transition-all duration-200",
               sizeClasses[size].label,
-              floatingLabel ? (
-                'absolute left-4 pointer-events-none',
-                'transform-origin-top-left',
-                (isFocused || hasValue || placeholder) ? (
-                  'top-0 -translate-y-1/2 scale-75 px-1',
-                  'bg-[#0b0e14] text-white/70'
-                ) : (
-                  'top-1/2 -translate-y-1/2 scale-100',
-                  'text-white/50'
-                )
-              ) : (
-                'block mb-2 font-medium text-white/80'
-              ),
-              error && 'text-red-500',
-              success && 'text-green-500',
-              disabled && 'opacity-50'
+              floatingLabel
+                ? cn(
+                    "absolute left-4 pointer-events-none",
+                    "transform-origin-top-left",
+                    isFocused || hasValue || placeholder
+                      ? "top-0 -translate-y-1/2 scale-75 px-1 bg-[#0b0e14] text-white/70"
+                      : "top-1/2 -translate-y-1/2 scale-100 text-white/50",
+                  )
+                : "block mb-2 font-medium text-white/80",
+              error && "text-red-500",
+              success && "text-green-500",
+              disabled && "opacity-50",
             )}
           >
             {label}
@@ -156,11 +154,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           {/* Left icon */}
           {leftIcon && (
-            <div className={cn(
-              'absolute left-3 top-1/2 -translate-y-1/2',
-              'text-white/50 pointer-events-none',
-              sizeClasses[size].icon
-            )}>
+            <div
+              className={cn(
+                "absolute left-3 top-1/2 -translate-y-1/2",
+                "text-white/50 pointer-events-none",
+                sizeClasses[size].icon,
+              )}
+            >
               {leftIcon}
             </div>
           )}
@@ -179,12 +179,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             placeholder={floatingLabel && label ? undefined : placeholder}
             className={cn(
               // Base styles
-              'w-full rounded-lg',
-              'bg-white/[0.08] backdrop-blur-md',
-              'border',
-              'text-white placeholder-white/30',
-              'transition-all duration-200',
-              'focus:outline-none focus:ring-2',
+              "w-full rounded-lg",
+              "bg-white/[0.08] backdrop-blur-md",
+              "border",
+              "text-white placeholder-white/30",
+              "transition-all duration-200",
+              "focus:outline-none focus:ring-2",
 
               // Size
               sizeClasses[size].input,
@@ -194,23 +194,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               stateClasses,
 
               // Floating label padding adjustment
-              floatingLabel && label && 'pt-5 pb-1',
+              floatingLabel && label && "pt-5 pb-1",
 
               // Disabled state
-              disabled && 'opacity-50 cursor-not-allowed',
+              disabled && "opacity-50 cursor-not-allowed",
 
-              className
+              className,
             )}
             {...props}
           />
 
           {/* Right icon */}
           {rightIcon && (
-            <div className={cn(
-              'absolute right-3 top-1/2 -translate-y-1/2',
-              'text-white/50',
-              sizeClasses[size].icon
-            )}>
+            <div
+              className={cn(
+                "absolute right-3 top-1/2 -translate-y-1/2",
+                "text-white/50",
+                sizeClasses[size].icon,
+              )}
+            >
               {rightIcon}
             </div>
           )}
@@ -225,28 +227,36 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {/* Helper text / Error / Success / Character count */}
         <div className="mt-1 flex items-start justify-between gap-2">
           {(error || success || helperText) && (
-            <p className={cn(
-              'text-xs',
-              error ? 'text-red-500' : success ? 'text-green-500' : 'text-white/50'
-            )}>
+            <p
+              className={cn(
+                "text-xs",
+                error
+                  ? "text-red-500"
+                  : success
+                    ? "text-green-500"
+                    : "text-white/50",
+              )}
+            >
               {error || success || helperText}
             </p>
           )}
 
           {showCount && maxLength && (
-            <span className={cn(
-              'text-xs text-white/50',
-              charCount === maxLength && 'text-yellow-500'
-            )}>
+            <span
+              className={cn(
+                "text-xs text-white/50",
+                charCount === maxLength && "text-yellow-500",
+              )}
+            >
               {charCount}/{maxLength}
             </span>
           )}
         </div>
       </div>
     );
-  }
+  },
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export default Input;

@@ -4,14 +4,14 @@
  * Core search component for TOOLY e-commerce
  */
 
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 export interface SearchSuggestion {
   /** Suggestion type */
-  type: 'product' | 'category' | 'brand' | 'recent';
+  type: "product" | "category" | "brand" | "recent";
   /** Display text */
   text: string;
   /** Optional subtitle */
@@ -49,7 +49,7 @@ export interface SearchBarProps {
   /** Clear all recent */
   onClearAllRecent?: () => void;
   /** Size variant */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width */
   fullWidth?: boolean;
   /** Additional className */
@@ -61,7 +61,7 @@ export interface SearchBarProps {
  * Includes recent searches, categories, and product suggestions
  */
 export const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = 'Search for products...',
+  placeholder = "Search for products...",
   suggestions = [],
   recentSearches = [],
   categories = [],
@@ -71,11 +71,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
   onClearRecent,
   onClearAllRecent,
-  size = 'md',
+  size = "md",
   fullWidth = false,
-  className
+  className,
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
@@ -85,31 +85,33 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   // Size classes
   const sizeClasses = {
     sm: {
-      input: 'h-9 text-xs pl-9 pr-3',
-      icon: 'w-4 h-4',
-      dropdown: 'text-xs'
+      input: "h-9 text-xs pl-9 pr-3",
+      icon: "w-4 h-4",
+      dropdown: "text-xs",
     },
     md: {
-      input: 'h-11 text-sm pl-11 pr-4',
-      icon: 'w-5 h-5',
-      dropdown: 'text-sm'
+      input: "h-11 text-sm pl-11 pr-4",
+      icon: "w-5 h-5",
+      dropdown: "text-sm",
     },
     lg: {
-      input: 'h-13 text-base pl-13 pr-5',
-      icon: 'w-6 h-6',
-      dropdown: 'text-base'
-    }
+      input: "h-13 text-base pl-13 pr-5",
+      icon: "w-6 h-6",
+      dropdown: "text-base",
+    },
   };
 
   // Filter suggestions based on query
   const filteredSuggestions = query.trim()
-    ? suggestions.filter(s =>
-        s.text.toLowerCase().includes(query.toLowerCase())
+    ? suggestions.filter((s) =>
+        s.text.toLowerCase().includes(query.toLowerCase()),
       )
     : [];
 
-  const hasResults = filteredSuggestions.length > 0 ||
-    (query.trim() === '' && (recentSearches.length > 0 || categories.length > 0));
+  const hasResults =
+    filteredSuggestions.length > 0 ||
+    (query.trim() === "" &&
+      (recentSearches.length > 0 || categories.length > 0));
 
   // Handle click outside
   useEffect(() => {
@@ -124,35 +126,32 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isOpen) return;
 
-    const totalItems = filteredSuggestions.length +
-      (query.trim() === '' ? recentSearches.length : 0);
+    const totalItems =
+      filteredSuggestions.length +
+      (query.trim() === "" ? recentSearches.length : 0);
 
     switch (e.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
-        setSelectedIndex(prev =>
-          prev < totalItems - 1 ? prev + 1 : 0
-        );
+        setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : 0));
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
-        setSelectedIndex(prev =>
-          prev > 0 ? prev - 1 : totalItems - 1
-        );
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
         break;
-      case 'Enter':
+      case "Enter":
         e.preventDefault();
         if (selectedIndex >= 0 && selectedIndex < filteredSuggestions.length) {
           handleSuggestionClick(filteredSuggestions[selectedIndex].text);
-        } else if (query.trim() === '' && selectedIndex >= 0) {
+        } else if (query.trim() === "" && selectedIndex >= 0) {
           const recentIndex = selectedIndex - filteredSuggestions.length;
           if (recentIndex >= 0 && recentIndex < recentSearches.length) {
             handleSuggestionClick(recentSearches[recentIndex]);
@@ -161,7 +160,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           handleSearch();
         }
         break;
-      case 'Escape':
+      case "Escape":
         setIsOpen(false);
         setSelectedIndex(-1);
         break;
@@ -193,41 +192,77 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   // Render suggestion icon based on type
-  const renderSuggestionIcon = (type: SearchSuggestion['type']) => {
+  const renderSuggestionIcon = (type: SearchSuggestion["type"]) => {
     switch (type) {
-      case 'product':
+      case "product":
         return (
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+            />
           </svg>
         );
-      case 'category':
+      case "category":
         return (
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+            />
           </svg>
         );
-      case 'brand':
+      case "brand":
         return (
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            />
           </svg>
         );
-      case 'recent':
+      case "recent":
         return (
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         );
     }
   };
 
   return (
-    <div className={cn('relative', fullWidth && 'w-full', className)}>
+    <div className={cn("relative", fullWidth && "w-full", className)}>
       {/* Search Input */}
       <div className="relative">
         <input
@@ -244,29 +279,52 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           placeholder={placeholder}
           autoFocus={autoFocus}
           className={cn(
-            'w-full rounded-lg',
-            'bg-white/[0.08] backdrop-blur-md',
-            'border border-white/[0.14]',
-            'text-white placeholder-white/40',
-            'transition-all duration-200',
-            'focus:outline-none focus:ring-2 focus:ring-white/20',
-            'focus:bg-white/[0.12] focus:border-white/[0.20]',
-            sizeClasses[size].input
+            "w-full rounded-lg",
+            "bg-white/[0.08] backdrop-blur-md",
+            "border border-white/[0.14]",
+            "text-white placeholder-white/40",
+            "transition-all duration-200",
+            "focus:outline-none focus:ring-2 focus:ring-white/20",
+            "focus:bg-white/[0.12] focus:border-white/[0.20]",
+            sizeClasses[size].input,
           )}
         />
 
         {/* Search Icon */}
         <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none">
           {isLoading ? (
-            <svg className={cn('animate-spin', sizeClasses[size].icon)} fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            <svg
+              className={cn("animate-spin", sizeClasses[size].icon)}
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
             </svg>
           ) : (
-            <svg className={sizeClasses[size].icon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              className={sizeClasses[size].icon}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           )}
         </div>
@@ -275,13 +333,23 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         {query && (
           <button
             onClick={() => {
-              setQuery('');
+              setQuery("");
               inputRef.current?.focus();
             }}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         )}
@@ -292,66 +360,80 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <div
           ref={dropdownRef}
           className={cn(
-            'absolute top-full left-0 right-0 mt-2',
-            'bg-[#0b0e14]/95 backdrop-blur-xl',
-            'border border-white/[0.14] rounded-xl',
-            'shadow-[0_8px_32px_rgba(0,0,0,0.4)]',
-            'overflow-hidden',
-            'max-h-[70vh] overflow-y-auto',
-            'z-50',
-            sizeClasses[size].dropdown
+            "absolute top-full left-0 right-0 mt-2",
+            "bg-[#0b0e14]/95 backdrop-blur-xl",
+            "border border-white/[0.14] rounded-xl",
+            "shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+            "overflow-hidden",
+            "max-h-[70vh] overflow-y-auto",
+            "z-50",
+            sizeClasses[size].dropdown,
           )}
         >
           {/* Recent Searches */}
-          {showRecentSearches && query.trim() === '' && recentSearches.length > 0 && (
-            <div className="p-3 border-b border-white/[0.08]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
-                  Recent Searches
-                </span>
-                {onClearAllRecent && (
-                  <button
-                    onClick={() => onClearAllRecent()}
-                    className="text-xs text-white/50 hover:text-white transition-colors"
-                  >
-                    Clear All
-                  </button>
-                )}
-              </div>
-              <div className="space-y-1">
-                {recentSearches.map((search, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSuggestionClick(search)}
-                    className={cn(
-                      'flex items-center justify-between px-3 py-2 rounded-lg',
-                      'cursor-pointer transition-all duration-150',
-                      'hover:bg-white/[0.08]',
-                      selectedIndex === index && 'bg-white/[0.08]'
-                    )}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-white/50">{renderSuggestionIcon('recent')}</span>
-                      <span className="text-white">{search}</span>
+          {showRecentSearches &&
+            query.trim() === "" &&
+            recentSearches.length > 0 && (
+              <div className="p-3 border-b border-white/[0.08]">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
+                    Recent Searches
+                  </span>
+                  {onClearAllRecent && (
+                    <button
+                      onClick={() => onClearAllRecent()}
+                      className="text-xs text-white/50 hover:text-white transition-colors"
+                    >
+                      Clear All
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-1">
+                  {recentSearches.map((search, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleSuggestionClick(search)}
+                      className={cn(
+                        "flex items-center justify-between px-3 py-2 rounded-lg",
+                        "cursor-pointer transition-all duration-150",
+                        "hover:bg-white/[0.08]",
+                        selectedIndex === index && "bg-white/[0.08]",
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-white/50">
+                          {renderSuggestionIcon("recent")}
+                        </span>
+                        <span className="text-white">{search}</span>
+                      </div>
+                      {onClearRecent && (
+                        <button
+                          onClick={(e) => handleClearRecent(e, search)}
+                          className="text-white/30 hover:text-white/60 transition-colors"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      )}
                     </div>
-                    {onClearRecent && (
-                      <button
-                        onClick={(e) => handleClearRecent(e, search)}
-                        className="text-white/30 hover:text-white/60 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Categories */}
-          {showCategories && query.trim() === '' && categories.length > 0 && (
+          {showCategories && query.trim() === "" && categories.length > 0 && (
             <div className="p-3 border-b border-white/[0.08]">
               <span className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-2 block">
                 Popular Categories
@@ -362,14 +444,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                     key={index}
                     onClick={() => handleSuggestionClick(category.name)}
                     className={cn(
-                      'px-3 py-2 rounded-lg text-left',
-                      'bg-white/[0.05] hover:bg-white/[0.10]',
-                      'border border-white/[0.08] hover:border-white/[0.14]',
-                      'transition-all duration-150'
+                      "px-3 py-2 rounded-lg text-left",
+                      "bg-white/[0.05] hover:bg-white/[0.10]",
+                      "border border-white/[0.08] hover:border-white/[0.14]",
+                      "transition-all duration-150",
                     )}
                   >
-                    <div className="text-white text-sm font-medium">{category.name}</div>
-                    <div className="text-white/40 text-xs">{category.count} products</div>
+                    <div className="text-white text-sm font-medium">
+                      {category.name}
+                    </div>
+                    <div className="text-white/40 text-xs">
+                      {category.count} products
+                    </div>
                   </button>
                 ))}
               </div>
@@ -386,16 +472,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               )}
               <div className="space-y-1">
                 {filteredSuggestions.map((suggestion, index) => {
-                  const actualIndex = query.trim() === '' ? recentSearches.length + index : index;
+                  const actualIndex =
+                    query.trim() === "" ? recentSearches.length + index : index;
                   return (
                     <div
                       key={index}
                       onClick={() => handleSuggestionClick(suggestion.text)}
                       className={cn(
-                        'flex items-center gap-3 px-3 py-2 rounded-lg',
-                        'cursor-pointer transition-all duration-150',
-                        'hover:bg-white/[0.08]',
-                        selectedIndex === actualIndex && 'bg-white/[0.08]'
+                        "flex items-center gap-3 px-3 py-2 rounded-lg",
+                        "cursor-pointer transition-all duration-150",
+                        "hover:bg-white/[0.08]",
+                        selectedIndex === actualIndex && "bg-white/[0.08]",
                       )}
                     >
                       {/* Icon or Image */}
@@ -417,25 +504,29 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                           {/* Highlight matching text */}
                           {query.trim() ? (
                             <>
-                              {suggestion.text.split(new RegExp(`(${query})`, 'gi')).map((part, i) => (
-                                <span
-                                  key={i}
-                                  className={
-                                    part.toLowerCase() === query.toLowerCase()
-                                      ? 'text-[#02fcef]'
-                                      : ''
-                                  }
-                                >
-                                  {part}
-                                </span>
-                              ))}
+                              {suggestion.text
+                                .split(new RegExp(`(${query})`, "gi"))
+                                .map((part, i) => (
+                                  <span
+                                    key={i}
+                                    className={
+                                      part.toLowerCase() === query.toLowerCase()
+                                        ? "text-[#02fcef]"
+                                        : ""
+                                    }
+                                  >
+                                    {part}
+                                  </span>
+                                ))}
                             </>
                           ) : (
                             suggestion.text
                           )}
                         </div>
                         {suggestion.subtitle && (
-                          <div className="text-xs text-white/50 truncate">{suggestion.subtitle}</div>
+                          <div className="text-xs text-white/50 truncate">
+                            {suggestion.subtitle}
+                          </div>
                         )}
                       </div>
 
@@ -458,14 +549,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               <button
                 onClick={handleSearch}
                 className={cn(
-                  'w-full px-4 py-2 rounded-lg',
-                  'bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe]',
-                  'text-white font-medium',
-                  'hover:opacity-90 active:scale-[0.98]',
-                  'transition-all duration-150'
+                  "w-full px-4 py-2 rounded-lg",
+                  "bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe]",
+                  "text-white font-medium",
+                  "hover:opacity-90 active:scale-[0.98]",
+                  "transition-all duration-150",
                 )}
               >
-                Search for "{query}"
+                Search for &quot;{query}&quot;
               </button>
             </div>
           )}
@@ -475,6 +566,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   );
 };
 
-SearchBar.displayName = 'SearchBar';
+SearchBar.displayName = "SearchBar";
 
 export default SearchBar;

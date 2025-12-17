@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm:*)",
+      "Bash(timeout 30 pnpm dev:*)",
+      "mcp__filesystem__search_files",
+      "Bash(timeout 30 pnpm:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(timeout /t 10 /nobreak)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

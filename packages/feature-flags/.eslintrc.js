@@ -1,7 +1,7 @@
 module.exports = {
-  extends: ['@shofar/config/eslint/base.js'],
+  extends: ["../config/eslint/base.js"],
   parserOptions: {
-    project: './tsconfig.json',
+    project: "./tsconfig.json",
     tsconfigRootDir: __dirname,
   },
   root: true,

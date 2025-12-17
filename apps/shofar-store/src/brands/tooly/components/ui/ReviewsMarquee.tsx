@@ -6,10 +6,10 @@
  * Continuous horizontal scroll with glassmorphic cards
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 export interface Review {
   id: string;
@@ -26,7 +26,7 @@ export interface ReviewsMarqueeProps {
   /** Reviews to display */
   reviews: Review[];
   /** Scroll direction */
-  direction?: 'left' | 'right';
+  direction?: "left" | "right";
   /** Scroll speed (lower is faster) */
   duration?: number;
   /** Pause on hover */
@@ -34,7 +34,7 @@ export interface ReviewsMarqueeProps {
   /** Show gradient fade edges */
   showFade?: boolean;
   /** Gap between cards */
-  gap?: 'sm' | 'md' | 'lg';
+  gap?: "sm" | "md" | "lg";
   /** Custom className */
   className?: string;
 }
@@ -45,17 +45,17 @@ export interface ReviewsMarqueeProps {
  */
 export const ReviewsMarquee: React.FC<ReviewsMarqueeProps> = ({
   reviews,
-  direction = 'left',
+  direction = "left",
   duration = 40,
   pauseOnHover = true,
   showFade = true,
-  gap = 'md',
-  className
+  gap = "md",
+  className,
 }) => {
   const gapClasses = {
-    sm: 'gap-4',
-    md: 'gap-6',
-    lg: 'gap-8'
+    sm: "gap-4",
+    md: "gap-6",
+    lg: "gap-8",
   };
 
   // Duplicate reviews for seamless loop
@@ -64,27 +64,24 @@ export const ReviewsMarquee: React.FC<ReviewsMarqueeProps> = ({
   return (
     <div
       className={cn(
-        'relative overflow-hidden',
-        showFade && 'gradient-fade-x',
-        className
+        "relative overflow-hidden",
+        showFade && "gradient-fade-x",
+        className,
       )}
     >
       <div
         className={cn(
-          'flex',
+          "flex",
           gapClasses[gap],
-          pauseOnHover && 'hover:[animation-play-state:paused]'
+          pauseOnHover && "hover:[animation-play-state:paused]",
         )}
         style={{
           animation: `marquee-${direction} ${duration}s linear infinite`,
-          width: 'max-content'
+          width: "max-content",
         }}
       >
         {duplicatedReviews.map((review, index) => (
-          <ReviewCard
-            key={`${review.id}-${index}`}
-            review={review}
-          />
+          <ReviewCard key={`${review.id}-${index}`} review={review} />
         ))}
       </div>
     </div>
@@ -97,25 +94,25 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
     <div
       className={cn(
         // Glass effect
-        'bg-white/[0.04] backdrop-blur-md',
-        'border border-white/[0.08]',
-        'rounded-xl p-6',
-        'min-w-[320px] max-w-[400px]',
-        'transition-all duration-300',
+        "bg-white/[0.04] backdrop-blur-md",
+        "border border-white/[0.08]",
+        "rounded-xl p-6",
+        "min-w-[320px] max-w-[400px]",
+        "transition-all duration-300",
 
         // Hover state
-        'hover:bg-white/[0.06]',
-        'hover:border-white/[0.12]',
-        'hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)]'
+        "hover:bg-white/[0.06]",
+        "hover:border-white/[0.12]",
+        "hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)]",
       )}
     >
       {/* Rating stars */}
-      {review.rating && (
+      {review.rating !== undefined && (
         <div className="flex gap-1 mb-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <StarIcon
               key={i}
-              filled={i < review.rating}
+              filled={i < (review.rating ?? 0)}
               className="w-4 h-4"
             />
           ))}
@@ -124,32 +121,26 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
 
       {/* Review content */}
       <blockquote className="text-white/80 text-sm leading-relaxed mb-4">
-        "{review.content}"
+        &quot;{review.content}&quot;
       </blockquote>
 
       {/* Author info */}
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <p className="text-white font-medium text-sm">
-              {review.author}
-            </p>
-            {review.verified && (
-              <VerifiedBadge />
-            )}
+            <p className="text-white font-medium text-sm">{review.author}</p>
+            {review.verified && <VerifiedBadge />}
           </div>
           {(review.role || review.company) && (
             <p className="text-white/50 text-xs mt-0.5">
               {review.role}
-              {review.role && review.company && ' at '}
+              {review.role && review.company && " at "}
               {review.company}
             </p>
           )}
         </div>
         {review.date && (
-          <time className="text-white/40 text-xs">
-            {review.date}
-          </time>
+          <time className="text-white/40 text-xs">{review.date}</time>
         )}
       </div>
     </div>
@@ -163,8 +154,8 @@ const StarIcon: React.FC<{
 }> = ({ filled = false, className }) => (
   <svg
     className={cn(
-      filled ? 'text-[var(--color-brand-3)]' : 'text-white/20',
-      className
+      filled ? "text-[var(--color-brand-3)]" : "text-white/20",
+      className,
     )}
     fill="currentColor"
     viewBox="0 0 20 20"
@@ -194,27 +185,22 @@ const VerifiedBadge: React.FC = () => (
 export const ReviewsMarqueeMultiRow: React.FC<{
   reviews: Review[][];
   duration?: number;
-  gap?: 'sm' | 'md' | 'lg';
+  gap?: "sm" | "md" | "lg";
   className?: string;
-}> = ({
-  reviews,
-  duration = 40,
-  gap = 'md',
-  className
-}) => {
+}> = ({ reviews, duration = 40, gap = "md", className }) => {
   const gapClasses = {
-    sm: 'gap-4',
-    md: 'gap-6',
-    lg: 'gap-8'
+    sm: "gap-4",
+    md: "gap-6",
+    lg: "gap-8",
   };
 
   return (
-    <div className={cn('flex flex-col', gapClasses[gap], className)}>
+    <div className={cn("flex flex-col", gapClasses[gap], className)}>
       {reviews.map((row, index) => (
         <ReviewsMarquee
           key={index}
           reviews={row}
-          direction={index % 2 === 0 ? 'left' : 'right'}
+          direction={index % 2 === 0 ? "left" : "right"}
           duration={duration}
           gap={gap}
           showFade={true}
@@ -246,14 +232,17 @@ const marqueeKeyframes = `
 `;
 
 // Inject keyframes on component mount
-if (typeof window !== 'undefined' && !document.querySelector('#marquee-keyframes')) {
-  const style = document.createElement('style');
-  style.id = 'marquee-keyframes';
+if (
+  typeof window !== "undefined" &&
+  !document.querySelector("#marquee-keyframes")
+) {
+  const style = document.createElement("style");
+  style.id = "marquee-keyframes";
   style.textContent = marqueeKeyframes;
   document.head.appendChild(style);
 }
 
-ReviewsMarquee.displayName = 'ReviewsMarquee';
-ReviewsMarqueeMultiRow.displayName = 'ReviewsMarqueeMultiRow';
+ReviewsMarquee.displayName = "ReviewsMarquee";
+ReviewsMarqueeMultiRow.displayName = "ReviewsMarqueeMultiRow";
 
 export default ReviewsMarquee;

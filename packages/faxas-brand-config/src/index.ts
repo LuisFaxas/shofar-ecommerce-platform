@@ -3,9 +3,8 @@
  * Handles brand resolution for fashion store (placeholder for future brands)
  */
 
-export * from './types';
-import type { BrandConfig, BrandResolution } from './types';
-import { BrandKey } from './types';
+export * from "./types";
+import type { BrandConfig, BrandResolution, type BrandKey } from "./types";
 
 // Brand configuration registry for FAXAS store
 // Currently empty - will be populated with fashion brands
@@ -14,7 +13,7 @@ const brands: Record<string, BrandConfig> = {
 };
 
 // Host to brand mapping for FAXAS store brands
-const hostToBrand: Map<string, string> = new Map([
+const hostToBrand = new Map<string, string>([
   // Future fashion brand domains will be added here
   // Example: ['faxas.com', 'faxas_fashion'],
 ]);
@@ -24,7 +23,9 @@ const hostToBrand: Map<string, string> = new Map([
  */
 export function getBrandByKey(key: string | BrandKey): BrandConfig | null {
   // Since BrandKey enum is empty, always return null
-  console.warn(`[FAXAS Store] No brands configured yet. Requested: ${key}`);
+  console.warn(
+    `[FAXAS Store] No brands configured yet. Requested: ${String(key)}`,
+  );
   return null;
 }
 
@@ -37,18 +38,18 @@ export function getBrandByHost(host: string): BrandConfig | null {
   }
 
   // Remove port if present
-  const hostname = (host.split(':')[0] || host).toLowerCase();
+  const hostname = (host.split(":")[0] ?? host).toLowerCase();
 
   // Check exact match first
   const brandKey = hostToBrand.get(hostname);
   if (brandKey) {
-    return brands[brandKey] || null;
+    return brands[brandKey] ?? null;
   }
 
   // Check if it's a subdomain of any configured domain
   for (const [domain, key] of hostToBrand.entries()) {
     if (hostname.endsWith(`.${domain}`) || hostname === domain) {
-      return brands[key] || null;
+      return brands[key] ?? null;
     }
   }
 
@@ -84,7 +85,9 @@ export function isValidBrandKey(_key: string): boolean {
  * Get brand by channel token (Vendure integration)
  */
 export function getBrandByChannelToken(token: string): BrandConfig | null {
-  return Object.values(brands).find(brand => brand.channelToken === token) || null;
+  return (
+    Object.values(brands).find((brand) => brand.channelToken === token) ?? null
+  );
 }
 
 /**
@@ -92,7 +95,7 @@ export function getBrandByChannelToken(token: string): BrandConfig | null {
  */
 export function createBrandResolution(
   brand: BrandConfig | null,
-  source: 'env' | 'host' | 'cookie' | 'fallback'
+  source: "env" | "host" | "cookie" | "fallback",
 ): BrandResolution | null {
   if (!brand) {
     return null;
@@ -101,7 +104,7 @@ export function createBrandResolution(
   return {
     brand,
     source,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   };
 }
 

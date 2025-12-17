@@ -4,11 +4,11 @@
  * Essential for navigation and form interactions
  */
 
-'use client';
+"use client";
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { cn } from '@/lib/utils';
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { cn } from "@/lib/utils";
 
 export interface PopoverProps {
   /** Trigger element */
@@ -16,7 +16,15 @@ export interface PopoverProps {
   /** Popover content */
   children: React.ReactNode;
   /** Placement of popover */
-  placement?: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end';
+  placement?:
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "top-start"
+    | "top-end"
+    | "bottom-start"
+    | "bottom-end";
   /** Offset from trigger */
   offset?: number;
   /** Close on click outside */
@@ -38,13 +46,13 @@ export interface PopoverProps {
 export const Popover: React.FC<PopoverProps> = ({
   trigger,
   children,
-  placement = 'bottom',
+  placement = "bottom",
   offset = 8,
   closeOnClickOutside = true,
   closeOnEsc = true,
   className,
   open: controlledOpen,
-  onOpenChange
+  onOpenChange,
 }) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -55,13 +63,16 @@ export const Popover: React.FC<PopoverProps> = ({
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : uncontrolledOpen;
 
-  const setOpen = useCallback((value: boolean) => {
-    if (isControlled) {
-      onOpenChange?.(value);
-    } else {
-      setUncontrolledOpen(value);
-    }
-  }, [isControlled, onOpenChange]);
+  const setOpen = useCallback(
+    (value: boolean) => {
+      if (isControlled) {
+        onOpenChange?.(value);
+      } else {
+        setUncontrolledOpen(value);
+      }
+    },
+    [isControlled, onOpenChange],
+  );
 
   // Calculate position
   const updatePosition = useCallback(() => {
@@ -75,35 +86,47 @@ export const Popover: React.FC<PopoverProps> = ({
     let left = 0;
 
     switch (placement) {
-      case 'top':
+      case "top":
         top = triggerRect.top - popoverRect.height - offset + scrollY;
-        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2 + scrollX;
+        left =
+          triggerRect.left +
+          (triggerRect.width - popoverRect.width) / 2 +
+          scrollX;
         break;
-      case 'bottom':
+      case "bottom":
         top = triggerRect.bottom + offset + scrollY;
-        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2 + scrollX;
+        left =
+          triggerRect.left +
+          (triggerRect.width - popoverRect.width) / 2 +
+          scrollX;
         break;
-      case 'left':
-        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2 + scrollY;
+      case "left":
+        top =
+          triggerRect.top +
+          (triggerRect.height - popoverRect.height) / 2 +
+          scrollY;
         left = triggerRect.left - popoverRect.width - offset + scrollX;
         break;
-      case 'right':
-        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2 + scrollY;
+      case "right":
+        top =
+          triggerRect.top +
+          (triggerRect.height - popoverRect.height) / 2 +
+          scrollY;
         left = triggerRect.right + offset + scrollX;
         break;
-      case 'top-start':
+      case "top-start":
         top = triggerRect.top - popoverRect.height - offset + scrollY;
         left = triggerRect.left + scrollX;
         break;
-      case 'top-end':
+      case "top-end":
         top = triggerRect.top - popoverRect.height - offset + scrollY;
         left = triggerRect.right - popoverRect.width + scrollX;
         break;
-      case 'bottom-start':
+      case "bottom-start":
         top = triggerRect.bottom + offset + scrollY;
         left = triggerRect.left + scrollX;
         break;
-      case 'bottom-end':
+      case "bottom-end":
         top = triggerRect.bottom + offset + scrollY;
         left = triggerRect.right - popoverRect.width + scrollX;
         break;
@@ -131,77 +154,92 @@ export const Popover: React.FC<PopoverProps> = ({
   }, [placement, offset]);
 
   // Handle click outside
-  const handleClickOutside = useCallback((e: MouseEvent) => {
-    if (!closeOnClickOutside) return;
+  const handleClickOutside = useCallback(
+    (e: MouseEvent) => {
+      if (!closeOnClickOutside) return;
 
-    const target = e.target as Node;
-    if (
-      !triggerRef.current?.contains(target) &&
-      !popoverRef.current?.contains(target)
-    ) {
-      setOpen(false);
-    }
-  }, [closeOnClickOutside, setOpen]);
+      const target = e.target as Node;
+      if (
+        !triggerRef.current?.contains(target) &&
+        !popoverRef.current?.contains(target)
+      ) {
+        setOpen(false);
+      }
+    },
+    [closeOnClickOutside, setOpen],
+  );
 
   // Handle ESC key
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (closeOnEsc && e.key === 'Escape') {
-      setOpen(false);
-    }
-  }, [closeOnEsc, setOpen]);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (closeOnEsc && e.key === "Escape") {
+        setOpen(false);
+      }
+    },
+    [closeOnEsc, setOpen],
+  );
 
   // Update position when open
   useEffect(() => {
     if (open) {
       updatePosition();
-      window.addEventListener('resize', updatePosition);
-      window.addEventListener('scroll', updatePosition);
+      window.addEventListener("resize", updatePosition);
+      window.addEventListener("scroll", updatePosition);
     }
 
     return () => {
-      window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition);
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
     };
   }, [open, updatePosition]);
 
   // Event listeners
   useEffect(() => {
     if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open, handleClickOutside, handleKeyDown]);
 
   // Clone trigger with ref and onClick
-  const triggerElement = React.cloneElement(trigger, {
-    ref: triggerRef,
-    onClick: (e: React.MouseEvent) => {
-      trigger.props.onClick?.(e);
-      setOpen(!open);
+  // Note: This is a standard pattern for headless UI components (Radix, Headless UI)
+  // We pass the ref object itself (not .current), which is how forwardRef works
+  const triggerProps = trigger.props as {
+    onClick?: (e: React.MouseEvent) => void;
+  };
+  // eslint-disable-next-line react-hooks/refs
+  const triggerElement = React.cloneElement(
+    trigger as React.ReactElement<Record<string, unknown>>,
+    {
+      ref: triggerRef,
+      onClick: (e: React.MouseEvent) => {
+        triggerProps.onClick?.(e);
+        setOpen(!open);
+      },
+      "aria-expanded": open,
+      "aria-haspopup": "true",
     },
-    'aria-expanded': open,
-    'aria-haspopup': true
-  });
+  );
 
   const popoverContent = open && (
     <div
       ref={popoverRef}
       className={cn(
-        'absolute z-50',
-        'glass rounded-[var(--radius-md,10px)]',
-        'shadow-[var(--elev-2)]',
-        'min-w-[200px]',
-        'animate-fade-in',
-        className
+        "absolute z-50",
+        "glass rounded-[var(--radius-md,10px)]",
+        "shadow-[var(--elev-2)]",
+        "min-w-[200px]",
+        "animate-fade-in",
+        className,
       )}
       style={{
         top: `${position.top}px`,
-        left: `${position.left}px`
+        left: `${position.left}px`,
       }}
       role="menu"
       aria-orientation="vertical"
@@ -213,13 +251,13 @@ export const Popover: React.FC<PopoverProps> = ({
   return (
     <>
       {triggerElement}
-      {typeof document !== 'undefined' && popoverContent &&
-        createPortal(popoverContent, document.body)
-      }
+      {typeof document !== "undefined" &&
+        popoverContent &&
+        createPortal(popoverContent, document.body)}
     </>
   );
 };
 
-Popover.displayName = 'Popover';
+Popover.displayName = "Popover";
 
 export default Popover;

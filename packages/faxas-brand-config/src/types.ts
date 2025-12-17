@@ -16,7 +16,7 @@ export interface BrandTheme {
   accentColor: string;
   backgroundColor: string;
   foregroundColor: string;
-  borderRadius: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  borderRadius: "none" | "sm" | "md" | "lg" | "xl";
   fontFamily: {
     sans: string;
     mono: string;
@@ -57,18 +57,18 @@ export interface BrandAssets {
  * Brand navigation configuration
  */
 export interface BrandNavigation {
-  mainMenu: Array<{
+  mainMenu: {
     label: string;
     href: string;
     icon?: string;
-  }>;
-  footerLinks: Array<{
+  }[];
+  footerLinks: {
     category: string;
-    links: Array<{
+    links: {
       label: string;
       href: string;
-    }>;
-  }>;
+    }[];
+  }[];
 }
 
 /**
@@ -85,9 +85,7 @@ export interface BrandConfig {
   seo: BrandSEO;
   assets: BrandAssets;
   navigation: BrandNavigation;
-  features?: {
-    [key: string]: boolean;
-  };
+  features?: Record<string, boolean>;
   analytics?: {
     gtmId?: string;
     gaId?: string;
@@ -100,6 +98,6 @@ export interface BrandConfig {
  */
 export interface BrandResolution {
   brand: BrandConfig;
-  source: 'env' | 'host' | 'cookie' | 'fallback';
+  source: "env" | "host" | "cookie" | "fallback";
   timestamp: number;
 }

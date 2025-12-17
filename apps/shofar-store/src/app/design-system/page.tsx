@@ -6,13 +6,16 @@
  * Showcases all new components from the reboot
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { PointerVarsProvider } from '@/components/providers/PointerVarsProvider';
-import { ButtonPrimary } from '@/brands/tooly/components/ui';
-import { ButtonGraphite } from '@/brands/tooly/components/ui/ButtonGraphite';
-import { ButtonPill, ButtonPillGroup } from '@/brands/tooly/components/ui/ButtonPill';
+import React from "react";
+import { PointerVarsProvider } from "@/components/providers/PointerVarsProvider";
+import { ButtonPrimary } from "@/brands/tooly/components/ui";
+import { ButtonGraphite } from "@/brands/tooly/components/ui/ButtonGraphite";
+import {
+  ButtonPill,
+  ButtonPillGroup,
+} from "@/brands/tooly/components/ui/ButtonPill";
 // Import experimental buttons from their new location
 import {
   ButtonMarketingPrimary,
@@ -20,14 +23,23 @@ import {
   ButtonRotatingPurple,
   ButtonConicShine,
   ButtonGlowUp,
-  ButtonRainbowShine
-} from '@/brands/tooly/components/ui/experiments';
-import { ToolyWordmark, ToolyWordmarkStacked } from '@/brands/tooly/components/ui/ToolyWordmark';
-import { Watermark, WatermarkGrid, WatermarkAnimated } from '@/brands/tooly/components/ui/Watermark';
-import { ReviewsMarquee, ReviewsMarqueeMultiRow } from '@/brands/tooly/components/ui/ReviewsMarquee';
-import { FeatureRail } from '@/brands/tooly/components/ui/FeatureRail';
+  ButtonRainbowShine,
+} from "@/brands/tooly/components/ui/experiments";
 import {
-  Button,
+  ToolyWordmark,
+  ToolyWordmarkStacked,
+} from "@/brands/tooly/components/ui/ToolyWordmark";
+import {
+  Watermark,
+  WatermarkGrid,
+  WatermarkAnimated,
+} from "@/brands/tooly/components/ui/Watermark";
+import {
+  ReviewsMarquee,
+  ReviewsMarqueeMultiRow,
+} from "@/brands/tooly/components/ui/ReviewsMarquee";
+import { FeatureRail } from "@/brands/tooly/components/ui/FeatureRail";
+import {
   Card,
   CardHeader,
   CardBody,
@@ -42,93 +54,102 @@ import {
   Input,
   ToastProvider,
   useToast,
-  toast
-} from '@/brands/tooly/components/ui';
-import { ButtonSecondary } from '@/brands/tooly/components/ui/ButtonSecondary';
+  toast,
+} from "@/brands/tooly/components/ui";
+import { ButtonSecondary } from "@/brands/tooly/components/ui/ButtonSecondary";
 
 // Sample data for components
 const sampleReviews = [
   {
-    id: '1',
-    author: 'Alex Chen',
-    role: 'Lead Engineer',
-    company: 'TechCorp',
-    content: 'TOOLY tools transformed our workflow. The build quality is exceptional and the precision is unmatched.',
+    id: "1",
+    author: "Alex Chen",
+    role: "Lead Engineer",
+    company: "TechCorp",
+    content:
+      "TOOLY tools transformed our workflow. The build quality is exceptional and the precision is unmatched.",
     rating: 5,
-    date: '2024-01',
-    verified: true
+    date: "2024-01",
+    verified: true,
   },
   {
-    id: '2',
-    author: 'Sarah Martinez',
-    role: 'Workshop Manager',
-    company: 'MakerSpace Co',
-    content: 'Industrial-grade quality at an accessible price point. These tools are built to last.',
+    id: "2",
+    author: "Sarah Martinez",
+    role: "Workshop Manager",
+    company: "MakerSpace Co",
+    content:
+      "Industrial-grade quality at an accessible price point. These tools are built to last.",
     rating: 5,
-    date: '2024-01',
-    verified: true
+    date: "2024-01",
+    verified: true,
   },
   {
-    id: '3',
-    author: 'Mike Johnson',
-    role: 'Contractor',
-    company: 'BuildRight LLC',
-    content: 'The attention to detail in every tool is remarkable. Worth every penny.',
+    id: "3",
+    author: "Mike Johnson",
+    role: "Contractor",
+    company: "BuildRight LLC",
+    content:
+      "The attention to detail in every tool is remarkable. Worth every penny.",
     rating: 5,
-    date: '2024-01',
-    verified: true
+    date: "2024-01",
+    verified: true,
   },
   {
-    id: '4',
-    author: 'Lisa Wong',
-    role: 'DIY Enthusiast',
-    content: 'Professional quality for home projects. The ergonomics are perfect for extended use.',
+    id: "4",
+    author: "Lisa Wong",
+    role: "DIY Enthusiast",
+    content:
+      "Professional quality for home projects. The ergonomics are perfect for extended use.",
     rating: 4,
-    date: '2024-01'
+    date: "2024-01",
   },
   {
-    id: '5',
-    author: 'David Brown',
-    role: 'Maintenance Supervisor',
-    company: 'Industrial Works',
-    content: 'Reliability you can count on. These tools have never let us down.',
+    id: "5",
+    author: "David Brown",
+    role: "Maintenance Supervisor",
+    company: "Industrial Works",
+    content:
+      "Reliability you can count on. These tools have never let us down.",
     rating: 5,
-    date: '2023-12',
-    verified: true
-  }
+    date: "2023-12",
+    verified: true,
+  },
 ];
 
 const sampleFeatures = [
   {
-    id: '1',
-    title: 'Precision Engineering',
-    description: 'Crafted with aerospace-grade materials and tolerances for ultimate accuracy.',
-    badge: 'FLAGSHIP',
+    id: "1",
+    title: "Precision Engineering",
+    description:
+      "Crafted with aerospace-grade materials and tolerances for ultimate accuracy.",
+    badge: "FLAGSHIP",
     highlight: '±0.001" tolerance',
-    icon: '⚙️'
+    icon: "⚙️",
   },
   {
-    id: '2',
-    title: 'Lifetime Warranty',
-    description: 'Built to last generations. If it breaks, we replace it. No questions asked.',
-    highlight: 'Forever guarantee',
-    icon: '🛡️'
+    id: "2",
+    title: "Lifetime Warranty",
+    description:
+      "Built to last generations. If it breaks, we replace it. No questions asked.",
+    highlight: "Forever guarantee",
+    icon: "🛡️",
   },
   {
-    id: '3',
-    title: 'Ergonomic Design',
-    description: 'Engineered for comfort during extended use with anti-fatigue grips.',
-    highlight: 'Reduces strain by 40%',
-    icon: '✋'
+    id: "3",
+    title: "Ergonomic Design",
+    description:
+      "Engineered for comfort during extended use with anti-fatigue grips.",
+    highlight: "Reduces strain by 40%",
+    icon: "✋",
   },
   {
-    id: '4',
-    title: 'Smart Integration',
-    description: 'IoT-enabled tools that track usage, maintenance, and performance metrics.',
-    badge: 'NEW',
-    highlight: 'Connected workshop',
-    icon: '📡'
-  }
+    id: "4",
+    title: "Smart Integration",
+    description:
+      "IoT-enabled tools that track usage, maintenance, and performance metrics.",
+    badge: "NEW",
+    highlight: "Connected workshop",
+    icon: "📡",
+  },
 ];
 
 export default function DesignSystemPage() {
@@ -181,17 +202,17 @@ export default function DesignSystemPage() {
         >
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {[
-              { shade: 950, hex: '#0b0f14' },
-              { shade: 900, hex: '#0d1218' },
-              { shade: 800, hex: '#121822' },
-              { shade: 700, hex: '#17202a' },
-              { shade: 600, hex: '#1d2631' },
-              { shade: 500, hex: '#243040' },
-              { shade: 400, hex: '#2d3a4c' },
-              { shade: 300, hex: '#374659' },
-              { shade: 200, hex: '#425367' },
-              { shade: 100, hex: '#516176' },
-              { shade: 50, hex: '#637389' },
+              { shade: 950, hex: "#0b0f14" },
+              { shade: 900, hex: "#0d1218" },
+              { shade: 800, hex: "#121822" },
+              { shade: 700, hex: "#17202a" },
+              { shade: 600, hex: "#1d2631" },
+              { shade: 500, hex: "#243040" },
+              { shade: 400, hex: "#2d3a4c" },
+              { shade: 300, hex: "#374659" },
+              { shade: 200, hex: "#425367" },
+              { shade: 100, hex: "#516176" },
+              { shade: 50, hex: "#637389" },
             ].map(({ shade, hex }) => (
               <div key={shade} className="glass-card p-4">
                 <div
@@ -206,7 +227,9 @@ export default function DesignSystemPage() {
 
           {/* Brand colors */}
           <div className="mt-12">
-            <h3 className="text-xl font-semibold text-white mb-6">Brand Palette</h3>
+            <h3 className="text-xl font-semibold text-white mb-6">
+              Brand Palette
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl">
               <div className="glass-card p-6">
                 <div className="w-full aspect-square rounded-lg bg-[#FF6B35] mb-4" />
@@ -240,13 +263,16 @@ export default function DesignSystemPage() {
                 ButtonPrimary - Animated Rainbow Border
               </h3>
               <p className="text-white/60 text-sm mt-2">
-                Inspired by Resend.com's "Launch Week" button design
+                Inspired by Resend.com&apos;s &quot;Launch Week&quot; button
+                design
               </p>
             </CardHeader>
             <CardBody className="space-y-8">
               {/* Size Variants */}
               <div className="space-y-4">
-                <p className="text-white/50 text-sm uppercase tracking-wider">Size Variants</p>
+                <p className="text-white/50 text-sm uppercase tracking-wider">
+                  Size Variants
+                </p>
                 <div className="flex flex-wrap gap-4 items-center justify-center">
                   <ButtonPrimary size="sm">Small Button</ButtonPrimary>
                   <ButtonPrimary size="md">Medium Button</ButtonPrimary>
@@ -256,28 +282,44 @@ export default function DesignSystemPage() {
 
               {/* With Arrow Icons */}
               <div className="space-y-4">
-                <p className="text-white/50 text-sm uppercase tracking-wider">With Arrow Icon</p>
+                <p className="text-white/50 text-sm uppercase tracking-wider">
+                  With Arrow Icon
+                </p>
                 <div className="flex flex-wrap gap-4 items-center justify-center">
-                  <ButtonPrimary showArrow size="sm">Shop TOOLY Now</ButtonPrimary>
-                  <ButtonPrimary showArrow size="md">Shop TOOLY Now</ButtonPrimary>
-                  <ButtonPrimary showArrow size="lg">Shop TOOLY Now</ButtonPrimary>
+                  <ButtonPrimary showArrow size="sm">
+                    Shop TOOLY Now
+                  </ButtonPrimary>
+                  <ButtonPrimary showArrow size="md">
+                    Shop TOOLY Now
+                  </ButtonPrimary>
+                  <ButtonPrimary showArrow size="lg">
+                    Shop TOOLY Now
+                  </ButtonPrimary>
                 </div>
               </div>
 
               {/* States */}
               <div className="space-y-4">
-                <p className="text-white/50 text-sm uppercase tracking-wider">States</p>
+                <p className="text-white/50 text-sm uppercase tracking-wider">
+                  States
+                </p>
                 <div className="flex flex-wrap gap-4 items-center justify-center">
                   <ButtonPrimary showArrow>Default</ButtonPrimary>
                   <ButtonPrimary loading>Loading</ButtonPrimary>
-                  <ButtonPrimary disabled showArrow>Disabled</ButtonPrimary>
-                  <ButtonPrimary fullWidth showArrow>Full Width</ButtonPrimary>
+                  <ButtonPrimary disabled showArrow>
+                    Disabled
+                  </ButtonPrimary>
+                  <ButtonPrimary fullWidth showArrow>
+                    Full Width
+                  </ButtonPrimary>
                 </div>
               </div>
 
               {/* Example CTAs */}
               <div className="space-y-4">
-                <p className="text-white/50 text-sm uppercase tracking-wider">E-Commerce CTAs</p>
+                <p className="text-white/50 text-sm uppercase tracking-wider">
+                  E-Commerce CTAs
+                </p>
                 <div className="flex flex-wrap gap-4 items-center justify-center">
                   <ButtonPrimary showArrow>Shop Now</ButtonPrimary>
                   <ButtonPrimary showArrow>Browse Tools</ButtonPrimary>
@@ -305,14 +347,26 @@ export default function DesignSystemPage() {
               </CardHeader>
               <CardBody className="space-y-6">
                 <div className="flex flex-wrap gap-6 items-center justify-center">
-                  <ButtonRotatingWhite size="sm">Small White</ButtonRotatingWhite>
-                  <ButtonRotatingWhite size="md">Medium White</ButtonRotatingWhite>
-                  <ButtonRotatingWhite size="lg">Large White</ButtonRotatingWhite>
+                  <ButtonRotatingWhite size="sm">
+                    Small White
+                  </ButtonRotatingWhite>
+                  <ButtonRotatingWhite size="md">
+                    Medium White
+                  </ButtonRotatingWhite>
+                  <ButtonRotatingWhite size="lg">
+                    Large White
+                  </ButtonRotatingWhite>
                 </div>
                 <div className="flex flex-wrap gap-6 items-center justify-center">
-                  <ButtonRotatingPurple size="sm">Small Purple</ButtonRotatingPurple>
-                  <ButtonRotatingPurple size="md">Medium Purple</ButtonRotatingPurple>
-                  <ButtonRotatingPurple size="lg">Large Purple</ButtonRotatingPurple>
+                  <ButtonRotatingPurple size="sm">
+                    Small Purple
+                  </ButtonRotatingPurple>
+                  <ButtonRotatingPurple size="md">
+                    Medium Purple
+                  </ButtonRotatingPurple>
+                  <ButtonRotatingPurple size="lg">
+                    Large Purple
+                  </ButtonRotatingPurple>
                 </div>
               </CardBody>
             </Card>
@@ -363,9 +417,15 @@ export default function DesignSystemPage() {
               </CardHeader>
               <CardBody className="space-y-6">
                 <div className="flex flex-wrap gap-4">
-                  <ButtonGraphite variant="primary" size="sm">Small Primary</ButtonGraphite>
-                  <ButtonGraphite variant="primary" size="md">Medium Primary</ButtonGraphite>
-                  <ButtonGraphite variant="primary" size="lg">Large Primary</ButtonGraphite>
+                  <ButtonGraphite variant="primary" size="sm">
+                    Small Primary
+                  </ButtonGraphite>
+                  <ButtonGraphite variant="primary" size="md">
+                    Medium Primary
+                  </ButtonGraphite>
+                  <ButtonGraphite variant="primary" size="lg">
+                    Large Primary
+                  </ButtonGraphite>
                 </div>
                 <div className="flex flex-wrap gap-4">
                   <ButtonGraphite variant="secondary">Secondary</ButtonGraphite>
@@ -415,18 +475,26 @@ export default function DesignSystemPage() {
           {/* Gradient background for glass demo */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#0B4E8B]/20 via-transparent to-[#FF6B35]/10" />
 
-          <CardGrid cols={{ default: 1, md: 3 }} gap="lg" className="relative z-10">
+          <CardGrid
+            cols={{ default: 1, md: 3 }}
+            gap="lg"
+            className="relative z-10"
+          >
             <Card glass padding="lg">
-              <h3 className="text-xl font-bold mb-3 text-white">Standard Glass</h3>
+              <h3 className="text-xl font-bold mb-3 text-white">
+                Standard Glass
+              </h3>
               <p className="text-white/70">
-                Cool frosted effect with inner highlight. Optimized for dark surfaces.
+                Cool frosted effect with inner highlight. Optimized for dark
+                surfaces.
               </p>
             </Card>
 
             <Card glass padding="lg" className="glass-blue">
               <h3 className="text-xl font-bold mb-3 text-white">Blue Tinted</h3>
               <p className="text-white/70">
-                Cool blue tint for technical interfaces. Enhanced depth perception.
+                Cool blue tint for technical interfaces. Enhanced depth
+                perception.
               </p>
             </Card>
 
@@ -449,17 +517,23 @@ export default function DesignSystemPage() {
           <Card glass padding="xl">
             <div className="space-y-12">
               <div className="text-center space-y-4">
-                <p className="text-sm text-white/50 uppercase tracking-wider">With Aberration</p>
+                <p className="text-sm text-white/50 uppercase tracking-wider">
+                  With Aberration
+                </p>
                 <ToolyWordmark size="lg" aberration={true} />
               </div>
 
               <div className="text-center space-y-4">
-                <p className="text-sm text-white/50 uppercase tracking-wider">Monochrome</p>
+                <p className="text-sm text-white/50 uppercase tracking-wider">
+                  Monochrome
+                </p>
                 <ToolyWordmark size="lg" aberration={false} />
               </div>
 
               <div className="text-center space-y-4">
-                <p className="text-sm text-white/50 uppercase tracking-wider">Stacked Version</p>
+                <p className="text-sm text-white/50 uppercase tracking-wider">
+                  Stacked Version
+                </p>
                 <ToolyWordmarkStacked size="md" aberration={true} />
               </div>
             </div>
@@ -499,7 +573,9 @@ export default function DesignSystemPage() {
           <div className="space-y-12">
             {/* Horizontal variant */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">Horizontal Layout</h3>
+              <h3 className="text-lg font-semibold text-white mb-6">
+                Horizontal Layout
+              </h3>
               <FeatureRail
                 features={sampleFeatures}
                 autoAdvance={5000}
@@ -510,7 +586,9 @@ export default function DesignSystemPage() {
 
             {/* Split variant */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">Split Layout</h3>
+              <h3 className="text-lg font-semibold text-white mb-6">
+                Split Layout
+              </h3>
               <FeatureRail
                 features={sampleFeatures}
                 autoAdvance={0} // Manual control
@@ -521,7 +599,9 @@ export default function DesignSystemPage() {
 
             {/* Vertical variant */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">Vertical Layout</h3>
+              <h3 className="text-lg font-semibold text-white mb-6">
+                Vertical Layout
+              </h3>
               <FeatureRail
                 features={sampleFeatures}
                 autoAdvance={4000}
@@ -542,7 +622,9 @@ export default function DesignSystemPage() {
           <CardGrid cols={{ default: 1, md: 2 }} gap="lg">
             <Card glass padding="lg">
               <CardHeader bordered>
-                <h3 className="text-lg font-semibold text-white">Loading States</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  Loading States
+                </h3>
               </CardHeader>
               <CardBody className="space-y-6">
                 <div className="flex items-center gap-4">
@@ -551,7 +633,9 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="w-full">
                   <div className="loader-laser" />
-                  <span className="text-white/70 text-sm mt-2 block">Laser Scanner</span>
+                  <span className="text-white/70 text-sm mt-2 block">
+                    Laser Scanner
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="loader-liquid" />
@@ -559,9 +643,15 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="loader-hex-grid">
-                    <span></span><span></span><span></span>
-                    <span></span><span></span><span></span>
-                    <span></span><span></span><span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                   </div>
                   <span className="text-white/70">Hexagon Grid</span>
                 </div>
@@ -570,7 +660,9 @@ export default function DesignSystemPage() {
 
             <Card glass padding="lg">
               <CardHeader bordered>
-                <h3 className="text-lg font-semibold text-white">Continuous Animations</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  Continuous Animations
+                </h3>
               </CardHeader>
               <CardBody className="space-y-6">
                 <div className="flex items-center gap-4">
@@ -603,15 +695,21 @@ export default function DesignSystemPage() {
           <Card glass padding="lg">
             <div className="space-y-6">
               <div className="p-8 rounded-xl bg-alive relative overflow-hidden h-32 flex items-center justify-center">
-                <span className="text-white font-semibold z-10 relative">Animated Gradient Background</span>
+                <span className="text-white font-semibold z-10 relative">
+                  Animated Gradient Background
+                </span>
               </div>
 
               <div className="p-8 rounded-xl spotlight bg-gm-900 relative overflow-hidden h-32 flex items-center justify-center">
-                <span className="text-white font-semibold">Spotlight Effect (move cursor)</span>
+                <span className="text-white font-semibold">
+                  Spotlight Effect (move cursor)
+                </span>
               </div>
 
               <div className="p-8 rounded-xl bg-noise bg-gm-800 relative overflow-hidden h-32 flex items-center justify-center">
-                <span className="text-white font-semibold">Noise Overlay Texture</span>
+                <span className="text-white font-semibold">
+                  Noise Overlay Texture
+                </span>
               </div>
             </div>
           </Card>
@@ -627,7 +725,9 @@ export default function DesignSystemPage() {
           <CardGrid cols={{ default: 1, md: 2 }} gap="lg">
             <Card glass padding="lg">
               <CardHeader bordered>
-                <h3 className="text-xl font-semibold text-white">Performance Metrics</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Performance Metrics
+                </h3>
               </CardHeader>
               <CardBody>
                 <div className="space-y-4">
@@ -653,7 +753,9 @@ export default function DesignSystemPage() {
 
             <Card glass padding="lg">
               <CardHeader bordered>
-                <h3 className="text-xl font-semibold text-white">Accessibility</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Accessibility
+                </h3>
               </CardHeader>
               <CardBody>
                 <ul className="space-y-3 text-white/70">
@@ -702,16 +804,16 @@ export default function DesignSystemPage() {
                 <Navbar
                   logo="TOOLY"
                   links={[
-                    { label: 'Shop', href: '/shop', active: true },
-                    { label: 'Categories', href: '/categories' },
-                    { label: 'Deals', href: '/deals' },
-                    { label: 'Support', href: '/support' }
+                    { label: "Shop", href: "/shop", active: true },
+                    { label: "Categories", href: "/categories" },
+                    { label: "Deals", href: "/deals" },
+                    { label: "Support", href: "/support" },
                   ]}
                   cartCount={3}
                   isLoggedIn={false}
                   searchPlaceholder="Search for tools..."
-                  onSearch={(query) => console.log('Search:', query)}
-                  onCartClick={() => console.log('Cart clicked')}
+                  onSearch={(query) => console.log("Search:", query)}
+                  onCartClick={() => console.log("Cart clicked")}
                   sticky={false}
                 />
               </CardBody>
@@ -719,8 +821,12 @@ export default function DesignSystemPage() {
 
             {/* Product Cards Grid */}
             <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Product Cards</h3>
-              <p className="text-white/60 mb-6">Three variants: default, compact, and detailed</p>
+              <h3 className="text-xl font-semibold text-white mb-4">
+                Product Cards
+              </h3>
+              <p className="text-white/60 mb-6">
+                Three variants: default, compact, and detailed
+              </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ProductCard
@@ -763,9 +869,16 @@ export default function DesignSystemPage() {
               </div>
 
               {/* Compact variant */}
-              <h4 className="text-lg font-medium text-white mt-8 mb-4">Compact Variant</h4>
+              <h4 className="text-lg font-medium text-white mt-8 mb-4">
+                Compact Variant
+              </h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {['Impact Driver', 'Circular Saw', 'Angle Grinder', 'Jigsaw'].map((name, i) => (
+                {[
+                  "Impact Driver",
+                  "Circular Saw",
+                  "Angle Grinder",
+                  "Jigsaw",
+                ].map((name, i) => (
                   <ProductCard
                     key={i}
                     id={`compact-${i}`}
@@ -789,19 +902,31 @@ export default function DesignSystemPage() {
                 <SearchBar
                   placeholder="Search for tools, brands, or categories..."
                   suggestions={[
-                    { type: 'product', text: 'Cordless Drill', subtitle: 'Power Tools' },
-                    { type: 'category', text: 'Hand Tools', count: 234 },
-                    { type: 'brand', text: 'DeWalt', subtitle: 'Premium Tools' },
-                    { type: 'product', text: 'Tool Box Set', subtitle: 'Storage' }
+                    {
+                      type: "product",
+                      text: "Cordless Drill",
+                      subtitle: "Power Tools",
+                    },
+                    { type: "category", text: "Hand Tools", count: 234 },
+                    {
+                      type: "brand",
+                      text: "DeWalt",
+                      subtitle: "Premium Tools",
+                    },
+                    {
+                      type: "product",
+                      text: "Tool Box Set",
+                      subtitle: "Storage",
+                    },
                   ]}
-                  recentSearches={['hammer', 'drill bits', 'safety glasses']}
+                  recentSearches={["hammer", "drill bits", "safety glasses"]}
                   categories={[
-                    { name: 'Power Tools', count: 156 },
-                    { name: 'Hand Tools', count: 234 },
-                    { name: 'Safety Gear', count: 89 },
-                    { name: 'Tool Storage', count: 67 }
+                    { name: "Power Tools", count: 156 },
+                    { name: "Hand Tools", count: 234 },
+                    { name: "Safety Gear", count: 89 },
+                    { name: "Tool Storage", count: 67 },
                   ]}
-                  onSearch={(query) => console.log('Searching for:', query)}
+                  onSearch={(query) => console.log("Searching for:", query)}
                 />
               </CardBody>
             </Card>
@@ -850,11 +975,7 @@ export default function DesignSystemPage() {
                       error="This field is required"
                       readOnly
                     />
-                    <Input
-                      label="Disabled"
-                      value="Cannot edit"
-                      disabled
-                    />
+                    <Input label="Disabled" value="Cannot edit" disabled />
                   </div>
                 </div>
               </CardBody>
@@ -870,30 +991,29 @@ export default function DesignSystemPage() {
                 <div className="flex flex-wrap gap-3">
                   <ButtonSecondary
                     onClick={() => {
-                      const toastContext = { addToast: (toast: any) => console.log('Toast:', toast) };
-                      console.log('Success toast triggered');
+                      const toastContext = {
+                        addToast: (toast: { message: string; type: string }) =>
+                          console.log("Toast:", toast),
+                      };
+                      void toastContext;
+                      console.log("Success toast triggered");
                     }}
                   >
                     Success Toast
                   </ButtonSecondary>
-                  <ButtonSecondary
-                    onClick={() => console.log('Error toast')}
-                  >
+                  <ButtonSecondary onClick={() => console.log("Error toast")}>
                     Error Toast
                   </ButtonSecondary>
-                  <ButtonSecondary
-                    onClick={() => console.log('Warning toast')}
-                  >
+                  <ButtonSecondary onClick={() => console.log("Warning toast")}>
                     Warning Toast
                   </ButtonSecondary>
-                  <ButtonSecondary
-                    onClick={() => console.log('Info toast')}
-                  >
+                  <ButtonSecondary onClick={() => console.log("Info toast")}>
                     Info Toast
                   </ButtonSecondary>
                 </div>
                 <p className="text-sm text-white/50 mt-4">
-                  Note: Toast notifications require ToastProvider wrapper in your app
+                  Note: Toast notifications require ToastProvider wrapper in
+                  your app
                 </p>
               </CardBody>
             </Card>

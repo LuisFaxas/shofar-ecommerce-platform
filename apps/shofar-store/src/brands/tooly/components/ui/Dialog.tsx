@@ -4,11 +4,11 @@
  * Essential for checkout flows and confirmations
  */
 
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { cn } from '@/lib/utils';
+import React, { useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { cn } from "@/lib/utils";
 
 export interface DialogProps {
   /** Whether dialog is open */
@@ -20,7 +20,7 @@ export interface DialogProps {
   /** Dialog description */
   description?: string;
   /** Dialog size */
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: "sm" | "md" | "lg" | "xl";
   /** Close on overlay click */
   closeOnOverlayClick?: boolean;
   /** Show close button */
@@ -40,47 +40,52 @@ export const Dialog: React.FC<DialogProps> = ({
   onClose,
   title,
   description,
-  size = 'md',
+  size = "md",
   closeOnOverlayClick = true,
   showCloseButton = true,
   children,
-  className
+  className,
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
   // Size classes
   const sizeClasses = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl'
+    sm: "max-w-md",
+    md: "max-w-lg",
+    lg: "max-w-2xl",
+    xl: "max-w-4xl",
   };
 
   // Focus trap implementation
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose();
-      return;
-    }
-
-    // Tab trap
-    if (e.key === 'Tab' && dialogRef.current) {
-      const focusableElements = dialogRef.current.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-      if (e.shiftKey && document.activeElement === firstElement) {
-        e.preventDefault();
-        lastElement?.focus();
-      } else if (!e.shiftKey && document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement?.focus();
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
       }
-    }
-  }, [onClose]);
+
+      // Tab trap
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusableElements = dialogRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement;
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    },
+    [onClose],
+  );
 
   // Handle focus management
   useEffect(() => {
@@ -89,25 +94,29 @@ export const Dialog: React.FC<DialogProps> = ({
       previousActiveElement.current = document.activeElement as HTMLElement;
 
       // Add event listeners
-      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
 
       // Focus first focusable element or dialog
       setTimeout(() => {
         if (dialogRef.current) {
           const firstFocusable = dialogRef.current.querySelector(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
           ) as HTMLElement;
-          firstFocusable?.focus() || dialogRef.current.focus();
+          if (firstFocusable) {
+            firstFocusable.focus();
+          } else {
+            dialogRef.current.focus();
+          }
         }
       }, 50);
 
       // Prevent body scroll
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
 
       // Restore focus
       if (previousActiveElement.current) {
@@ -123,9 +132,9 @@ export const Dialog: React.FC<DialogProps> = ({
       {/* Backdrop */}
       <div
         className={cn(
-          'fixed inset-0 z-50',
-          'bg-black/60 backdrop-blur-sm',
-          'animate-fade-in'
+          "fixed inset-0 z-50",
+          "bg-black/60 backdrop-blur-sm",
+          "animate-fade-in",
         )}
         onClick={closeOnOverlayClick ? onClose : undefined}
         aria-hidden="true"
@@ -137,15 +146,15 @@ export const Dialog: React.FC<DialogProps> = ({
           ref={dialogRef}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={title ? 'dialog-title' : undefined}
-          aria-describedby={description ? 'dialog-description' : undefined}
+          aria-labelledby={title ? "dialog-title" : undefined}
+          aria-describedby={description ? "dialog-description" : undefined}
           className={cn(
-            'relative w-full pointer-events-auto',
-            'glass-heavy rounded-[var(--radius-lg,12px)]',
-            'animate-scale-in',
-            'shadow-[var(--elev-3)]',
+            "relative w-full pointer-events-auto",
+            "glass-heavy rounded-[var(--radius-lg,12px)]",
+            "animate-scale-in",
+            "shadow-[var(--elev-3)]",
             sizeClasses[size],
-            className
+            className,
           )}
           onClick={(e) => e.stopPropagation()}
           tabIndex={-1}
@@ -176,12 +185,12 @@ export const Dialog: React.FC<DialogProps> = ({
                 <button
                   onClick={onClose}
                   className={cn(
-                    'p-1.5 rounded-lg',
-                    'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]',
-                    'hover:bg-[var(--glass-tint-light)]',
-                    'transition-all duration-[var(--motion-fast)]',
-                    'focus-visible:outline-none focus-visible:ring-2',
-                    'focus-visible:ring-[var(--focus-ring-color)]'
+                    "p-1.5 rounded-lg",
+                    "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]",
+                    "hover:bg-[var(--glass-tint-light)]",
+                    "transition-all duration-[var(--motion-fast)]",
+                    "focus-visible:outline-none focus-visible:ring-2",
+                    "focus-visible:ring-[var(--focus-ring-color)]",
                   )}
                   aria-label="Close dialog"
                 >
@@ -204,22 +213,20 @@ export const Dialog: React.FC<DialogProps> = ({
           )}
 
           {/* Content */}
-          <div className="p-6">
-            {children}
-          </div>
+          <div className="p-6">{children}</div>
         </div>
       </div>
     </>
   );
 
   // Portal to document.body
-  if (typeof document !== 'undefined') {
+  if (typeof document !== "undefined") {
     return createPortal(dialogContent, document.body);
   }
 
   return null;
 };
 
-Dialog.displayName = 'Dialog';
+Dialog.displayName = "Dialog";
 
 export default Dialog;
