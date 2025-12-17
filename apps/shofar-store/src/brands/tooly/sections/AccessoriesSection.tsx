@@ -8,13 +8,13 @@
  * - Accepts accessories data from Vendure collection
  */
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
-import { ButtonSecondary } from '../components/ui/ButtonSecondary';
-import { useCart } from '@/contexts/CartContext';
+import * as React from "react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { ButtonSecondary } from "../components/ui/ButtonSecondary";
+import { useCart } from "@/contexts/CartContext";
 
 interface AccessoryVariant {
   id: string;
@@ -61,40 +61,15 @@ interface AccessoriesSectionProps {
 /**
  * Format price with currency
  */
-function formatPrice(priceInCents: number, currencyCode: string = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+function formatPrice(
+  priceInCents: number,
+  currencyCode: string = "USD",
+): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency: currencyCode,
   }).format(priceInCents / 100);
 }
-
-// Default accessories for placeholder display
-const DEFAULT_ACCESSORIES = [
-  {
-    id: '1',
-    name: 'Silicone Case + Glass Vial',
-    price: '$24.99',
-    description: 'Premium protection for your TOOLY',
-  },
-  {
-    id: '2',
-    name: 'Carry Chain - Gold',
-    price: '$19.99',
-    description: '18K gold-plated stainless steel',
-  },
-  {
-    id: '3',
-    name: 'Carry Chain - Silver',
-    price: '$19.99',
-    description: 'Brushed stainless steel finish',
-  },
-  {
-    id: '4',
-    name: 'Cleaning Kit',
-    price: '$9.99',
-    description: 'Complete maintenance solution',
-  },
-];
 
 export function AccessoriesSection({
   className,
@@ -111,7 +86,7 @@ export function AccessoriesSection({
   return (
     <section
       id="accessories"
-      className={cn('py-16 md:py-24 bg-[#0d1218]', className)}
+      className={cn("py-16 md:py-24 bg-[#0d1218]", className)}
       aria-labelledby="accessories-heading"
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -126,174 +101,96 @@ export function AccessoriesSection({
             </h2>
             <p className="text-lg text-white/60 max-w-xl">
               {accessories?.description ||
-                'Premium accessories designed to enhance your TOOLY experience'}
+                "Premium accessories designed to enhance your TOOLY experience"}
             </p>
           </div>
-          <ButtonSecondary className="hidden md:flex mt-4 md:mt-0" showArrow>
-            View All Accessories
-          </ButtonSecondary>
+          {hasAccessories && (
+            <ButtonSecondary className="hidden md:flex mt-4 md:mt-0" showArrow>
+              View All Accessories
+            </ButtonSecondary>
+          )}
         </div>
 
-        {/* Accessories Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {hasAccessories
-            ? variants.slice(0, 4).map((variant) => {
-                const imageUrl =
-                  variant.featuredAsset?.preview ||
-                  variant.product.featuredAsset?.preview;
-                return (
-                  <div
-                    key={variant.id}
-                    className={cn(
-                      'group p-4 rounded-xl',
-                      'bg-white/[0.04] border border-white/[0.08]',
-                      'hover:bg-white/[0.06] hover:border-white/[0.12]',
-                      'transition-all duration-300'
-                    )}
-                  >
-                    {/* Image */}
-                    <div
-                      className={cn(
-                        'aspect-square rounded-lg mb-4 relative',
-                        'bg-white/[0.04] border border-white/[0.06]',
-                        'overflow-hidden'
-                      )}
-                    >
-                      {imageUrl ? (
-                        <Image
-                          src={imageUrl}
-                          alt={variant.product.name}
-                          fill
-                          className="object-contain p-2"
-                          sizes="(max-width: 768px) 50vw, 25vw"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-center p-4">
-                            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-white/[0.06] flex items-center justify-center text-white/30">
-                              <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={1.5}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
-                                />
-                              </svg>
-                            </div>
-                            <p className="text-xs text-white/30">Image</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Info */}
-                    <h3 className="text-sm font-semibold text-white mb-1 line-clamp-1">
-                      {variant.product.name}
-                    </h3>
-                    <p className="text-xs text-white/50 mb-3 line-clamp-1">
-                      {variant.product.description || variant.name}
-                    </p>
-
-                    {/* Price & Action */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-white">
-                        {formatPrice(variant.priceWithTax, variant.currencyCode)}
-                      </span>
-                      <button
-                        onClick={() => handleAddToCart(variant)}
-                        className={cn(
-                          'p-2 rounded-lg',
-                          'bg-white/[0.08] text-white/60',
-                          'hover:bg-white/[0.12] hover:text-white',
-                          'transition-all duration-200',
-                          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50'
-                        )}
-                        aria-label={`Add ${variant.product.name} to cart`}
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            : DEFAULT_ACCESSORIES.map((accessory) => (
+        {/* Accessories Grid or Coming Soon */}
+        {hasAccessories ? (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {variants.slice(0, 4).map((variant) => {
+              const imageUrl =
+                variant.featuredAsset?.preview ||
+                variant.product.featuredAsset?.preview;
+              return (
                 <div
-                  key={accessory.id}
+                  key={variant.id}
                   className={cn(
-                    'group p-4 rounded-xl',
-                    'bg-white/[0.04] border border-white/[0.08]',
-                    'hover:bg-white/[0.06] hover:border-white/[0.12]',
-                    'transition-all duration-300'
+                    "group p-4 rounded-xl",
+                    "bg-white/[0.04] border border-white/[0.08]",
+                    "hover:bg-white/[0.06] hover:border-white/[0.12]",
+                    "transition-all duration-300",
                   )}
                 >
-                  {/* Image Placeholder */}
+                  {/* Image */}
                   <div
                     className={cn(
-                      'aspect-square rounded-lg mb-4',
-                      'bg-white/[0.04] border border-white/[0.06]',
-                      'flex items-center justify-center',
-                      'overflow-hidden'
+                      "aspect-square rounded-lg mb-4 relative",
+                      "bg-white/[0.04] border border-white/[0.06]",
+                      "overflow-hidden",
                     )}
                   >
-                    <div className="text-center p-4">
-                      <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-white/[0.06] flex items-center justify-center text-white/30">
-                        <svg
-                          className="w-6 h-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={1.5}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
-                          />
-                        </svg>
+                    {imageUrl ? (
+                      <Image
+                        src={imageUrl}
+                        alt={variant.product.name}
+                        fill
+                        className="object-contain p-2"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center p-4">
+                          <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-white/[0.06] flex items-center justify-center text-white/30">
+                            <svg
+                              className="w-6 h-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={1.5}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
+                              />
+                            </svg>
+                          </div>
+                          <p className="text-xs text-white/30">Image</p>
+                        </div>
                       </div>
-                      <p className="text-xs text-white/30">Image</p>
-                    </div>
+                    )}
                   </div>
 
                   {/* Info */}
                   <h3 className="text-sm font-semibold text-white mb-1 line-clamp-1">
-                    {accessory.name}
+                    {variant.product.name}
                   </h3>
                   <p className="text-xs text-white/50 mb-3 line-clamp-1">
-                    {accessory.description}
+                    {variant.product.description || variant.name}
                   </p>
 
                   {/* Price & Action */}
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-bold text-white">
-                      {accessory.price}
+                      {formatPrice(variant.priceWithTax, variant.currencyCode)}
                     </span>
                     <button
+                      onClick={() => handleAddToCart(variant)}
                       className={cn(
-                        'p-2 rounded-lg',
-                        'bg-white/[0.08] text-white/60',
-                        'hover:bg-white/[0.12] hover:text-white',
-                        'transition-all duration-200',
-                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50'
+                        "p-2 rounded-lg",
+                        "bg-white/[0.08] text-white/60",
+                        "hover:bg-white/[0.12] hover:text-white",
+                        "transition-all duration-200",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
                       )}
-                      aria-label={`Add ${accessory.name} to cart`}
+                      aria-label={`Add ${variant.product.name} to cart`}
                     >
                       <svg
                         className="w-5 h-5"
@@ -311,20 +208,56 @@ export function AccessoriesSection({
                     </button>
                   </div>
                 </div>
-              ))}
-        </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* Coming Soon Empty State */
+          <div
+            className={cn(
+              "bg-white/[0.03] backdrop-blur-sm",
+              "border border-white/[0.08] rounded-2xl",
+              "p-12 md:p-16 text-center",
+            )}
+          >
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#02fcef]/10 to-[#a02bfe]/10 flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-[#02fcef]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl md:text-2xl font-semibold text-white/90 mb-3">
+              Accessories Coming Soon
+            </h3>
+            <p className="text-white/50 max-w-md mx-auto">
+              Premium add-ons to enhance your TOOLY experience. Sign up to be
+              notified when they launch.
+            </p>
+          </div>
+        )}
 
-        {/* Mobile CTA */}
-        <div className="mt-8 md:hidden">
-          <ButtonSecondary fullWidth showArrow>
-            View All Accessories
-          </ButtonSecondary>
-        </div>
+        {/* Mobile CTA - Only show when accessories exist */}
+        {hasAccessories && (
+          <div className="mt-8 md:hidden">
+            <ButtonSecondary fullWidth showArrow>
+              View All Accessories
+            </ButtonSecondary>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
-AccessoriesSection.displayName = 'AccessoriesSection';
+AccessoriesSection.displayName = "AccessoriesSection";
 
 export default AccessoriesSection;
