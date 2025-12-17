@@ -13,6 +13,8 @@
     "@shofar/api-client": "workspace:*",
     "@shofar/feature-flags": "workspace:*",
     "@shofar/shofar-brand-config": "workspace:*",
+    "@stripe/react-stripe-js": "^5.4.1",
+    "@stripe/stripe-js": "^8.6.0",
     "clsx": "^2.1.1",
     "focus-trap-react": "^11.0.4",
     "jose": "^5.9.6",

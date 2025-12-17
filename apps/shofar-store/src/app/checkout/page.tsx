@@ -13,6 +13,13 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/brands/tooly/components/ui/Input";
 import { ButtonPrimary } from "@/brands/tooly/components/ui/ButtonPrimary";
 import { ButtonSecondary } from "@/brands/tooly/components/ui/ButtonSecondary";
+import {
+  StripePaymentForm,
+  TestPaymentForm,
+} from "@/components/StripePaymentForm";
+
+// Check if Stripe is configured
+const STRIPE_ENABLED = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 // Types
 interface OrderLine {
@@ -675,37 +682,30 @@ export default function CheckoutPage() {
 
             {/* Payment Step */}
             {step === "payment" && (
-              <form onSubmit={handlePaymentSubmit} className="space-y-6">
-                <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl p-6">
-                  <h2 className="text-lg font-semibold text-white mb-4">
-                    Payment
-                  </h2>
-                  <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-300 text-sm">
-                    <strong>Test Mode:</strong> This is a test checkout. No real
-                    payment will be processed. Click &quot;Place Order&quot; to
-                    complete your test order.
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <ButtonSecondary
-                    type="button"
-                    onClick={() => setStep("shipping")}
-                    fullWidth
-                  >
-                    Back
-                  </ButtonSecondary>
-                  <ButtonPrimary
-                    type="submit"
-                    fullWidth
-                    size="lg"
-                    disabled={submitting}
+              <>
+                {STRIPE_ENABLED ? (
+                  <StripePaymentForm
+                    onSuccess={() => {
+                      // Refresh order state and move to confirmation
+                      graphqlRequest<{ activeOrder: ActiveOrder | null }>(
+                        ACTIVE_ORDER_QUERY,
+                      ).then((data) => {
+                        if (data.activeOrder) {
+                          setOrder(data.activeOrder);
+                        }
+                        setStep("confirmation");
+                      });
+                    }}
+                    onBack={() => setStep("shipping")}
+                  />
+                ) : (
+                  <TestPaymentForm
+                    onSubmit={handlePaymentSubmit}
+                    onBack={() => setStep("shipping")}
                     loading={submitting}
-                  >
-                    Place Order
-                  </ButtonPrimary>
-                </div>
-              </form>
+                  />
+                )}
+              </>
             )}
 
             {/* Confirmation Step */}

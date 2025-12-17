@@ -153,6 +153,12 @@ importers:
       "@shofar/shofar-brand-config":
         specifier: workspace:*
         version: link:../../packages/shofar-brand-config
+      "@stripe/react-stripe-js":
+        specifier: ^5.4.1
+        version: 5.4.1(@stripe/stripe-js@8.6.0)(react-dom@19.2.0)(react@19.2.0)
+      "@stripe/stripe-js":
+        specifier: ^8.6.0
+        version: 8.6.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -6503,6 +6509,30 @@ packages:
       {
         integrity: sha512-Uy0+khmZqUrUGm5dmMqVlnvufZRSK0FbYzVgp0UMstm+F5+W2/jnEEQyc9vo1ZR/E5ZI/B1WjjoTqBqwJL6Krw==,
       }
+    dev: false
+
+  /@stripe/react-stripe-js@5.4.1(@stripe/stripe-js@8.6.0)(react-dom@19.2.0)(react@19.2.0):
+    resolution:
+      {
+        integrity: sha512-ipeYcAHa4EPmjwfv0lFE+YDVkOQ0TMKkFWamW+BqmnSkEln/hO8rmxGPPWcd9WjqABx6Ro8Xg4pAS7evCcR9cw==,
+      }
+    peerDependencies:
+      "@stripe/stripe-js": ">=8.0.0 <9.0.0"
+      react: ">=16.8.0 <20.0.0"
+      react-dom: ">=16.8.0 <20.0.0"
+    dependencies:
+      "@stripe/stripe-js": 8.6.0
+      prop-types: 15.8.1
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
+    dev: false
+
+  /@stripe/stripe-js@8.6.0:
+    resolution:
+      {
+        integrity: sha512-EB0/GGgs4hfezzkiMkinlRgWtjz8fSdwVQhwYS7Sg/RQrSvuNOz+ssPjD+lAzqaYTCB0zlbrt0fcqVziLJrufQ==,
+      }
+    engines: { node: ">=12.16" }
     dev: false
 
   /@swc/helpers@0.5.15:
