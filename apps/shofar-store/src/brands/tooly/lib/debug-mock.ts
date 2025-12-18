@@ -126,6 +126,7 @@ export function augmentWithMockData(
       variants: [...pageData.product.variants, ...mockVariants],
     },
     accessories: mockAccessoriesCollection as ToolyPageData["accessories"],
+    heroImage: pageData.heroImage, // Preserve heroImage
   };
 }
 

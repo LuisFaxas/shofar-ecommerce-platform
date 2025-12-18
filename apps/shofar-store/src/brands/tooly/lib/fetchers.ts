@@ -26,10 +26,18 @@ export type AccessoriesData = NonNullable<
   GetAccessoriesCollectionQuery["collection"]
 >;
 
+export interface HeroImageData {
+  id: string;
+  preview: string;
+  source: string;
+}
+
 export interface ToolyPageData {
   product: ToolyProductData | null;
   gallery: GalleryData | null;
   accessories: AccessoriesData | null;
+  /** Hero background image from Channel customFields */
+  heroImage: string | null;
 }
 
 // ============================================================================
@@ -64,11 +72,16 @@ export function buildAssetUrl(
 // FETCHERS
 // ============================================================================
 
+interface ProductAndChannelData {
+  product: ToolyProductData | null;
+  heroImage: string | null;
+}
+
 /**
- * Fetch main TOOLY product data
+ * Fetch main TOOLY product data and channel configuration
  * Used by: HeroSection, ProductSection
  */
-export async function fetchToolyProduct(): Promise<ToolyProductData | null> {
+export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelData> {
   try {
     const { data, error } = await toolyShopClient.query({
       query: GetToolyProductDocument,
@@ -78,14 +91,37 @@ export async function fetchToolyProduct(): Promise<ToolyProductData | null> {
 
     if (error) {
       console.error("[TOOLY] Failed to fetch product:", error.message);
-      return null;
+      return { product: null, heroImage: null };
     }
 
-    return data?.product ?? null;
+    // Extract heroImage from activeChannel customFields
+    const heroImagePreview =
+      (
+        data?.activeChannel?.customFields as {
+          heroImage?: { preview?: string };
+        }
+      )?.heroImage?.preview ?? null;
+
+    // Build full URL for heroImage
+    const heroImage = buildAssetUrl(heroImagePreview);
+
+    return {
+      product: data?.product ?? null,
+      heroImage,
+    };
   } catch (err) {
     console.error("[TOOLY] Product fetch error:", err);
-    return null;
+    return { product: null, heroImage: null };
   }
+}
+
+/**
+ * Fetch main TOOLY product data (legacy - use fetchToolyProductAndChannel for hero)
+ * Used by: ProductSection
+ */
+export async function fetchToolyProduct(): Promise<ToolyProductData | null> {
+  const { product } = await fetchToolyProductAndChannel();
+  return product;
 }
 
 /**
@@ -141,16 +177,17 @@ export async function fetchAccessoriesCollection(): Promise<AccessoriesData | nu
  * Main entry point for page-level data fetching
  */
 export async function fetchToolyPageData(): Promise<ToolyPageData> {
-  const [product, gallery, accessories] = await Promise.all([
-    fetchToolyProduct(),
+  const [productAndChannel, gallery, accessories] = await Promise.all([
+    fetchToolyProductAndChannel(),
     fetchProductGallery(),
     fetchAccessoriesCollection(),
   ]);
 
   return {
-    product,
+    product: productAndChannel.product,
     gallery,
     accessories,
+    heroImage: productAndChannel.heroImage,
   };
 }
 
