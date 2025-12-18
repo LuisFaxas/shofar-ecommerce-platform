@@ -6,16 +6,10 @@ import {
   RequestContext,
   Permission,
   LanguageCode,
-  AssetService,
-  ProductService,
-  CollectionService,
-  FacetService,
-  ProductVariantService,
-  ConfigService,
+  CurrencyCode,
   TransactionalConnection,
-} from '@vendure/core';
-import { config } from '../vendure-config';
-import { initialData } from './initial-data';
+} from "@vendure/core";
+import { config } from "../vendure-config";
 
 /**
  * Populate database with channels, roles, and seed products
@@ -23,50 +17,56 @@ import { initialData } from './initial-data';
 export async function populateDatabase(): Promise<void> {
   const app = await bootstrap(config);
 
-  await app.get(TransactionalConnection).withTransaction(async (ctx) => {
+  await app.get(TransactionalConnection).withTransaction(async (_ctx) => {
     const channelService = app.get(ChannelService);
     const roleService = app.get(RoleService);
     const adminService = app.get(AdministratorService);
-    const configService = app.get(ConfigService);
 
     // Get superadmin context
     const superadminContext = new RequestContext({
+      apiType: "admin",
       channel: await channelService.getDefaultChannel(),
       languageCode: LanguageCode.en,
       isAuthorized: true,
       authorizedAsOwnerOnly: false,
     });
 
-    console.log('🚀 Setting up channels...');
+    console.log("🚀 Setting up channels...");
 
     // Create Tooly channel
-    const toolyChannel = await channelService.create(superadminContext, {
-      code: 'tooly',
-      token: 'tooly',
+    const toolyChannelResult = await channelService.create(superadminContext, {
+      code: "tooly",
+      token: "tooly",
       defaultLanguageCode: LanguageCode.en,
       availableLanguageCodes: [LanguageCode.en],
       pricesIncludeTax: false,
-      currencyCode: 'USD',
+      currencyCode: CurrencyCode.USD,
       defaultShippingZoneId: 1,
       defaultTaxZoneId: 1,
     });
+    if ("message" in toolyChannelResult) {
+      throw new Error(
+        `Failed to create tooly channel: ${toolyChannelResult.message}`,
+      );
+    }
+    const toolyChannel = toolyChannelResult;
 
     // Create Future channel (placeholder)
-    const futureChannel = await channelService.create(superadminContext, {
-      code: 'future',
-      token: 'future',
+    await channelService.create(superadminContext, {
+      code: "future",
+      token: "future",
       defaultLanguageCode: LanguageCode.en,
       availableLanguageCodes: [LanguageCode.en],
       pricesIncludeTax: false,
-      currencyCode: 'USD',
+      currencyCode: CurrencyCode.USD,
       defaultShippingZoneId: 1,
       defaultTaxZoneId: 1,
     });
 
-    console.log('✅ Channels created: tooly, future');
+    console.log("✅ Channels created: tooly, future");
 
     // Create RBAC Roles
-    console.log('🔐 Setting up RBAC roles...');
+    console.log("🔐 Setting up RBAC roles...");
 
     // ToolyStoreManager - Full permissions on tooly channel only
     const storeManagerPermissions = [
@@ -161,10 +161,10 @@ export async function populateDatabase(): Promise<void> {
     ];
 
     const toolyStoreManagerRole = await roleService.create(superadminContext, {
-      code: 'tooly-store-manager',
-      description: 'Full permissions on Tooly channel',
+      code: "tooly-store-manager",
+      description: "Full permissions on Tooly channel",
       permissions: storeManagerPermissions,
-      channelIds: [toolyChannel.id],
+      channelIds: [toolyChannel.id as string],
     });
 
     // ToolyFulfillment - Orders and fulfillment permissions on tooly only
@@ -177,11 +177,11 @@ export async function populateDatabase(): Promise<void> {
       Permission.UpdateStockLocation,
     ];
 
-    const toolyFulfillmentRole = await roleService.create(superadminContext, {
-      code: 'tooly-fulfillment',
-      description: 'Order fulfillment permissions on Tooly channel',
+    await roleService.create(superadminContext, {
+      code: "tooly-fulfillment",
+      description: "Order fulfillment permissions on Tooly channel",
       permissions: fulfillmentPermissions,
-      channelIds: [toolyChannel.id],
+      channelIds: [toolyChannel.id as string],
     });
 
     // ToolySupport - Read-only orders on tooly only
@@ -191,25 +191,29 @@ export async function populateDatabase(): Promise<void> {
       Permission.ReadProduct,
     ];
 
-    const toolySupportRole = await roleService.create(superadminContext, {
-      code: 'tooly-support',
-      description: 'Read-only order support on Tooly channel',
+    await roleService.create(superadminContext, {
+      code: "tooly-support",
+      description: "Read-only order support on Tooly channel",
       permissions: supportPermissions,
-      channelIds: [toolyChannel.id],
+      channelIds: [toolyChannel.id as string],
     });
 
-    console.log('✅ RBAC roles created: tooly-store-manager, tooly-fulfillment, tooly-support');
+    console.log(
+      "✅ RBAC roles created: tooly-store-manager, tooly-fulfillment, tooly-support",
+    );
 
     // Create test admin user scoped to tooly
-    const testAdmin = await adminService.create(superadminContext, {
-      emailAddress: 'manager@tooly.com',
-      firstName: 'Tooly',
-      lastName: 'Manager',
-      password: 'manager123',
+    await adminService.create(superadminContext, {
+      emailAddress: "manager@tooly.com",
+      firstName: "Tooly",
+      lastName: "Manager",
+      password: "manager123",
       roleIds: [toolyStoreManagerRole.id],
     });
 
-    console.log('👤 Test admin created: manager@tooly.com (password: manager123)');
+    console.log(
+      "👤 Test admin created: manager@tooly.com (password: manager123)",
+    );
   });
 
   await app.close();
