@@ -6,6 +6,7 @@ import {
   LanguageCode,
   DefaultLogger,
   LogLevel,
+  Asset,
 } from "@vendure/core";
 import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
@@ -276,6 +277,29 @@ export const config: VendureConfig = {
         ],
         defaultValue: "Lyophilized powder",
         nullable: true,
+      },
+    ],
+    // ============================================================================
+    // CHANNEL CUSTOM FIELDS (Hero Images, Branding)
+    // Per-channel storefront configuration managed via Admin UI
+    // ============================================================================
+    Channel: [
+      {
+        name: "heroImage",
+        type: "relation",
+        entity: Asset,
+        eager: true,
+        nullable: true,
+        label: [
+          { languageCode: LanguageCode.en, value: "Hero Background Image" },
+        ],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              "Full-width hero background image for the storefront homepage",
+          },
+        ],
       },
     ],
   },
