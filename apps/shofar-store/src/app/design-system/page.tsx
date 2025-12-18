@@ -811,8 +811,6 @@ export default function DesignSystemPage() {
                   ]}
                   cartCount={3}
                   isLoggedIn={false}
-                  searchPlaceholder="Search for tools..."
-                  onSearch={(query) => console.log("Search:", query)}
                   onCartClick={() => console.log("Cart clicked")}
                   sticky={false}
                 />

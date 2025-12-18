@@ -1,6 +1,7 @@
 # TOOLY Product Query
 # Used by: HeroSection, ProductSection
 # Fetches main TOOLY product with all variant details for display and purchase
+# Also fetches activeChannel for hero image configuration
 
 query GetToolyProduct($slug: String!) {
   product(slug: $slug) {
@@ -50,6 +51,24 @@ query GetToolyProduct($slug: String!) {
       facet {
         id
         code
+        name
+      }
+    }
+  }
+  # Channel configuration for storefront customization
+  activeChannel {
+    id
+    code
+    customFields {
+      heroImage {
+        id
+        preview
+        source
+      }
+      homeGalleryAssets {
+        id
+        preview
+        source
         name
       }
     }

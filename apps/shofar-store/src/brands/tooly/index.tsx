@@ -11,12 +11,12 @@
  * - Server-side data fetching with graceful fallbacks
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { CartProvider, useCart } from '@/contexts/CartContext';
-import { Navbar } from './components/ui/Navbar';
-import { CartDrawer } from './components/CartDrawer';
+import React from "react";
+import { CartProvider, useCart } from "@/contexts/CartContext";
+import { Navbar } from "./components/ui/Navbar";
+import { CartDrawer } from "./components/CartDrawer";
 import {
   HeroSection,
   CredibilitySection,
@@ -27,11 +27,16 @@ import {
   ReviewsSection,
   FaqSection,
   FooterSection,
-} from './sections';
-import type { ToolyPageData } from './lib/fetchers';
+} from "./sections";
+import type { ToolyPageData } from "./lib/fetchers";
+import {
+  isDebugMockEnabled,
+  augmentWithMockData,
+  getDebugBannerProps,
+} from "./lib/debug-mock";
 
 // Import design tokens
-import './styles/tokens.css';
+import "./styles/tokens.css";
 
 interface ToolyAppProps {
   /** Page data fetched server-side from Vendure */
@@ -42,22 +47,51 @@ interface ToolyAppProps {
 function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
   const { itemCount, toggleDrawer } = useCart();
 
+  // Debug mock mode - DEV ONLY
+  const [effectiveData, setEffectiveData] = React.useState(pageData);
+  const [debugBanner, setDebugBanner] = React.useState({
+    show: false,
+    message: "",
+  });
+
+  React.useEffect(() => {
+    // Check for debug mock mode on client side only
+    if (isDebugMockEnabled()) {
+      setEffectiveData(augmentWithMockData(pageData ?? null));
+      setDebugBanner(getDebugBannerProps());
+    } else {
+      setEffectiveData(pageData);
+      setDebugBanner({ show: false, message: "" });
+    }
+  }, [pageData]);
+
   return (
     <div className="min-h-screen bg-[#0b0e14]">
+      {/* Debug Mock Banner - DEV ONLY */}
+      {debugBanner.show && (
+        <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-black px-4 py-2 text-center text-sm font-medium">
+          {debugBanner.message}
+        </div>
+      )}
+
       {/* Sticky Navigation */}
       <Navbar cartCount={itemCount} onCartClick={toggleDrawer} />
 
       {/* Main Content */}
-      <main>
+      <main className={debugBanner.show ? "pt-10" : ""}>
         <HeroSection
-          featuredAsset={pageData?.product?.featuredAsset}
-          productName={pageData?.product?.name}
+          heroImage={effectiveData?.heroImage}
+          featuredAsset={effectiveData?.product?.featuredAsset}
+          productName={effectiveData?.product?.name}
         />
         <CredibilitySection />
         <TechnologySection />
-        <GallerySection assets={pageData?.gallery?.assets} />
-        <ProductSection product={pageData?.product} />
-        <AccessoriesSection accessories={pageData?.accessories} />
+        <GallerySection
+          assets={effectiveData?.gallery?.assets}
+          channelGalleryAssets={effectiveData?.homeGalleryAssets}
+        />
+        <ProductSection product={effectiveData?.product} />
+        <AccessoriesSection accessories={effectiveData?.accessories} />
         <ReviewsSection />
         <FaqSection />
       </main>
@@ -71,7 +105,9 @@ function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
   );
 }
 
-export default function ToolyApp({ pageData }: ToolyAppProps): React.ReactElement {
+export default function ToolyApp({
+  pageData,
+}: ToolyAppProps): React.ReactElement {
   return (
     <CartProvider>
       <ToolyAppInner pageData={pageData} />

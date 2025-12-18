@@ -6,10 +6,14 @@ import {
   LanguageCode,
   DefaultLogger,
   LogLevel,
+  Asset,
+  Permission,
 } from "@vendure/core";
-import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
+// EmailPlugin disabled for initial deployment
+// import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
+import { StripePlugin } from "@vendure/payments-plugin/package/stripe";
 import path from "path";
 import * as dotenv from "dotenv";
 import { configureS3AssetStorage } from "./config/s3-asset-storage";
@@ -33,7 +37,7 @@ function getDbConfig(): any {
       username: process.env.DB_USERNAME || "vendure",
       password: process.env.DB_PASSWORD || "vendure",
       database: process.env.DB_NAME || "vendure",
-      synchronize: IS_DEV,
+      synchronize: true, // Enable for initial schema creation
       migrations: [path.join(__dirname, "../migrations/*.+(js|ts)")],
       logging: false,
     };
@@ -73,6 +77,8 @@ export const config: VendureConfig = {
     },
     cookieOptions: {
       secret: process.env.COOKIE_SECRET || "cookie-secret-change-in-production",
+      // Use distinct cookie name to avoid collision with admin session on localhost
+      name: "vendure-shop-session",
     },
   },
   dbConnectionOptions: getDbConfig(),
@@ -96,6 +102,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "sequence",
@@ -110,6 +117,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "family",
@@ -123,6 +131,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "researchGoals",
@@ -136,6 +145,7 @@ export const config: VendureConfig = {
               "Research goal categories (Recovery, Metabolic, Longevity, Cognitive, Cosmetic, Research)",
           },
         ],
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "molecularWeight",
@@ -148,6 +158,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "molecularFormula",
@@ -160,6 +171,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "sdsUrl",
@@ -172,6 +184,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "coaUrl",
@@ -184,6 +197,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "featured",
@@ -277,6 +291,47 @@ export const config: VendureConfig = {
         nullable: true,
       },
     ],
+    // ============================================================================
+    // CHANNEL CUSTOM FIELDS (Hero Images, Branding)
+    // Per-channel storefront configuration managed via Admin UI
+    // ============================================================================
+    Channel: [
+      {
+        name: "heroImage",
+        type: "relation",
+        entity: Asset,
+        eager: true,
+        nullable: true,
+        label: [
+          { languageCode: LanguageCode.en, value: "Hero Background Image" },
+        ],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              "Full-width hero background image for the storefront homepage",
+          },
+        ],
+      },
+      {
+        name: "homeGalleryAssets",
+        type: "relation",
+        entity: Asset,
+        list: true,
+        eager: true,
+        nullable: true,
+        label: [
+          { languageCode: LanguageCode.en, value: "Homepage Gallery Images" },
+        ],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value: "Decorative images for homepage gallery section (max 6)",
+          },
+        ],
+        ui: { tab: "Marketing" },
+      },
+    ],
   },
   logger: new DefaultLogger({ level: IS_DEV ? LogLevel.Debug : LogLevel.Info }),
   plugins: [
@@ -299,16 +354,17 @@ export const config: VendureConfig = {
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
     DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
-    EmailPlugin.init({
-      devMode: true,
-      outputPath: path.join(__dirname, "../static/email/test-emails"),
-      route: "mailbox",
-      handlers: defaultEmailHandlers,
-      templatePath: path.join(__dirname, "../static/email/templates"),
-      globalTemplateVars: {
-        fromAddress: '"TOOLY Store" <noreply@tooly.com>',
-      },
-    }),
+    // EmailPlugin disabled for initial deployment (no templates in prod yet)
+    // EmailPlugin.init({
+    //   devMode: true,
+    //   outputPath: path.join(__dirname, "../static/email/test-emails"),
+    //   route: "mailbox",
+    //   handlers: defaultEmailHandlers,
+    //   templatePath: path.join(__dirname, "../static/email/templates"),
+    //   globalTemplateVars: {
+    //     fromAddress: '"TOOLY Store" <noreply@tooly.com>',
+    //   },
+    // }),
     AdminUiPlugin.init({
       route: "admin",
       port: 3002,
@@ -319,6 +375,11 @@ export const config: VendureConfig = {
         defaultLanguage: LanguageCode.en,
         availableLanguages: [LanguageCode.en],
       },
+    }),
+    // Stripe Payment Integration
+    // API key and webhook secret are configured per PaymentMethod in Admin UI
+    StripePlugin.init({
+      storeCustomersInStripe: true,
     }),
   ],
 };

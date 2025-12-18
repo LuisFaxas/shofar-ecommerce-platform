@@ -14,41 +14,62 @@ import {
   type GetToolyProductQuery,
   type GetProductGalleryQuery,
   type GetAccessoriesCollectionQuery,
-} from '@shofar/api-client';
+} from "@shofar/api-client";
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
-export type ToolyProductData = NonNullable<GetToolyProductQuery['product']>;
-export type GalleryData = NonNullable<GetProductGalleryQuery['product']>;
-export type AccessoriesData = NonNullable<GetAccessoriesCollectionQuery['collection']>;
+export type ToolyProductData = NonNullable<GetToolyProductQuery["product"]>;
+export type GalleryData = NonNullable<GetProductGalleryQuery["product"]>;
+export type AccessoriesData = NonNullable<
+  GetAccessoriesCollectionQuery["collection"]
+>;
+
+export interface HeroImageData {
+  id: string;
+  preview: string;
+  source: string;
+}
+
+export interface HomeGalleryAsset {
+  id: string;
+  preview: string;
+  source: string;
+  name: string;
+}
 
 export interface ToolyPageData {
   product: ToolyProductData | null;
   gallery: GalleryData | null;
   accessories: AccessoriesData | null;
+  /** Hero background image from Channel customFields */
+  heroImage: string | null;
+  /** Marketing gallery images from Channel customFields */
+  homeGalleryAssets: HomeGalleryAsset[] | null;
 }
 
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
 
-const TOOLY_PRODUCT_SLUG = 'tooly';
-const ACCESSORIES_COLLECTION_SLUG = 'tooly-accessories';
+const TOOLY_PRODUCT_SLUG = "tooly";
+const ACCESSORIES_COLLECTION_SLUG = "accessories";
 
 // Asset host for image URLs
-const ASSET_HOST = process.env.NEXT_PUBLIC_ASSET_HOST || 'localhost:3001';
-const ASSET_PROTOCOL = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+const ASSET_HOST = process.env.NEXT_PUBLIC_ASSET_HOST || "localhost:3001";
+const ASSET_PROTOCOL = process.env.NODE_ENV === "production" ? "https" : "http";
 
 /**
  * Build full asset URL from Vendure preview path
  */
-export function buildAssetUrl(previewPath: string | undefined | null): string | null {
+export function buildAssetUrl(
+  previewPath: string | undefined | null,
+): string | null {
   if (!previewPath) return null;
 
   // If already a full URL, return as-is
-  if (previewPath.startsWith('http://') || previewPath.startsWith('https://')) {
+  if (previewPath.startsWith("http://") || previewPath.startsWith("https://")) {
     return previewPath;
   }
 
@@ -60,28 +81,66 @@ export function buildAssetUrl(previewPath: string | undefined | null): string | 
 // FETCHERS
 // ============================================================================
 
+interface ProductAndChannelData {
+  product: ToolyProductData | null;
+  heroImage: string | null;
+  homeGalleryAssets: HomeGalleryAsset[] | null;
+}
+
 /**
- * Fetch main TOOLY product data
+ * Fetch main TOOLY product data and channel configuration
  * Used by: HeroSection, ProductSection
  */
-export async function fetchToolyProduct(): Promise<ToolyProductData | null> {
+export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelData> {
   try {
     const { data, error } = await toolyShopClient.query({
       query: GetToolyProductDocument,
       variables: { slug: TOOLY_PRODUCT_SLUG },
-      fetchPolicy: 'network-only',
+      fetchPolicy: "network-only",
     });
 
     if (error) {
-      console.error('[TOOLY] Failed to fetch product:', error.message);
-      return null;
+      console.error("[TOOLY] Failed to fetch product:", error.message);
+      return { product: null, heroImage: null, homeGalleryAssets: null };
     }
 
-    return data?.product ?? null;
+    // Extract heroImage from activeChannel customFields
+    const heroImagePreview =
+      (
+        data?.activeChannel?.customFields as {
+          heroImage?: { preview?: string };
+        }
+      )?.heroImage?.preview ?? null;
+
+    // Build full URL for heroImage
+    const heroImage = buildAssetUrl(heroImagePreview);
+
+    // Extract homeGalleryAssets from activeChannel customFields
+    const homeGalleryAssets =
+      (
+        data?.activeChannel?.customFields as {
+          homeGalleryAssets?: HomeGalleryAsset[];
+        }
+      )?.homeGalleryAssets ?? null;
+
+    return {
+      product: data?.product ?? null,
+      heroImage,
+      homeGalleryAssets,
+    };
   } catch (err) {
-    console.error('[TOOLY] Product fetch error:', err);
-    return null;
+    console.error("[TOOLY] Product fetch error:", err);
+    return { product: null, heroImage: null, homeGalleryAssets: null };
   }
+}
+
+/**
+ * Fetch main TOOLY product data (legacy - use fetchToolyProductAndChannel for hero)
+ * Used by: ProductSection
+ */
+export async function fetchToolyProduct(): Promise<ToolyProductData | null> {
+  const { product } = await fetchToolyProductAndChannel();
+  return product;
 }
 
 /**
@@ -93,17 +152,17 @@ export async function fetchProductGallery(): Promise<GalleryData | null> {
     const { data, error } = await toolyShopClient.query({
       query: GetProductGalleryDocument,
       variables: { slug: TOOLY_PRODUCT_SLUG },
-      fetchPolicy: 'network-only',
+      fetchPolicy: "network-only",
     });
 
     if (error) {
-      console.error('[TOOLY] Failed to fetch gallery:', error.message);
+      console.error("[TOOLY] Failed to fetch gallery:", error.message);
       return null;
     }
 
     return data?.product ?? null;
   } catch (err) {
-    console.error('[TOOLY] Gallery fetch error:', err);
+    console.error("[TOOLY] Gallery fetch error:", err);
     return null;
   }
 }
@@ -117,17 +176,17 @@ export async function fetchAccessoriesCollection(): Promise<AccessoriesData | nu
     const { data, error } = await toolyShopClient.query({
       query: GetAccessoriesCollectionDocument,
       variables: { slug: ACCESSORIES_COLLECTION_SLUG },
-      fetchPolicy: 'network-only',
+      fetchPolicy: "network-only",
     });
 
     if (error) {
-      console.error('[TOOLY] Failed to fetch accessories:', error.message);
+      console.error("[TOOLY] Failed to fetch accessories:", error.message);
       return null;
     }
 
     return data?.collection ?? null;
   } catch (err) {
-    console.error('[TOOLY] Accessories fetch error:', err);
+    console.error("[TOOLY] Accessories fetch error:", err);
     return null;
   }
 }
@@ -137,16 +196,18 @@ export async function fetchAccessoriesCollection(): Promise<AccessoriesData | nu
  * Main entry point for page-level data fetching
  */
 export async function fetchToolyPageData(): Promise<ToolyPageData> {
-  const [product, gallery, accessories] = await Promise.all([
-    fetchToolyProduct(),
+  const [productAndChannel, gallery, accessories] = await Promise.all([
+    fetchToolyProductAndChannel(),
     fetchProductGallery(),
     fetchAccessoriesCollection(),
   ]);
 
   return {
-    product,
+    product: productAndChannel.product,
     gallery,
     accessories,
+    heroImage: productAndChannel.heroImage,
+    homeGalleryAssets: productAndChannel.homeGalleryAssets,
   };
 }
 
@@ -159,10 +220,10 @@ export async function fetchToolyPageData(): Promise<ToolyPageData> {
  */
 export function formatPrice(
   priceInCents: number,
-  currencyCode: string = 'USD'
+  currencyCode: string = "USD",
 ): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency: currencyCode,
   }).format(priceInCents / 100);
 }
@@ -171,9 +232,9 @@ export function formatPrice(
  * Get variant color from facet values
  */
 export function getVariantColor(
-  facetValues: Array<{ code: string; name: string; facet: { code: string } }>
+  facetValues: Array<{ code: string; name: string; facet: { code: string } }>,
 ): { name: string; code: string } | null {
-  const colorFacet = facetValues.find(fv => fv.facet.code === 'color');
+  const colorFacet = facetValues.find((fv) => fv.facet.code === "color");
   if (colorFacet) {
     return { name: colorFacet.name, code: colorFacet.code };
   }
@@ -184,9 +245,9 @@ export function getVariantColor(
  * Get variant finish from facet values
  */
 export function getVariantFinish(
-  facetValues: Array<{ code: string; name: string; facet: { code: string } }>
+  facetValues: Array<{ code: string; name: string; facet: { code: string } }>,
 ): { name: string; code: string } | null {
-  const finishFacet = facetValues.find(fv => fv.facet.code === 'finish');
+  const finishFacet = facetValues.find((fv) => fv.facet.code === "finish");
   if (finishFacet) {
     return { name: finishFacet.name, code: finishFacet.code };
   }
@@ -198,12 +259,12 @@ export function getVariantFinish(
  */
 export function getColorHex(colorCode: string): string {
   const colorMap: Record<string, string> = {
-    gunmetal: '#4a5568',
-    midnight: '#1a1a2e',
-    arctic: '#e2e8f0',
-    ember: '#ff6b35',
-    cobalt: '#3b82f6',
-    titanium: '#94a3b8',
+    gunmetal: "#4a5568",
+    midnight: "#1a1a2e",
+    arctic: "#e2e8f0",
+    ember: "#ff6b35",
+    cobalt: "#3b82f6",
+    titanium: "#94a3b8",
   };
-  return colorMap[colorCode.toLowerCase()] || '#6b7280';
+  return colorMap[colorCode.toLowerCase()] || "#6b7280";
 }

@@ -21,7 +21,13 @@ const nextConfig: NextConfig = {
             },
           ]
         : []),
-      // Cloudflare R2 wildcard pattern
+      // Cloudflare R2 public bucket URLs (*.r2.dev)
+      {
+        protocol: "https",
+        hostname: "*.r2.dev",
+        pathname: "/**",
+      },
+      // Cloudflare R2 S3 API URLs (*.r2.cloudflarestorage.com)
       {
         protocol: "https",
         hostname: "*.r2.cloudflarestorage.com",

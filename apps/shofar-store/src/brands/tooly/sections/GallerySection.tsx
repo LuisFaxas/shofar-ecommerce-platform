@@ -9,11 +9,11 @@
  * - Accepts optional gallery data from Vendure
  */
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface GalleryAsset {
   id: string;
@@ -24,31 +24,37 @@ interface GalleryAsset {
 
 interface GallerySectionProps {
   className?: string;
-  /** Gallery assets from Vendure */
+  /** Gallery assets from Vendure product */
   assets?: GalleryAsset[] | null;
+  /** Marketing gallery assets from Channel (takes priority) */
+  channelGalleryAssets?: GalleryAsset[] | null;
 }
 
 const DEFAULT_GALLERY_ITEMS = [
-  { id: '1', label: 'TOOLY Front View', featured: true },
-  { id: '2', label: 'TOOLY Side Profile' },
-  { id: '3', label: 'TOOLY Detail Shot' },
-  { id: '4', label: 'TOOLY In Use' },
-  { id: '5', label: 'TOOLY Components' },
-  { id: '6', label: 'TOOLY Accessories' },
+  { id: "1", label: "TOOLY Front View", featured: true },
+  { id: "2", label: "TOOLY Side Profile" },
+  { id: "3", label: "TOOLY Detail Shot" },
+  { id: "4", label: "TOOLY In Use" },
+  { id: "5", label: "TOOLY Components" },
+  { id: "6", label: "TOOLY Accessories" },
 ];
 
 export function GallerySection({
   className,
   assets,
+  channelGalleryAssets,
 }: GallerySectionProps): React.ReactElement {
-  // Use assets from Vendure if available, otherwise show placeholders
-  const galleryItems = assets?.slice(0, 6) || [];
+  // Prioritize channel marketing gallery, fallback to product assets, then placeholders
+  const effectiveAssets = channelGalleryAssets?.length
+    ? channelGalleryAssets
+    : assets;
+  const galleryItems = effectiveAssets?.slice(0, 6) || [];
   const hasAssets = galleryItems.length > 0;
 
   return (
     <section
       id="gallery"
-      className={cn('py-16 md:py-24 bg-[#0d1218]', className)}
+      className={cn("py-16 md:py-24 bg-[#0d1218]", className)}
       aria-labelledby="gallery-heading"
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -79,18 +85,18 @@ export function GallerySection({
                 <div
                   key={asset?.id || `placeholder-${index}`}
                   className={cn(
-                    'group relative overflow-hidden rounded-xl',
-                    'bg-white/[0.04] border border-white/[0.08]',
-                    'hover:border-white/[0.16] transition-all duration-300',
+                    "group relative overflow-hidden rounded-xl",
+                    "bg-white/[0.04] border border-white/[0.08]",
+                    "hover:border-white/[0.16] transition-all duration-300",
                     // Featured item spans 2 columns on larger screens
-                    index === 0 && 'md:col-span-2 md:row-span-2'
+                    index === 0 && "md:col-span-2 md:row-span-2",
                   )}
                 >
                   {/* Fixed aspect ratio container */}
                   <div
                     className={cn(
-                      'aspect-video relative',
-                      index === 0 && 'md:aspect-square'
+                      "aspect-video relative",
+                      index === 0 && "md:aspect-square",
                     )}
                   >
                     {asset?.preview ? (
@@ -101,8 +107,8 @@ export function GallerySection({
                         className="object-cover"
                         sizes={
                           index === 0
-                            ? '(max-width: 768px) 100vw, 66vw'
-                            : '(max-width: 768px) 50vw, 33vw'
+                            ? "(max-width: 768px) 100vw, 66vw"
+                            : "(max-width: 768px) 50vw, 33vw"
                         }
                       />
                     ) : (
@@ -111,14 +117,14 @@ export function GallerySection({
                         <div className="text-center p-4">
                           <div
                             className={cn(
-                              'mx-auto mb-3 rounded-full flex items-center justify-center',
-                              'bg-white/[0.06] text-white/30',
-                              index === 0 ? 'w-20 h-20' : 'w-12 h-12'
+                              "mx-auto mb-3 rounded-full flex items-center justify-center",
+                              "bg-white/[0.06] text-white/30",
+                              index === 0 ? "w-20 h-20" : "w-12 h-12",
                             )}
                           >
                             <svg
                               className={cn(
-                                index === 0 ? 'w-10 h-10' : 'w-6 h-6'
+                                index === 0 ? "w-10 h-10" : "w-6 h-6",
                               )}
                               fill="none"
                               viewBox="0 0 24 24"
@@ -134,8 +140,8 @@ export function GallerySection({
                           </div>
                           <p
                             className={cn(
-                              'text-white/40',
-                              index === 0 ? 'text-sm' : 'text-xs'
+                              "text-white/40",
+                              index === 0 ? "text-sm" : "text-xs",
                             )}
                           >
                             {label}
@@ -147,20 +153,22 @@ export function GallerySection({
                     {/* Hover overlay */}
                     <div
                       className={cn(
-                        'absolute inset-0',
-                        'bg-gradient-to-t from-black/60 via-transparent to-transparent',
-                        'opacity-0 group-hover:opacity-100',
-                        'transition-opacity duration-300'
+                        "absolute inset-0",
+                        "bg-gradient-to-t from-black/60 via-transparent to-transparent",
+                        "opacity-0 group-hover:opacity-100",
+                        "transition-opacity duration-300",
                       )}
                     >
                       <div className="absolute bottom-4 left-4 right-4">
-                        <p className="text-sm font-medium text-white">{label}</p>
+                        <p className="text-sm font-medium text-white">
+                          {label}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               );
-            }
+            },
           )}
         </div>
       </div>
@@ -168,6 +176,6 @@ export function GallerySection({
   );
 }
 
-GallerySection.displayName = 'GallerySection';
+GallerySection.displayName = "GallerySection";
 
 export default GallerySection;

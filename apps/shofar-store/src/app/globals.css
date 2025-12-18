@@ -43,3 +43,20 @@ h1, h2, h3, h4, h5, h6 {
   outline: none;
   box-shadow: var(--focus-ring);
 }
+
+/* Scroll offset for sticky navbar - WO-FRONTEND-01 */
+/* Navbar height: h-16 (4rem) on mobile, h-20 (5rem) on desktop */
+[id] {
+  scroll-margin-top: 5rem;
+}
+
+@media (max-width: 1023px) {
+  [id] {
+    scroll-margin-top: 4rem;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}

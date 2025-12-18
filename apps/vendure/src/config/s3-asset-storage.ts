@@ -112,39 +112,45 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
   }
 
   async writeFileFromBuffer(fileName: string, data: Buffer): Promise<string> {
+    // Normalize path separators for S3 keys (Windows uses backslash)
+    const normalizedKey = fileName.replace(/\\/g, "/");
     const upload = new Upload({
       client: this.s3Client,
       params: {
         Bucket: this.bucket,
-        Key: fileName,
+        Key: normalizedKey,
         Body: data,
         ContentType: this.getMimeType(fileName),
       },
     });
 
     await upload.done();
-    return fileName;
+    return fileName; // Return original for Vendure's internal tracking
   }
 
   async writeFileFromStream(fileName: string, data: Readable): Promise<string> {
+    // Normalize path separators for S3 keys (Windows uses backslash)
+    const normalizedKey = fileName.replace(/\\/g, "/");
     const upload = new Upload({
       client: this.s3Client,
       params: {
         Bucket: this.bucket,
-        Key: fileName,
+        Key: normalizedKey,
         Body: data,
         ContentType: this.getMimeType(fileName),
       },
     });
 
     await upload.done();
-    return fileName;
+    return fileName; // Return original for Vendure's internal tracking
   }
 
   async readFileToBuffer(identifier: string): Promise<Buffer> {
+    // Normalize path separators for S3 keys
+    const normalizedKey = identifier.replace(/\\/g, "/");
     const command = new GetObjectCommand({
       Bucket: this.bucket,
-      Key: identifier,
+      Key: normalizedKey,
     });
 
     const response = await this.s3Client.send(command);
@@ -159,9 +165,11 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
   }
 
   async readFileToStream(identifier: string): Promise<Readable> {
+    // Normalize path separators for S3 keys
+    const normalizedKey = identifier.replace(/\\/g, "/");
     const command = new GetObjectCommand({
       Bucket: this.bucket,
-      Key: identifier,
+      Key: normalizedKey,
     });
 
     const response = await this.s3Client.send(command);
@@ -169,9 +177,11 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
   }
 
   async deleteFile(identifier: string): Promise<void> {
+    // Normalize path separators for S3 keys
+    const normalizedKey = identifier.replace(/\\/g, "/");
     const command = new DeleteObjectCommand({
       Bucket: this.bucket,
-      Key: identifier,
+      Key: normalizedKey,
     });
 
     await this.s3Client.send(command);
@@ -179,9 +189,11 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
 
   async fileExists(fileName: string): Promise<boolean> {
     try {
+      // Normalize path separators for S3 keys
+      const normalizedKey = fileName.replace(/\\/g, "/");
       const command = new GetObjectCommand({
         Bucket: this.bucket,
-        Key: fileName,
+        Key: normalizedKey,
       });
       await this.s3Client.send(command);
       return true;
@@ -191,24 +203,27 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
   }
 
   toAbsoluteUrl(_request: Request, identifier: string): string {
+    // Normalize path separators for URLs (Windows uses backslash)
+    const normalizedIdentifier = identifier.replace(/\\/g, "/");
+
     // Use ASSET_URL_PREFIX if set, otherwise construct from endpoint/bucket
     const prefix = process.env.ASSET_URL_PREFIX;
     if (prefix) {
-      return `${prefix.replace(/\/$/, "")}/${identifier}`;
+      return `${prefix.replace(/\/$/, "")}/${normalizedIdentifier}`;
     }
 
     // Fallback: construct URL from endpoint and bucket
     if (this.config.endpoint) {
       const baseUrl = this.config.endpoint.replace(/\/$/, "");
       if (this.config.forcePathStyle) {
-        return `${baseUrl}/${this.bucket}/${identifier}`;
+        return `${baseUrl}/${this.bucket}/${normalizedIdentifier}`;
       }
       // Virtual-hosted style (R2)
-      return `${baseUrl}/${identifier}`;
+      return `${baseUrl}/${normalizedIdentifier}`;
     }
 
     // AWS S3 default
-    return `https://${this.bucket}.s3.${this.config.region}.amazonaws.com/${identifier}`;
+    return `https://${this.bucket}.s3.${this.config.region}.amazonaws.com/${normalizedIdentifier}`;
   }
 
   private getMimeType(fileName: string): string {

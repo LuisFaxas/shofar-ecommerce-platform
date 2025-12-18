@@ -1,13 +1,13 @@
 {
-  "TOOLY-DLC-GM": "./assets-import/tooly-dlc-gunmetal.png",
-  "TOOLY-CK-MID": "./assets-import/tooly-cerakote-midnight.png",
-  "TOOLY-CK-ARC": "./assets-import/tooly-cerakote-arctic.png",
-  "TOOLY-CK-EMB": "./assets-import/tooly-cerakote-ember.png",
-  "TOOLY-CK-COB": "./assets-import/tooly-cerakote-cobalt.png",
-  "TOOLY-CK-TIT": "./assets-import/tooly-cerakote-titanium.png",
-  "ACC-CASE-VIAL": "./assets-import/accessory-case-vial.png",
-  "ACC-CHAIN-GLD": "./assets-import/accessory-chain-gold.png",
-  "ACC-CHAIN-SLV": "./assets-import/accessory-chain-silver.png",
-  "ACC-CLEAN-KIT": "./assets-import/accessory-cleaning-kit.png",
-  "ACC-CASE-001": "./assets-import/accessory-silicone-case.png"
+  "TOOLY-DLC-GM": "./assets-import/1V1A8379.jpg",
+  "TOOLY-CK-MID": "./assets-import/1V1A8395.jpg",
+  "TOOLY-CK-ARC": "./assets-import/1V1A8427.jpg",
+  "TOOLY-CK-EMB": "./assets-import/1V1A8445.jpg",
+  "TOOLY-CK-COB": "./assets-import/1V1A8446.jpg",
+  "TOOLY-CK-TIT": "./assets-import/1V1A8448.jpg",
+  "ACC-CASE-VIAL": "./assets-import/1V1A8452.jpg",
+  "ACC-CHAIN-GLD": "./assets-import/1V1A8464.jpg",
+  "ACC-CHAIN-SLV": "./assets-import/1V1A8468.jpg",
+  "ACC-CLEAN-KIT": "./assets-import/1V1A8474.jpg",
+  "ACC-CASE-001": "./assets-import/1V1A8480.jpg"
 }

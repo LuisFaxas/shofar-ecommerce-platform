@@ -189,7 +189,7 @@ export type Channel = Node & {
   createdAt: Scalars["DateTime"]["output"];
   /** @deprecated Use defaultCurrencyCode instead */
   currencyCode: CurrencyCode;
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<ChannelCustomFields>;
   defaultCurrencyCode: CurrencyCode;
   defaultLanguageCode: LanguageCode;
   defaultShippingZone?: Maybe<Zone>;
@@ -203,6 +203,12 @@ export type Channel = Node & {
   /** Not yet used - will be implemented in a future release. */
   trackInventory?: Maybe<Scalars["Boolean"]["output"]>;
   updatedAt: Scalars["DateTime"]["output"];
+};
+
+export type ChannelCustomFields = {
+  __typename?: "ChannelCustomFields";
+  heroImage?: Maybe<Asset>;
+  homeGalleryAssets?: Maybe<Array<Asset>>;
 };
 
 export type Collection = Node & {
@@ -1791,6 +1797,7 @@ export type Mutation = {
   authenticate: AuthenticationResult;
   /** Create a new Customer Address */
   createCustomerAddress: Address;
+  createStripePaymentIntent: Scalars["String"]["output"];
   /** Delete an existing Address */
   deleteCustomerAddress: Success;
   /**
@@ -2677,7 +2684,7 @@ export type Product = Node & {
   assets: Array<Asset>;
   collections: Array<Collection>;
   createdAt: Scalars["DateTime"]["output"];
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<ProductCustomFields>;
   description: Scalars["String"]["output"];
   enabled: Scalars["Boolean"]["output"];
   facetValues: Array<FacetValue>;
@@ -2699,15 +2706,39 @@ export type ProductVariantListArgs = {
   options?: InputMaybe<ProductVariantListOptions>;
 };
 
+export type ProductCustomFields = {
+  __typename?: "ProductCustomFields";
+  casNumber?: Maybe<Scalars["String"]["output"]>;
+  coaUrl?: Maybe<Scalars["String"]["output"]>;
+  family?: Maybe<Scalars["String"]["output"]>;
+  featured?: Maybe<Scalars["Boolean"]["output"]>;
+  molecularFormula?: Maybe<Scalars["String"]["output"]>;
+  molecularWeight?: Maybe<Scalars["String"]["output"]>;
+  popularity?: Maybe<Scalars["Int"]["output"]>;
+  researchGoals?: Maybe<Array<Scalars["String"]["output"]>>;
+  sdsUrl?: Maybe<Scalars["String"]["output"]>;
+  sequence?: Maybe<Scalars["String"]["output"]>;
+};
+
 export type ProductFilterParameter = {
   _and?: InputMaybe<Array<ProductFilterParameter>>;
   _or?: InputMaybe<Array<ProductFilterParameter>>;
+  casNumber?: InputMaybe<StringOperators>;
+  coaUrl?: InputMaybe<StringOperators>;
   createdAt?: InputMaybe<DateOperators>;
   description?: InputMaybe<StringOperators>;
   enabled?: InputMaybe<BooleanOperators>;
+  family?: InputMaybe<StringOperators>;
+  featured?: InputMaybe<BooleanOperators>;
   id?: InputMaybe<IdOperators>;
   languageCode?: InputMaybe<StringOperators>;
+  molecularFormula?: InputMaybe<StringOperators>;
+  molecularWeight?: InputMaybe<StringOperators>;
   name?: InputMaybe<StringOperators>;
+  popularity?: InputMaybe<NumberOperators>;
+  researchGoals?: InputMaybe<StringListOperators>;
+  sdsUrl?: InputMaybe<StringOperators>;
+  sequence?: InputMaybe<StringOperators>;
   slug?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
 };
@@ -2777,10 +2808,19 @@ export type ProductOptionTranslation = {
 };
 
 export type ProductSortParameter = {
+  casNumber?: InputMaybe<SortOrder>;
+  coaUrl?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
+  family?: InputMaybe<SortOrder>;
+  featured?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
+  molecularFormula?: InputMaybe<SortOrder>;
+  molecularWeight?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
+  popularity?: InputMaybe<SortOrder>;
+  sdsUrl?: InputMaybe<SortOrder>;
+  sequence?: InputMaybe<SortOrder>;
   slug?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
 };
@@ -2801,7 +2841,7 @@ export type ProductVariant = Node & {
   assets: Array<Asset>;
   createdAt: Scalars["DateTime"]["output"];
   currencyCode: CurrencyCode;
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<ProductVariantCustomFields>;
   facetValues: Array<FacetValue>;
   featuredAsset?: Maybe<Asset>;
   id: Scalars["ID"]["output"];
@@ -2820,19 +2860,33 @@ export type ProductVariant = Node & {
   updatedAt: Scalars["DateTime"]["output"];
 };
 
+export type ProductVariantCustomFields = {
+  __typename?: "ProductVariantCustomFields";
+  administrationRoute?: Maybe<Scalars["String"]["output"]>;
+  form?: Maybe<Scalars["String"]["output"]>;
+  purityPercent?: Maybe<Scalars["String"]["output"]>;
+  sizeMg?: Maybe<Scalars["String"]["output"]>;
+  storage?: Maybe<Scalars["String"]["output"]>;
+};
+
 export type ProductVariantFilterParameter = {
   _and?: InputMaybe<Array<ProductVariantFilterParameter>>;
   _or?: InputMaybe<Array<ProductVariantFilterParameter>>;
+  administrationRoute?: InputMaybe<StringOperators>;
   createdAt?: InputMaybe<DateOperators>;
   currencyCode?: InputMaybe<StringOperators>;
+  form?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
   languageCode?: InputMaybe<StringOperators>;
   name?: InputMaybe<StringOperators>;
   price?: InputMaybe<NumberOperators>;
   priceWithTax?: InputMaybe<NumberOperators>;
   productId?: InputMaybe<IdOperators>;
+  purityPercent?: InputMaybe<StringOperators>;
+  sizeMg?: InputMaybe<StringOperators>;
   sku?: InputMaybe<StringOperators>;
   stockLevel?: InputMaybe<StringOperators>;
+  storage?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
 };
 
@@ -2856,14 +2910,19 @@ export type ProductVariantListOptions = {
 };
 
 export type ProductVariantSortParameter = {
+  administrationRoute?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
+  form?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
   price?: InputMaybe<SortOrder>;
   priceWithTax?: InputMaybe<SortOrder>;
   productId?: InputMaybe<SortOrder>;
+  purityPercent?: InputMaybe<SortOrder>;
+  sizeMg?: InputMaybe<SortOrder>;
   sku?: InputMaybe<SortOrder>;
   stockLevel?: InputMaybe<SortOrder>;
+  storage?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
 };
 
@@ -3796,6 +3855,308 @@ export type UpdateOrderLineMutation = {
       };
 };
 
+export type PeptideProductFieldsFragment = {
+  __typename?: "Product";
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  featuredAsset?: {
+    __typename?: "Asset";
+    id: string;
+    preview: string;
+    source: string;
+  } | null;
+  assets: Array<{
+    __typename?: "Asset";
+    id: string;
+    preview: string;
+    source: string;
+    name: string;
+  }>;
+  customFields?: {
+    __typename?: "ProductCustomFields";
+    casNumber?: string | null;
+    sequence?: string | null;
+    family?: string | null;
+    researchGoals?: Array<string> | null;
+    sdsUrl?: string | null;
+    coaUrl?: string | null;
+    molecularWeight?: string | null;
+    molecularFormula?: string | null;
+    featured?: boolean | null;
+    popularity?: number | null;
+  } | null;
+  variants: Array<{
+    __typename?: "ProductVariant";
+    id: string;
+    name: string;
+    sku: string;
+    price: number;
+    priceWithTax: number;
+    currencyCode: CurrencyCode;
+    stockLevel: string;
+    featuredAsset?: {
+      __typename?: "Asset";
+      id: string;
+      preview: string;
+      source: string;
+    } | null;
+    customFields?: {
+      __typename?: "ProductVariantCustomFields";
+      purityPercent?: string | null;
+      sizeMg?: string | null;
+      storage?: string | null;
+      administrationRoute?: string | null;
+      form?: string | null;
+    } | null;
+  }>;
+  facetValues: Array<{
+    __typename?: "FacetValue";
+    id: string;
+    code: string;
+    name: string;
+    facet: { __typename?: "Facet"; id: string; code: string; name: string };
+  }>;
+};
+
+export type GetPeptideProductsQueryVariables = Exact<{
+  options?: InputMaybe<ProductListOptions>;
+}>;
+
+export type GetPeptideProductsQuery = {
+  __typename?: "Query";
+  products: {
+    __typename?: "ProductList";
+    totalItems: number;
+    items: Array<{
+      __typename?: "Product";
+      id: string;
+      name: string;
+      slug: string;
+      description: string;
+      featuredAsset?: {
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+      } | null;
+      assets: Array<{
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+        name: string;
+      }>;
+      customFields?: {
+        __typename?: "ProductCustomFields";
+        casNumber?: string | null;
+        sequence?: string | null;
+        family?: string | null;
+        researchGoals?: Array<string> | null;
+        sdsUrl?: string | null;
+        coaUrl?: string | null;
+        molecularWeight?: string | null;
+        molecularFormula?: string | null;
+        featured?: boolean | null;
+        popularity?: number | null;
+      } | null;
+      variants: Array<{
+        __typename?: "ProductVariant";
+        id: string;
+        name: string;
+        sku: string;
+        price: number;
+        priceWithTax: number;
+        currencyCode: CurrencyCode;
+        stockLevel: string;
+        featuredAsset?: {
+          __typename?: "Asset";
+          id: string;
+          preview: string;
+          source: string;
+        } | null;
+        customFields?: {
+          __typename?: "ProductVariantCustomFields";
+          purityPercent?: string | null;
+          sizeMg?: string | null;
+          storage?: string | null;
+          administrationRoute?: string | null;
+          form?: string | null;
+        } | null;
+      }>;
+      facetValues: Array<{
+        __typename?: "FacetValue";
+        id: string;
+        code: string;
+        name: string;
+        facet: { __typename?: "Facet"; id: string; code: string; name: string };
+      }>;
+    }>;
+  };
+};
+
+export type GetPeptideProductQueryVariables = Exact<{
+  slug: Scalars["String"]["input"];
+}>;
+
+export type GetPeptideProductQuery = {
+  __typename?: "Query";
+  product?: {
+    __typename?: "Product";
+    id: string;
+    name: string;
+    slug: string;
+    description: string;
+    featuredAsset?: {
+      __typename?: "Asset";
+      id: string;
+      preview: string;
+      source: string;
+    } | null;
+    assets: Array<{
+      __typename?: "Asset";
+      id: string;
+      preview: string;
+      source: string;
+      name: string;
+    }>;
+    customFields?: {
+      __typename?: "ProductCustomFields";
+      casNumber?: string | null;
+      sequence?: string | null;
+      family?: string | null;
+      researchGoals?: Array<string> | null;
+      sdsUrl?: string | null;
+      coaUrl?: string | null;
+      molecularWeight?: string | null;
+      molecularFormula?: string | null;
+      featured?: boolean | null;
+      popularity?: number | null;
+    } | null;
+    variants: Array<{
+      __typename?: "ProductVariant";
+      id: string;
+      name: string;
+      sku: string;
+      price: number;
+      priceWithTax: number;
+      currencyCode: CurrencyCode;
+      stockLevel: string;
+      featuredAsset?: {
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+      } | null;
+      customFields?: {
+        __typename?: "ProductVariantCustomFields";
+        purityPercent?: string | null;
+        sizeMg?: string | null;
+        storage?: string | null;
+        administrationRoute?: string | null;
+        form?: string | null;
+      } | null;
+    }>;
+    facetValues: Array<{
+      __typename?: "FacetValue";
+      id: string;
+      code: string;
+      name: string;
+      facet: { __typename?: "Facet"; id: string; code: string; name: string };
+    }>;
+  } | null;
+};
+
+export type GetPeptideProductSlugsQueryVariables = Exact<{
+  options?: InputMaybe<ProductListOptions>;
+}>;
+
+export type GetPeptideProductSlugsQuery = {
+  __typename?: "Query";
+  products: {
+    __typename?: "ProductList";
+    totalItems: number;
+    items: Array<{ __typename?: "Product"; slug: string }>;
+  };
+};
+
+export type GetFeaturedPeptideProductsQueryVariables = Exact<{
+  options?: InputMaybe<ProductListOptions>;
+}>;
+
+export type GetFeaturedPeptideProductsQuery = {
+  __typename?: "Query";
+  products: {
+    __typename?: "ProductList";
+    totalItems: number;
+    items: Array<{
+      __typename?: "Product";
+      id: string;
+      name: string;
+      slug: string;
+      description: string;
+      featuredAsset?: {
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+      } | null;
+      assets: Array<{
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+        name: string;
+      }>;
+      customFields?: {
+        __typename?: "ProductCustomFields";
+        casNumber?: string | null;
+        sequence?: string | null;
+        family?: string | null;
+        researchGoals?: Array<string> | null;
+        sdsUrl?: string | null;
+        coaUrl?: string | null;
+        molecularWeight?: string | null;
+        molecularFormula?: string | null;
+        featured?: boolean | null;
+        popularity?: number | null;
+      } | null;
+      variants: Array<{
+        __typename?: "ProductVariant";
+        id: string;
+        name: string;
+        sku: string;
+        price: number;
+        priceWithTax: number;
+        currencyCode: CurrencyCode;
+        stockLevel: string;
+        featuredAsset?: {
+          __typename?: "Asset";
+          id: string;
+          preview: string;
+          source: string;
+        } | null;
+        customFields?: {
+          __typename?: "ProductVariantCustomFields";
+          purityPercent?: string | null;
+          sizeMg?: string | null;
+          storage?: string | null;
+          administrationRoute?: string | null;
+          form?: string | null;
+        } | null;
+      }>;
+      facetValues: Array<{
+        __typename?: "FacetValue";
+        id: string;
+        code: string;
+        name: string;
+        facet: { __typename?: "Facet"; id: string; code: string; name: string };
+      }>;
+    }>;
+  };
+};
+
 export type GetProductsQueryVariables = Exact<{
   options?: InputMaybe<ProductListOptions>;
 }>;
@@ -4081,8 +4442,91 @@ export type GetToolyProductQuery = {
       facet: { __typename?: "Facet"; id: string; code: string; name: string };
     }>;
   } | null;
+  activeChannel: {
+    __typename?: "Channel";
+    id: string;
+    code: string;
+    customFields?: {
+      __typename?: "ChannelCustomFields";
+      heroImage?: {
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+      } | null;
+      homeGalleryAssets?: Array<{
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+        name: string;
+      }> | null;
+    } | null;
+  };
 };
 
+export const PeptideProductFieldsFragmentDoc = gql`
+  fragment PeptideProductFields on Product {
+    id
+    name
+    slug
+    description
+    featuredAsset {
+      id
+      preview
+      source
+    }
+    assets {
+      id
+      preview
+      source
+      name
+    }
+    customFields {
+      casNumber
+      sequence
+      family
+      researchGoals
+      sdsUrl
+      coaUrl
+      molecularWeight
+      molecularFormula
+      featured
+      popularity
+    }
+    variants {
+      id
+      name
+      sku
+      price
+      priceWithTax
+      currencyCode
+      stockLevel
+      featuredAsset {
+        id
+        preview
+        source
+      }
+      customFields {
+        purityPercent
+        sizeMg
+        storage
+        administrationRoute
+        form
+      }
+    }
+    facetValues {
+      id
+      code
+      name
+      facet {
+        id
+        code
+        name
+      }
+    }
+  }
+`;
 export const GetActiveOrderDocument = gql`
   query GetActiveOrder {
     activeOrder {
@@ -4381,6 +4825,334 @@ export type UpdateOrderLineMutationResult =
 export type UpdateOrderLineMutationOptions = Apollo.BaseMutationOptions<
   UpdateOrderLineMutation,
   UpdateOrderLineMutationVariables
+>;
+export const GetPeptideProductsDocument = gql`
+  query GetPeptideProducts($options: ProductListOptions) {
+    products(options: $options) {
+      items {
+        ...PeptideProductFields
+      }
+      totalItems
+    }
+  }
+  ${PeptideProductFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetPeptideProductsQuery__
+ *
+ * To run a query within a React component, call `useGetPeptideProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPeptideProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPeptideProductsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetPeptideProductsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetPeptideProductsQuery,
+    GetPeptideProductsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetPeptideProductsQuery,
+    GetPeptideProductsQueryVariables
+  >(GetPeptideProductsDocument, options);
+}
+export function useGetPeptideProductsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPeptideProductsQuery,
+    GetPeptideProductsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetPeptideProductsQuery,
+    GetPeptideProductsQueryVariables
+  >(GetPeptideProductsDocument, options);
+}
+export function useGetPeptideProductsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetPeptideProductsQuery,
+        GetPeptideProductsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetPeptideProductsQuery,
+    GetPeptideProductsQueryVariables
+  >(GetPeptideProductsDocument, options);
+}
+export type GetPeptideProductsQueryHookResult = ReturnType<
+  typeof useGetPeptideProductsQuery
+>;
+export type GetPeptideProductsLazyQueryHookResult = ReturnType<
+  typeof useGetPeptideProductsLazyQuery
+>;
+export type GetPeptideProductsSuspenseQueryHookResult = ReturnType<
+  typeof useGetPeptideProductsSuspenseQuery
+>;
+export type GetPeptideProductsQueryResult = Apollo.QueryResult<
+  GetPeptideProductsQuery,
+  GetPeptideProductsQueryVariables
+>;
+export const GetPeptideProductDocument = gql`
+  query GetPeptideProduct($slug: String!) {
+    product(slug: $slug) {
+      ...PeptideProductFields
+    }
+  }
+  ${PeptideProductFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetPeptideProductQuery__
+ *
+ * To run a query within a React component, call `useGetPeptideProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPeptideProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPeptideProductQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetPeptideProductQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetPeptideProductQuery,
+    GetPeptideProductQueryVariables
+  > &
+    (
+      | { variables: GetPeptideProductQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetPeptideProductQuery,
+    GetPeptideProductQueryVariables
+  >(GetPeptideProductDocument, options);
+}
+export function useGetPeptideProductLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPeptideProductQuery,
+    GetPeptideProductQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetPeptideProductQuery,
+    GetPeptideProductQueryVariables
+  >(GetPeptideProductDocument, options);
+}
+export function useGetPeptideProductSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetPeptideProductQuery,
+        GetPeptideProductQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetPeptideProductQuery,
+    GetPeptideProductQueryVariables
+  >(GetPeptideProductDocument, options);
+}
+export type GetPeptideProductQueryHookResult = ReturnType<
+  typeof useGetPeptideProductQuery
+>;
+export type GetPeptideProductLazyQueryHookResult = ReturnType<
+  typeof useGetPeptideProductLazyQuery
+>;
+export type GetPeptideProductSuspenseQueryHookResult = ReturnType<
+  typeof useGetPeptideProductSuspenseQuery
+>;
+export type GetPeptideProductQueryResult = Apollo.QueryResult<
+  GetPeptideProductQuery,
+  GetPeptideProductQueryVariables
+>;
+export const GetPeptideProductSlugsDocument = gql`
+  query GetPeptideProductSlugs($options: ProductListOptions) {
+    products(options: $options) {
+      items {
+        slug
+      }
+      totalItems
+    }
+  }
+`;
+
+/**
+ * __useGetPeptideProductSlugsQuery__
+ *
+ * To run a query within a React component, call `useGetPeptideProductSlugsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPeptideProductSlugsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPeptideProductSlugsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetPeptideProductSlugsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetPeptideProductSlugsQuery,
+    GetPeptideProductSlugsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetPeptideProductSlugsQuery,
+    GetPeptideProductSlugsQueryVariables
+  >(GetPeptideProductSlugsDocument, options);
+}
+export function useGetPeptideProductSlugsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPeptideProductSlugsQuery,
+    GetPeptideProductSlugsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetPeptideProductSlugsQuery,
+    GetPeptideProductSlugsQueryVariables
+  >(GetPeptideProductSlugsDocument, options);
+}
+export function useGetPeptideProductSlugsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetPeptideProductSlugsQuery,
+        GetPeptideProductSlugsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetPeptideProductSlugsQuery,
+    GetPeptideProductSlugsQueryVariables
+  >(GetPeptideProductSlugsDocument, options);
+}
+export type GetPeptideProductSlugsQueryHookResult = ReturnType<
+  typeof useGetPeptideProductSlugsQuery
+>;
+export type GetPeptideProductSlugsLazyQueryHookResult = ReturnType<
+  typeof useGetPeptideProductSlugsLazyQuery
+>;
+export type GetPeptideProductSlugsSuspenseQueryHookResult = ReturnType<
+  typeof useGetPeptideProductSlugsSuspenseQuery
+>;
+export type GetPeptideProductSlugsQueryResult = Apollo.QueryResult<
+  GetPeptideProductSlugsQuery,
+  GetPeptideProductSlugsQueryVariables
+>;
+export const GetFeaturedPeptideProductsDocument = gql`
+  query GetFeaturedPeptideProducts($options: ProductListOptions) {
+    products(options: $options) {
+      items {
+        ...PeptideProductFields
+      }
+      totalItems
+    }
+  }
+  ${PeptideProductFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFeaturedPeptideProductsQuery__
+ *
+ * To run a query within a React component, call `useGetFeaturedPeptideProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFeaturedPeptideProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFeaturedPeptideProductsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetFeaturedPeptideProductsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetFeaturedPeptideProductsQuery,
+    GetFeaturedPeptideProductsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFeaturedPeptideProductsQuery,
+    GetFeaturedPeptideProductsQueryVariables
+  >(GetFeaturedPeptideProductsDocument, options);
+}
+export function useGetFeaturedPeptideProductsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFeaturedPeptideProductsQuery,
+    GetFeaturedPeptideProductsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFeaturedPeptideProductsQuery,
+    GetFeaturedPeptideProductsQueryVariables
+  >(GetFeaturedPeptideProductsDocument, options);
+}
+export function useGetFeaturedPeptideProductsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetFeaturedPeptideProductsQuery,
+        GetFeaturedPeptideProductsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetFeaturedPeptideProductsQuery,
+    GetFeaturedPeptideProductsQueryVariables
+  >(GetFeaturedPeptideProductsDocument, options);
+}
+export type GetFeaturedPeptideProductsQueryHookResult = ReturnType<
+  typeof useGetFeaturedPeptideProductsQuery
+>;
+export type GetFeaturedPeptideProductsLazyQueryHookResult = ReturnType<
+  typeof useGetFeaturedPeptideProductsLazyQuery
+>;
+export type GetFeaturedPeptideProductsSuspenseQueryHookResult = ReturnType<
+  typeof useGetFeaturedPeptideProductsSuspenseQuery
+>;
+export type GetFeaturedPeptideProductsQueryResult = Apollo.QueryResult<
+  GetFeaturedPeptideProductsQuery,
+  GetFeaturedPeptideProductsQueryVariables
 >;
 export const GetProductsDocument = gql`
   query GetProducts($options: ProductListOptions) {
@@ -5045,6 +5817,23 @@ export const GetToolyProductDocument = gql`
         facet {
           id
           code
+          name
+        }
+      }
+    }
+    activeChannel {
+      id
+      code
+      customFields {
+        heroImage {
+          id
+          preview
+          source
+        }
+        homeGalleryAssets {
+          id
+          preview
+          source
           name
         }
       }

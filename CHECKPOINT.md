@@ -7,7 +7,7 @@
 
 ## CURRENT TRUTH (Read This First)
 
-**Last Updated**: 2025-12-17
+**Last Updated**: 2025-12-18
 
 ### Service Status
 
@@ -18,6 +18,35 @@
 | pharma-store | 3002 | @shofar/pharma-store | N/A (pending) |
 | faxas-store  | 3003 | @shofar/faxas-store  | N/A (pending) |
 
+### Railway Deployment (LIVE)
+
+| Service        | URL                                                                   | Status        |
+| -------------- | --------------------------------------------------------------------- | ------------- |
+| Vendure Admin  | https://vendure-server-production-75fc.up.railway.app/admin           | ✅ Online     |
+| Shop API       | https://vendure-server-production-75fc.up.railway.app/shop-api        | ✅ Online     |
+| Stripe Webhook | https://vendure-server-production-75fc.up.railway.app/payments/stripe | ✅ Configured |
+
+**Railway Project**: `tooly-vendure-staging`
+**Branch**: `tooly-storefront`
+**Credentials**: superadmin / superadmin123
+
+### Vercel Deployment (PENDING)
+
+**Environment Variables Required:**
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_VENDURE_SHOP_API_URL` | `https://vendure-server-production-75fc.up.railway.app/shop-api` |
+| `NEXT_PUBLIC_ASSET_HOST` | `pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev` |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_51SfTcZ...` (use full key) |
+
+**Build Settings:**
+
+- **Framework**: Next.js (auto-detected)
+- **Root Directory**: `apps/shofar-store`
+- **Build Command**: `cd ../.. && pnpm install && pnpm --filter @shofar/shofar-store build`
+- **Output Directory**: `.next`
+- **Install Command**: (leave empty - handled in build command)
+
 ### Active Brand: TOOLY
 
 **BRAND_KEY**: `tooly`
@@ -25,16 +54,21 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                    |
-| -------------- | ------ | -------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: 65b565a)          |
-| Stock          | ✅     | All 10 variants IN_STOCK                                 |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                 |
-| Payment        | ✅     | Test Payment (dummy) in tooly channel                    |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled           |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm) |
-| Product Images | ⚠️     | Infrastructure ready, awaiting user images               |
-| Real Payment   | ❌     | Authorize.Net Accept Hosted (Phase 2)                    |
+| Item           | Status | Notes                                                              |
+| -------------- | ------ | ------------------------------------------------------------------ |
+| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                    |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                         |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                           |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                  |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                     |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)           |
+| Product Images | ✅     | 4 gallery + featuredAsset + heroImage uploaded to Railway          |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)         |
+| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed   |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod        |
+| Real Payment   | ✅     | Stripe WORKING! Local: XSG7ZEWV6LSGHJBR, Railway: 14M9T5V98G22UDCY |
+| Railway Deploy | ✅     | vendure-server + vendure-worker ONLINE, Stripe webhook configured  |
+| Vercel Deploy  | 🔜     | Ready to deploy shofar-store to Vercel                             |
 
 ---
 
@@ -117,18 +151,271 @@ packages/
 
 ---
 
-## PRESALE SPRINT LOG (2025-12-17)
+## PRESALE SPRINT LOG (2025-12-18)
 
-### MILESTONE 5: Product Images (Infrastructure)
+### MILESTONE 14: Asset Management Workflows (2025-12-18)
 
-- **Status**: ⚠️ Ready for user action
-- **Change**: Created asset import infrastructure
-  - `apps/vendure/assets-import/` folder created
-  - `map.json` mapping all 11 SKUs to expected image files
-  - `README.md` with usage instructions
+- **Status**: ✅ COMPLETE - Marketing gallery + hero image upload paths
+- **Branch**: `feature/frontend-polish`
+- **Changes Made**:
+  - Added `homeGalleryAssets` Channel custom field (list relation to Asset)
+  - Updated GraphQL query to fetch channel gallery assets
+  - Frontend GallerySection prioritizes channel assets over product assets
+  - All 11 product images now in `apps/vendure/assets-import/`
+- **Admin UI Workflows**:
+  | Task | Path | Notes |
+  |------|------|-------|
+  | Upload Product Images | Products → TOOLY → Assets → drag images | Set one as Featured Asset |
+  | Set Hero Background | Settings → Channels → tooly → Hero Background Image | Upload/select asset |
+  | Set Marketing Gallery | Settings → Channels → tooly → Marketing tab | Upload up to 6 images |
+- **Fallback Behavior**:
+  - Gallery: Channel assets → Product assets → Placeholder grid
+  - Hero: Channel heroImage → Product featuredAsset → Gradient fallback
+- **Files Modified**:
+  - `apps/vendure/src/vendure-config.ts` - Added homeGalleryAssets field
+  - `packages/api-client/src/shop/tooly-product.graphql` - Query homeGalleryAssets
+  - `apps/shofar-store/src/brands/tooly/lib/fetchers.ts` - Extract + return homeGalleryAssets
+  - `apps/shofar-store/src/brands/tooly/sections/GallerySection.tsx` - Accept channelGalleryAssets prop
+  - `apps/shofar-store/src/brands/tooly/index.tsx` - Wire up homeGalleryAssets
+
+### MILESTONE 13: Railway Deployment (2025-12-18)
+
+- **Status**: ✅ COMPLETE - Stripe payments working on Railway
+- **Branch**: `feature/frontend-polish`
+- **Railway Project**: `tooly-vendure-staging`
+- **Test Order (Railway)**: `14M9T5V98G22UDCY` → **PaymentSettled** ✅
+- **Services Deployed**:
+  | Service | Status | URL |
+  |---------|--------|-----|
+  | vendure-server | ✅ Online | https://vendure-server-production-75fc.up.railway.app |
+  | vendure-worker | ✅ Online | (internal, no public URL) |
+  | PostgreSQL | ✅ Running | postgres.railway.internal |
+- **Data Created via Admin API**:
+  - ✅ US country + North America zone
+  - ✅ tooly channel (ID: 2, token: tooly)
+  - ✅ Standard tax category + 0% tax rate
+  - ✅ TOOLY product (ID: 1) + DLC Gunmetal variant
+  - ✅ Standard Shipping $9.99 (assigned to tooly)
+  - ✅ Stripe payment method (webhook secret configured)
+- **Stripe Webhook**:
+  - Endpoint: `https://vendure-server-production-75fc.up.railway.app/payments/stripe`
+  - Events: payment_intent.succeeded, payment_intent.payment_failed, payment_intent.canceled
+  - Webhook secret saved in Vendure (verified via Admin API)
+- **Commits for Deployment** (on `feature/frontend-polish`):
+  - `3496a5a` feat(vendure): add worker entry point for production deployment
+  - `3d9b4f8` fix(deps): upgrade next.js to 16.0.10 for railway security
+  - `12f82e5` fix(vendure): resolve typescript errors in seed scripts
+  - `0019d3a` fix(vendure): add pg package for postgresql driver
+  - `980b5b4` fix(vendure): enable database synchronize for initial deploy
+  - `28205ad` fix(vendure): disable email plugin for initial deployment
+- **Known Limitations**:
+  - Product images need manual upload in Railway Admin (Postgres has no asset records)
+  - Only 1 variant (DLC Gunmetal) created via API
+  - Shipping price is $9.99 (plan to change to $5.50 later)
+- **Next Step for Images**: Go to Railway Admin → Products → TOOLY → Assets → upload from `assets-import/`
+
+### MILESTONE 12: Stripe Payment Integration (2025-12-17)
+
+- **Status**: ✅ COMPLETE - Full Stripe flow working (PaymentSettled confirmed)
+- **Branch**: `feature/frontend-polish`
+- **Test Orders**:
+  - `VN7PGZXUJBZV9JXM` - $158.99 (test mode, webhook not configured)
+  - `WVDGQZP9R6MNQZH4` - $158.99 (webhook configured, state stuck)
+  - `XSG7ZEWV6LSGHJBR` - $158.99 ✅ **PaymentSettled confirmed!**
+- **Commits**:
+  - `6972300` fix(web): gate setcustomerfororder and isolate shop/admin sessions
+  - `5502cd7` fix(web): checkout mutation fields and input label styling
+  - `dbeecf9` docs(repo): update checkpoint with stripe success and next steps
+- **Bugs Fixed**:
+  1. `Cannot set a Customer for the Order when already logged in` - Added activeCustomer check
+  2. `Cannot read properties of undefined (reading 'map')` - Fixed SET_SHIPPING_METHOD_MUTATION to return all order fields
+  3. Input label black background - Removed hardcoded bg color from floating label
+- **Stripe Setup Completed**:
+  - ✅ Stripe CLI installed via winget
+  - ✅ `stripe login` authenticated to Faxas Enterprise LLC sandbox
+  - ✅ `stripe listen --forward-to localhost:3001/payments/stripe` running
+  - ✅ Webhook secret updated in Vendure Admin (whsec_725f78aa...)
+  - ⚠️ Order state not updating to PaymentSettled (webhook processing issue)
+- **Files Modified**:
+  - `apps/shofar-store/src/app/checkout/page.tsx` - activeCustomer check + full mutation fields
+  - `apps/vendure/src/vendure-config.ts` - Cookie name isolation
+  - `apps/shofar-store/src/brands/tooly/components/ui/Input.tsx` - Label styling fix
+
+### MILESTONE 11: Frontend Polish + Hero Redesign (2025-12-17)
+
+- **Status**: ✅ Complete
+- **Branch**: `feature/frontend-polish`
+- **Commits**:
+  - `764c517` fix(web): mobile menu close + remove search bar
+  - `eaa3986` fix(web): cart drawer closes on backdrop click
+  - `8e1ec0c` feat(vendure): add heroimage channel custom field
+  - `eb7c39e` feat(web): hero section full background redesign
+- **Bug Fixes**:
+  | Bug | Fix | Commit |
+  |-----|-----|--------|
+  | Can't click out of hamburger menu | Backdrop outside nav (Fragment return) | `764c517` |
+  | Can't close menu with X button | Removed FocusTrap blocking clicks | `764c517` |
+  | Can't open cart while menu open | handleCartClick closes menu first | `764c517` |
+  | Section nav lands wrong (cut off) | scroll-margin-top 5rem/4rem in globals.css | `764c517` |
+  | Search bar removal | Completely removed (per user request) | `764c517` |
+  | Cart drawer click-outside (desktop) | FocusTrap clickOutsideDeactivates option | `eaa3986` |
+- **Hero Redesign**:
+  - **Before**: Product image floating at bottom of hero, disconnected feel
+  - **After**: Full dramatic background image with frosted overlay
+  - Layout: Text/buttons centered over background image
+  - Vendure integration: heroImage custom field on Channel entity
+  - Fallback: product.featuredAsset → gradient background
+  - Responsive: Same design at all viewports (1440px, 768px, 375px)
+- **Files Modified**:
+  - `apps/shofar-store/src/brands/tooly/components/ui/Navbar.tsx` - Full rewrite (335 lines)
+  - `apps/shofar-store/src/brands/tooly/components/CartDrawer.tsx` - FocusTrap fix
+  - `apps/shofar-store/src/app/globals.css` - scroll-margin-top for sections
+  - `apps/vendure/src/vendure-config.ts` - Channel heroImage custom field
+  - `apps/shofar-store/src/brands/tooly/sections/HeroSection.tsx` - Full background redesign
+  - `apps/shofar-store/src/brands/tooly/lib/fetchers.ts` - Fetch heroImage
+  - `packages/api-client/src/shop/tooly-product.graphql` - activeChannel query
+- **User Action**: Upload hero image via Vendure Admin UI (Settings → Channels → tooly → Hero Background Image)
+
+### MILESTONE 10: Stripe Payment Integration (2025-12-17)
+
+- **Status**: ✅ Complete (see Milestone 12 for final fixes)
+- **Branch**: `feature/stripe-payments`
+- **Commits**:
+  - `6c19a3b` feat(vendure): enable stripe plugin (test mode)
+  - `8ad0360` feat(web): stripe payment element checkout step
+- **Changes**:
+  - Installed `@vendure/payments-plugin` and `stripe@13` in Vendure
+  - Added StripePlugin to vendure-config.ts with webhook at `/payments/stripe`
+  - Installed `@stripe/stripe-js` and `@stripe/react-stripe-js` in storefront
+  - Created `StripePaymentForm.tsx` component with Stripe Payment Element
+  - Checkout page conditionally uses Stripe (if configured) or test payment
+  - Created `docs/STRIPE-TESTING.md` with setup guide
+- **Configuration Done**:
+  - ✅ Stripe Payment Method created in Admin UI (ID: 2)
+  - ✅ API key (sk*test*...) entered
+  - ✅ `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` in .env.local
+  - ⚠️ Webhook secret is placeholder (update for production)
+- **Test Card**: `4242 4242 4242 4242` (any future date, any CVC)
+- **Files Modified**:
+  - `apps/vendure/src/vendure-config.ts` - Added StripePlugin
+  - `apps/vendure/.env.example` - Documented Stripe setup
+  - `apps/shofar-store/src/app/checkout/page.tsx` - Conditional Stripe/test payment
+  - `apps/shofar-store/src/components/StripePaymentForm.tsx` - NEW Payment Element
+  - `docs/STRIPE-TESTING.md` - NEW testing guide
+
+### MILESTONE 9: Vendure Source-of-Truth Audit (2025-12-17)
+
+- **Status**: ✅ Complete
+- **Branch**: `feature/tooly-clean-slate`
+- **Objective**: Verify storefront is 100% driven by Vendure data (no hardcoding)
+- **Audit Results**:
+
+  | Component               | Status     | Behavior                                          |
+  | ----------------------- | ---------- | ------------------------------------------------- |
+  | ProductSection variants | ✅ Dynamic | Reads from `product.variants`                     |
+  | Color swatches          | ✅ Dynamic | Hidden if `variants.length === 1`, shown if >1    |
+  | ProductCarousel         | ✅ Dynamic | Uses `product.assets[]` from Vendure              |
+  | AccessoriesSection      | ✅ Dynamic | Shows "Coming Soon" if empty, grid if items exist |
+  | Prices                  | ✅ Dynamic | From `variant.priceWithTax`                       |
+  | Stock                   | ✅ Dynamic | From `variant.stockLevel`                         |
+
+- **Bug Fixed**: `fetchers.ts` accessories collection slug was `'tooly-accessories'` → fixed to `'accessories'`
+- **Debug Mock Mode**: Added `?debugMock=1` URL param for DEV testing
+  - Simulates additional variants and accessories
+  - Shows amber banner when active
+  - Does NOT ship in production
+
+- **How to Add New Variants/Accessories**:
+  1. **New Variant**: Admin UI → Products → TOOLY → Add Variant → Set color facet
+  2. **New Accessory**: Admin UI → Products → Create → Add to `accessories` collection
+  3. Frontend automatically renders them (no code changes needed)
+
+- **Files Modified**:
+  - `apps/shofar-store/src/brands/tooly/lib/fetchers.ts` - Fixed collection slug
+  - `apps/shofar-store/src/brands/tooly/lib/debug-mock.ts` - NEW debug utility
+  - `apps/shofar-store/src/brands/tooly/index.tsx` - Debug mock integration
+
+### MILESTONE 8: TOOLY Clean Slate (2025-12-17)
+
+- **Status**: ✅ Complete
+- **Branch**: `feature/tooly-clean-slate`
+- **Commits**:
+  - `b4166b2` feat(vendure): clean slate tooly channel - single gunmetal variant
+  - `8b62df5` feat(web): carousel + accessories coming soon state
+- **Changes**:
+  - Deleted 5 TOOLY variants (kept only TOOLY-DLC-GM Gunmetal)
+  - Deleted 5 accessory products from tooly channel
+  - Uploaded 5 gunmetal product images to R2 via gallery upload CLI
+  - Created `ProductCarousel.tsx` - mobile-first image carousel with swipe, dots, thumbnails
+  - Updated `ProductSection.tsx` - uses carousel, hides color swatches when 1 variant
+  - Updated `AccessoriesSection.tsx` - premium "Coming Soon" empty state
+- **Before/After**:
+  | Metric | Before | After |
+  |--------|--------|-------|
+  | TOOLY variants | 6 | 1 (Gunmetal) |
+  | Accessories (tooly) | 5 | 0 |
+  | Product gallery images | 0 | 5 |
+- **Verify**:
+
+  ```bash
+  # Shop API: 1 variant
+  curl -s http://localhost:3001/shop-api -H "vendure-token: tooly" \
+    -d '{"query":"{ product(slug:\"tooly\"){ variants { sku } } }"}'
+
+  # Shop API: 0 accessories
+  curl -s http://localhost:3001/shop-api -H "vendure-token: tooly" \
+    -d '{"query":"{ collection(slug:\"accessories\"){ productVariants { totalItems } } }"}'
+  ```
+
+- **New Files**:
+  - `apps/vendure/src/cli/upload-gallery.ts` - Gallery image upload CLI
+  - `apps/shofar-store/src/brands/tooly/components/ui/ProductCarousel.tsx` - Image carousel
+
+### MILESTONE 7: Admin Organization (Partial)
+
+- **Status**: ⚠️ In Progress
+- **Change**: Created Brand facet for filtering products in Admin UI
+  - Brand facet created with values: TOOLY, PEPTIDE
+  - Allows filtering Products by brand in Admin panel
 - **User Action Required**:
-  1. Add 11 PNG images to `assets-import/` folder
-  2. Run `pnpm --filter @shofar/vendure bulk:assets`
+  1. Go to Products → open each product → add Brand facet value
+  2. TOOLY products → Brand: TOOLY
+  3. PEPTIDE products → Brand: PEPTIDE
+- **Why**: Superadmin sees ALL channels - this enables filtering by brand
+
+### MILESTONE 6: Cloudflare R2 Asset Hosting
+
+- **Status**: ✅ Complete
+- **Change**: Migrated asset storage from local to Cloudflare R2
+  - `apps/vendure/src/config/s3-asset-storage.ts` - Fixed path separator bug (Windows backslash → forward slash)
+  - `apps/shofar-store/next.config.ts` - Added `*.r2.dev` remote pattern for Next/Image
+  - 11 product images uploaded to R2 bucket via `bulk:assets`
+- **R2 Configuration**:
+  - Bucket: `tooly-assets`
+  - Public URL: `https://pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev`
+  - S3 Endpoint: `https://9815cde18ff3728069fccdbaa4da52bf.r2.cloudflarestorage.com`
+- **Verify**: `curl -s -o /dev/null -w "%{http_code}" "https://pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev/preview/36/1v1a8379__preview.jpg"` → 200
+- **Fix Applied**: AdminUiPlugin index.html corruption - reinstalled `@vendure/admin-ui-plugin`
+
+### MILESTONE 5: Product Images (Complete)
+
+- **Status**: ✅ Complete
+- **Change**: Uploaded all product images to R2
+  - `apps/vendure/assets-import/map.json` - 11 SKU→image mappings
+  - Images: 1V1A8379.jpg through 1V1A8480.jpg (user-provided photos)
+  - Bulk import: `pnpm --filter @shofar/vendure bulk:assets` → 11 success, 0 failed
+- **SKU→Image Mapping**:
+  - TOOLY-DLC-GM → 1V1A8379.jpg
+  - TOOLY-CK-MID → 1V1A8395.jpg
+  - TOOLY-CK-ARC → 1V1A8427.jpg
+  - TOOLY-CK-EMB → 1V1A8445.jpg
+  - TOOLY-CK-COB → 1V1A8446.jpg
+  - TOOLY-CK-TIT → 1V1A8448.jpg
+  - ACC-CASE-VIAL → 1V1A8452.jpg
+  - ACC-CHAIN-GLD → 1V1A8464.jpg
+  - ACC-CHAIN-SLV → 1V1A8468.jpg
+  - ACC-CLEAN-KIT → 1V1A8474.jpg
+  - ACC-CASE-001 → 1V1A8480.jpg
 
 ### MILESTONE 4: Minimal Checkout Route
 
@@ -304,18 +591,11 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ### Products in TOOLY Channel
 
-| Product                    | SKU           | Price   | Stock |
-| -------------------------- | ------------- | ------- | ----- |
-| TOOLY - DLC Gunmetal       | TOOLY-DLC-GM  | $149.00 | 100   |
-| TOOLY - Cerakote Midnight  | TOOLY-CK-MID  | $149.00 | 50    |
-| TOOLY - Cerakote Arctic    | TOOLY-CK-ARC  | $149.00 | 50    |
-| TOOLY - Cerakote Ember     | TOOLY-CK-EMB  | $149.00 | 50    |
-| TOOLY - Cerakote Cobalt    | TOOLY-CK-COB  | $149.00 | 50    |
-| TOOLY - Cerakote Titanium  | TOOLY-CK-TIT  | $149.00 | 50    |
-| Silicone Case + Glass Vial | ACC-CASE-VIAL | -       | 200   |
-| Carry Chain - Gold         | ACC-CHAIN-GLD | -       | 150   |
-| Carry Chain - Silver       | ACC-CHAIN-SLV | -       | 150   |
-| Cleaning Kit               | ACC-CLEAN-KIT | -       | 300   |
+| Product              | SKU          | Price   | Stock | Notes                  |
+| -------------------- | ------------ | ------- | ----- | ---------------------- |
+| TOOLY - DLC Gunmetal | TOOLY-DLC-GM | $149.00 | 100   | 5 gallery images on R2 |
+
+> **Note**: As of Milestone 8, only 1 TOOLY variant exists (Gunmetal). Accessories removed from tooly channel but collection slug `accessories` preserved (returns 0 items).
 
 ### Channels
 
@@ -330,11 +610,36 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ## NEXT STEPS (Phase 2)
 
-1. **Product Images**: User adds images → run bulk:assets
-2. **Real Payment**: Integrate Authorize.Net Accept Hosted
-3. **Order Emails**: Configure email templates
-4. **Production Deploy**: Vercel (frontend) + Railway/Fly (Vendure)
-5. **pharma-store**: Begin PEPTIDES channel setup
+### Immediate (Railway is LIVE)
+
+1. **✅ RAILWAY DEPLOYED**: Backend fully operational on Railway
+   - vendure-server + vendure-worker running
+   - Stripe TEST payments working (Order `14M9T5V98G22UDCY` → PaymentSettled)
+   - Shop API accessible at https://vendure-server-production-75fc.up.railway.app/shop-api
+2. **Deploy Frontend to Vercel**:
+   - Point `NEXT_PUBLIC_VENDURE_SHOP_API` to Railway URL
+   - Keep `pk_test_...` publishable key
+   - Test full checkout flow from deployed frontend
+3. **Upload Product Images**:
+   - Railway Postgres has no asset records yet
+   - Run `pnpm --filter @shofar/vendure bulk:assets` locally against Railway DB
+   - OR upload via Railway Admin UI
+
+### Production Prep (Before Real Sales)
+
+4. **Stripe Production Keys**:
+   - Create LIVE webhook in Stripe Dashboard (same URL, live mode)
+   - Replace `sk_test_...` with `sk_live_...` in Railway Vendure Admin
+   - Replace `pk_test_...` with `pk_live_...` in Vercel env
+5. **Domain Setup**: Custom domain for Railway Vendure + Vercel frontend
+6. **Shipping Price**: Change from $9.99 to $5.50 (Admin UI)
+
+### Post-Launch
+
+7. **Order Emails**: Configure transactional email templates
+8. **Policies**: Privacy policy, terms of service, refund policy pages
+9. **pharma-store**: Begin PEPTIDES channel setup (separate store)
+10. **Auth System**: Implement Vendure-native authentication (login/signup/account)
 
 ---
 

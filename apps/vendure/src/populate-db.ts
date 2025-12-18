@@ -1,46 +1,42 @@
-import { bootstrap } from '@vendure/core';
-import { populate } from '@vendure/core/cli';
-import { config } from './vendure-config';
-import { initialData } from './initial-data/initial-data';
-import { populateDatabase } from './initial-data/data-population';
-import { seedProducts } from './initial-data/seed-products';
+import { bootstrap } from "@vendure/core";
+import { populate } from "@vendure/core/cli";
+import { config } from "./vendure-config";
+import { initialData } from "./initial-data/initial-data";
+import { seedProducts } from "./initial-data/seed-products";
 
 /**
  * Main script to populate the database with initial data
  */
 async function runPopulate(): Promise<void> {
   try {
-    console.log('🌟 Starting database population...\n');
+    console.log("🌟 Starting database population...\n");
 
     // First, populate with Vendure's initial data
-    console.log('📦 Setting up initial Vendure data...');
+    console.log("📦 Setting up initial Vendure data...");
     await populate(
-      () => config,
+      () => bootstrap(config),
       initialData,
-      process.env.SEED_PRODUCTS === 'true' ? './products.csv' : undefined
+      process.env.SEED_PRODUCTS === "true" ? "./products.csv" : undefined,
     );
 
     // Bootstrap the app for custom population
-    console.log('\n🔧 Setting up custom data...');
+    console.log("\n🔧 Setting up custom data...");
     const app = await bootstrap(config);
-
-    // Populate channels and roles
-    await populateDatabase();
 
     // Seed products
     await seedProducts(app);
 
     await app.close();
 
-    console.log('\n✨ Database population complete!');
-    console.log('\n📝 Credentials:');
-    console.log('  Superadmin: superadmin / superadmin123');
-    console.log('  Tooly Manager: manager@tooly.com / manager123');
-    console.log('\n🚀 You can now run `pnpm dev` to start the server');
+    console.log("\n✨ Database population complete!");
+    console.log("\n📝 Credentials:");
+    console.log("  Superadmin: superadmin / superadmin123");
+    console.log("  Tooly Manager: manager@tooly.com / manager123");
+    console.log("\n🚀 You can now run `pnpm dev` to start the server");
 
     process.exit(0);
   } catch (error) {
-    console.error('\n❌ Error populating database:', error);
+    console.error("\n❌ Error populating database:", error);
     process.exit(1);
   }
 }

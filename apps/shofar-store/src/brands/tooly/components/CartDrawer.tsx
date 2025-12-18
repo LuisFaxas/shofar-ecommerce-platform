@@ -252,7 +252,13 @@ export function CartDrawer(): React.ReactElement {
       />
 
       {/* Drawer */}
-      <FocusTrap active={isDrawerOpen}>
+      <FocusTrap
+        active={isDrawerOpen}
+        focusTrapOptions={{
+          clickOutsideDeactivates: true,
+          onDeactivate: closeDrawer,
+        }}
+      >
         <aside
           ref={drawerRef}
           data-testid="cart-drawer"
