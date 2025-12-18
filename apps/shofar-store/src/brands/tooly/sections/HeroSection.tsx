@@ -86,14 +86,11 @@ export function HeroSection({
         )}
 
         {/* Frosted Overlay - Creates depth and ensures text readability */}
-        <div
-          className="absolute inset-0 bg-[#0b0e14]/50 backdrop-blur-sm"
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 bg-[#0b0e14]/25" aria-hidden="true" />
 
         {/* Gradient Overlays - Top and bottom fade for seamless integration */}
         <div
-          className="absolute inset-0 bg-gradient-to-b from-[#0b0e14] via-transparent to-[#0b0e14]/95"
+          className="absolute inset-0 bg-gradient-to-b from-[#0b0e14]/80 via-transparent to-[#0b0e14]/90"
           aria-hidden="true"
         />
 
