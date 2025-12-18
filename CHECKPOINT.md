@@ -27,7 +27,7 @@
 
 | Item           | Status | Notes                                                             |
 | -------------- | ------ | ----------------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: ed21969)                   |
+| Build          | ✅     | lint + typecheck + build PASS (commit: eb7c39e)                   |
 | Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                        |
 | Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                          |
 | Payment        | ✅     | Test Payment (dummy) - ready for practice presale                 |
@@ -35,6 +35,7 @@
 | Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)          |
 | Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set              |
 | Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)        |
+| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed  |
 | Admin Organize | ➖     | Optional: Brand facet created, not required for single prod       |
 | Real Payment   | ⚠️     | Stripe plugin + Payment Element ready, needs API keys in Admin UI |
 
@@ -120,6 +121,41 @@ packages/
 ---
 
 ## PRESALE SPRINT LOG (2025-12-17)
+
+### MILESTONE 11: Frontend Polish + Hero Redesign (2025-12-17)
+
+- **Status**: ✅ Complete
+- **Branch**: `feature/frontend-polish`
+- **Commits**:
+  - `764c517` fix(web): mobile menu close + remove search bar
+  - `eaa3986` fix(web): cart drawer closes on backdrop click
+  - `8e1ec0c` feat(vendure): add heroimage channel custom field
+  - `eb7c39e` feat(web): hero section full background redesign
+- **Bug Fixes**:
+  | Bug | Fix | Commit |
+  |-----|-----|--------|
+  | Can't click out of hamburger menu | Backdrop outside nav (Fragment return) | `764c517` |
+  | Can't close menu with X button | Removed FocusTrap blocking clicks | `764c517` |
+  | Can't open cart while menu open | handleCartClick closes menu first | `764c517` |
+  | Section nav lands wrong (cut off) | scroll-margin-top 5rem/4rem in globals.css | `764c517` |
+  | Search bar removal | Completely removed (per user request) | `764c517` |
+  | Cart drawer click-outside (desktop) | FocusTrap clickOutsideDeactivates option | `eaa3986` |
+- **Hero Redesign**:
+  - **Before**: Product image floating at bottom of hero, disconnected feel
+  - **After**: Full dramatic background image with frosted overlay
+  - Layout: Text/buttons centered over background image
+  - Vendure integration: heroImage custom field on Channel entity
+  - Fallback: product.featuredAsset → gradient background
+  - Responsive: Same design at all viewports (1440px, 768px, 375px)
+- **Files Modified**:
+  - `apps/shofar-store/src/brands/tooly/components/ui/Navbar.tsx` - Full rewrite (335 lines)
+  - `apps/shofar-store/src/brands/tooly/components/CartDrawer.tsx` - FocusTrap fix
+  - `apps/shofar-store/src/app/globals.css` - scroll-margin-top for sections
+  - `apps/vendure/src/vendure-config.ts` - Channel heroImage custom field
+  - `apps/shofar-store/src/brands/tooly/sections/HeroSection.tsx` - Full background redesign
+  - `apps/shofar-store/src/brands/tooly/lib/fetchers.ts` - Fetch heroImage
+  - `packages/api-client/src/shop/tooly-product.graphql` - activeChannel query
+- **User Action**: Upload hero image via Vendure Admin UI (Settings → Channels → tooly → Hero Background Image)
 
 ### MILESTONE 10: Stripe Payment Integration (2025-12-17)
 
