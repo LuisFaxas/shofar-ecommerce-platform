@@ -32,12 +32,21 @@ export interface HeroImageData {
   source: string;
 }
 
+export interface HomeGalleryAsset {
+  id: string;
+  preview: string;
+  source: string;
+  name: string;
+}
+
 export interface ToolyPageData {
   product: ToolyProductData | null;
   gallery: GalleryData | null;
   accessories: AccessoriesData | null;
   /** Hero background image from Channel customFields */
   heroImage: string | null;
+  /** Marketing gallery images from Channel customFields */
+  homeGalleryAssets: HomeGalleryAsset[] | null;
 }
 
 // ============================================================================
@@ -75,6 +84,7 @@ export function buildAssetUrl(
 interface ProductAndChannelData {
   product: ToolyProductData | null;
   heroImage: string | null;
+  homeGalleryAssets: HomeGalleryAsset[] | null;
 }
 
 /**
@@ -91,7 +101,7 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
 
     if (error) {
       console.error("[TOOLY] Failed to fetch product:", error.message);
-      return { product: null, heroImage: null };
+      return { product: null, heroImage: null, homeGalleryAssets: null };
     }
 
     // Extract heroImage from activeChannel customFields
@@ -105,13 +115,22 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
     // Build full URL for heroImage
     const heroImage = buildAssetUrl(heroImagePreview);
 
+    // Extract homeGalleryAssets from activeChannel customFields
+    const homeGalleryAssets =
+      (
+        data?.activeChannel?.customFields as {
+          homeGalleryAssets?: HomeGalleryAsset[];
+        }
+      )?.homeGalleryAssets ?? null;
+
     return {
       product: data?.product ?? null,
       heroImage,
+      homeGalleryAssets,
     };
   } catch (err) {
     console.error("[TOOLY] Product fetch error:", err);
-    return { product: null, heroImage: null };
+    return { product: null, heroImage: null, homeGalleryAssets: null };
   }
 }
 
@@ -188,6 +207,7 @@ export async function fetchToolyPageData(): Promise<ToolyPageData> {
     gallery,
     accessories,
     heroImage: productAndChannel.heroImage,
+    homeGalleryAssets: productAndChannel.homeGalleryAssets,
   };
 }
 

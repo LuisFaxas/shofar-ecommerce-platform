@@ -86,7 +86,10 @@ function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
         />
         <CredibilitySection />
         <TechnologySection />
-        <GallerySection assets={effectiveData?.gallery?.assets} />
+        <GallerySection
+          assets={effectiveData?.gallery?.assets}
+          channelGalleryAssets={effectiveData?.homeGalleryAssets}
+        />
         <ProductSection product={effectiveData?.product} />
         <AccessoriesSection accessories={effectiveData?.accessories} />
         <ReviewsSection />
