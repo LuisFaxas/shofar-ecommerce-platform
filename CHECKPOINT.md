@@ -7,7 +7,7 @@
 
 ## CURRENT TRUTH (Read This First)
 
-**Last Updated**: 2025-12-17
+**Last Updated**: 2025-12-18
 
 ### Service Status
 
@@ -18,6 +18,18 @@
 | pharma-store | 3002 | @shofar/pharma-store | N/A (pending) |
 | faxas-store  | 3003 | @shofar/faxas-store  | N/A (pending) |
 
+### Railway Deployment (LIVE)
+
+| Service        | URL                                                                   | Status        |
+| -------------- | --------------------------------------------------------------------- | ------------- |
+| Vendure Admin  | https://vendure-server-production-75fc.up.railway.app/admin           | ✅ Online     |
+| Shop API       | https://vendure-server-production-75fc.up.railway.app/shop-api        | ✅ Online     |
+| Stripe Webhook | https://vendure-server-production-75fc.up.railway.app/payments/stripe | ✅ Configured |
+
+**Railway Project**: `tooly-vendure-staging`
+**Branch**: `feature/frontend-polish`
+**Credentials**: superadmin / superadmin123
+
 ### Active Brand: TOOLY
 
 **BRAND_KEY**: `tooly`
@@ -25,19 +37,20 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                            |
-| -------------- | ------ | ---------------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                  |
-| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                       |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                         |
-| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                   |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)         |
-| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set             |
-| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)       |
-| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed |
-| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod      |
-| Real Payment   | ✅     | Stripe WORKING! Order XSG7ZEWV6LSGHJBR → PaymentSettled          |
+| Item           | Status | Notes                                                              |
+| -------------- | ------ | ------------------------------------------------------------------ |
+| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                    |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                         |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                           |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                  |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                     |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)           |
+| Product Images | ⚠️     | 11 images in `assets-import/`, needs upload to Railway Admin       |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)         |
+| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed   |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod        |
+| Real Payment   | ✅     | Stripe WORKING! Local: XSG7ZEWV6LSGHJBR, Railway: 14M9T5V98G22UDCY |
+| Railway Deploy | ✅     | vendure-server + vendure-worker ONLINE, Stripe webhook configured  |
 
 ---
 
@@ -120,7 +133,68 @@ packages/
 
 ---
 
-## PRESALE SPRINT LOG (2025-12-17)
+## PRESALE SPRINT LOG (2025-12-18)
+
+### MILESTONE 14: Asset Management Workflows (2025-12-18)
+
+- **Status**: ✅ COMPLETE - Marketing gallery + hero image upload paths
+- **Branch**: `feature/frontend-polish`
+- **Changes Made**:
+  - Added `homeGalleryAssets` Channel custom field (list relation to Asset)
+  - Updated GraphQL query to fetch channel gallery assets
+  - Frontend GallerySection prioritizes channel assets over product assets
+  - All 11 product images now in `apps/vendure/assets-import/`
+- **Admin UI Workflows**:
+  | Task | Path | Notes |
+  |------|------|-------|
+  | Upload Product Images | Products → TOOLY → Assets → drag images | Set one as Featured Asset |
+  | Set Hero Background | Settings → Channels → tooly → Hero Background Image | Upload/select asset |
+  | Set Marketing Gallery | Settings → Channels → tooly → Marketing tab | Upload up to 6 images |
+- **Fallback Behavior**:
+  - Gallery: Channel assets → Product assets → Placeholder grid
+  - Hero: Channel heroImage → Product featuredAsset → Gradient fallback
+- **Files Modified**:
+  - `apps/vendure/src/vendure-config.ts` - Added homeGalleryAssets field
+  - `packages/api-client/src/shop/tooly-product.graphql` - Query homeGalleryAssets
+  - `apps/shofar-store/src/brands/tooly/lib/fetchers.ts` - Extract + return homeGalleryAssets
+  - `apps/shofar-store/src/brands/tooly/sections/GallerySection.tsx` - Accept channelGalleryAssets prop
+  - `apps/shofar-store/src/brands/tooly/index.tsx` - Wire up homeGalleryAssets
+
+### MILESTONE 13: Railway Deployment (2025-12-18)
+
+- **Status**: ✅ COMPLETE - Stripe payments working on Railway
+- **Branch**: `feature/frontend-polish`
+- **Railway Project**: `tooly-vendure-staging`
+- **Test Order (Railway)**: `14M9T5V98G22UDCY` → **PaymentSettled** ✅
+- **Services Deployed**:
+  | Service | Status | URL |
+  |---------|--------|-----|
+  | vendure-server | ✅ Online | https://vendure-server-production-75fc.up.railway.app |
+  | vendure-worker | ✅ Online | (internal, no public URL) |
+  | PostgreSQL | ✅ Running | postgres.railway.internal |
+- **Data Created via Admin API**:
+  - ✅ US country + North America zone
+  - ✅ tooly channel (ID: 2, token: tooly)
+  - ✅ Standard tax category + 0% tax rate
+  - ✅ TOOLY product (ID: 1) + DLC Gunmetal variant
+  - ✅ Standard Shipping $9.99 (assigned to tooly)
+  - ✅ Stripe payment method (webhook secret configured)
+- **Stripe Webhook**:
+  - Endpoint: `https://vendure-server-production-75fc.up.railway.app/payments/stripe`
+  - Events: payment_intent.succeeded, payment_intent.payment_failed, payment_intent.canceled
+  - Webhook secret saved in Vendure (verified via Admin API)
+- **Commits for Deployment** (on `feature/frontend-polish`):
+  - `3496a5a` feat(vendure): add worker entry point for production deployment
+  - `3d9b4f8` fix(deps): upgrade next.js to 16.0.10 for railway security
+  - `12f82e5` fix(vendure): resolve typescript errors in seed scripts
+  - `0019d3a` fix(vendure): add pg package for postgresql driver
+  - `980b5b4` fix(vendure): enable database synchronize for initial deploy
+  - `28205ad` fix(vendure): disable email plugin for initial deployment
+- **Known Limitations**:
+  - Product images need manual upload in Railway Admin (Postgres has no asset records)
+  - Only 1 variant (DLC Gunmetal) created via API
+  - Shipping price is $9.99 (plan to change to $5.50 later)
+- **Next Step for Images**: Go to Railway Admin → Products → TOOLY → Assets → upload from `assets-import/`
 
 ### MILESTONE 12: Stripe Payment Integration (2025-12-17)
 
@@ -518,28 +592,36 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ## NEXT STEPS (Phase 2)
 
-### Immediate (BLOCKING for Launch)
+### Immediate (Railway is LIVE)
 
-1. **✅ WEBHOOK FIXED**: Orders reach PaymentSettled state
-   - Root cause: Webhook secret wasn't saving via Admin UI
-   - Fixed via Admin API update
-   - Confirmed working: Order `XSG7ZEWV6LSGHJBR` → PaymentSettled
-2. **Practice Presale**: Internal rehearsal (3 runs: incognito, normal, mobile)
+1. **✅ RAILWAY DEPLOYED**: Backend fully operational on Railway
+   - vendure-server + vendure-worker running
+   - Stripe TEST payments working (Order `14M9T5V98G22UDCY` → PaymentSettled)
+   - Shop API accessible at https://vendure-server-production-75fc.up.railway.app/shop-api
+2. **Deploy Frontend to Vercel**:
+   - Point `NEXT_PUBLIC_VENDURE_SHOP_API` to Railway URL
+   - Keep `pk_test_...` publishable key
+   - Test full checkout flow from deployed frontend
+3. **Upload Product Images**:
+   - Railway Postgres has no asset records yet
+   - Run `pnpm --filter @shofar/vendure bulk:assets` locally against Railway DB
+   - OR upload via Railway Admin UI
 
-### Production Prep (After Webhook Fixed)
+### Production Prep (Before Real Sales)
 
-3. **Stripe Production Keys**:
-   - Replace test keys with live keys (`sk_live_...`, `pk_live_...`)
-   - Set up permanent webhook in Stripe Dashboard (not CLI forwarding)
-   - Upload hero image in Admin UI (Settings → Channels → tooly)
-4. **Production Deploy**: Vercel (frontend) + hosted Vendure + PostgreSQL + Cloudflare R2
+4. **Stripe Production Keys**:
+   - Create LIVE webhook in Stripe Dashboard (same URL, live mode)
+   - Replace `sk_test_...` with `sk_live_...` in Railway Vendure Admin
+   - Replace `pk_test_...` with `pk_live_...` in Vercel env
+5. **Domain Setup**: Custom domain for Railway Vendure + Vercel frontend
+6. **Shipping Price**: Change from $9.99 to $5.50 (Admin UI)
 
 ### Post-Launch
 
-5. **Order Emails**: Configure transactional email templates
-6. **Policies**: Privacy policy, terms of service, refund policy pages
-7. **pharma-store**: Begin PEPTIDES channel setup (separate store)
-8. **Auth System**: Implement Vendure-native authentication (login/signup/account)
+7. **Order Emails**: Configure transactional email templates
+8. **Policies**: Privacy policy, terms of service, refund policy pages
+9. **pharma-store**: Begin PEPTIDES channel setup (separate store)
+10. **Auth System**: Implement Vendure-native authentication (login/signup/account)
 
 ---
 
