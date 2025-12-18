@@ -8,11 +8,11 @@
  * - Smooth expand/collapse animation
  */
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useState, useCallback } from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 interface FaqSectionProps {
   className?: string;
@@ -21,33 +21,33 @@ interface FaqSectionProps {
 const FAQS = [
   {
     id: 1,
-    question: 'What materials is TOOLY made from?',
+    question: "What materials is TOOLY made from?",
     answer:
-      'TOOLY is precision CNC-machined from aerospace-grade 6061 aluminum with a medical-grade stainless steel chamber. The heating element uses premium ceramics for optimal heat distribution and purity.',
+      "TOOLY is precision CNC-machined from aerospace-grade 6061 aluminum with a medical-grade stainless steel chamber. The heating element uses premium ceramics for optimal heat distribution and purity.",
   },
   {
     id: 2,
-    question: 'How long does the battery last?',
+    question: "What is included with my TOOLY?",
     answer:
-      'The high-capacity lithium-ion battery provides 50+ sessions on a single charge. Charging takes approximately 90 minutes via USB-C. We recommend using the included cable for optimal charging speeds.',
+      "Every TOOLY comes with the precision-machined device, a protective carrying case, cleaning brush, spare screens, and a detailed user guide. Everything you need to get started is included in the box.",
   },
   {
     id: 3,
-    question: 'What is your warranty policy?',
+    question: "What is your warranty policy?",
     answer:
-      'Every TOOLY device comes with a comprehensive 2-year warranty covering manufacturing defects and battery performance. Extended warranty options are available at checkout.',
+      "Every TOOLY device comes with a comprehensive 2-year warranty covering manufacturing defects and component performance. Extended warranty options are available at checkout.",
   },
   {
     id: 4,
-    question: 'How do I clean and maintain my TOOLY?',
+    question: "How do I clean and maintain my TOOLY?",
     answer:
-      'We recommend cleaning your TOOLY after every 5-10 sessions using the included cleaning kit. The modular design allows easy access to all components. Detailed maintenance guides are available in your account.',
+      "We recommend cleaning your TOOLY after every 5-10 sessions using the included cleaning kit. The modular design allows easy access to all components. Detailed maintenance guides are available in your account.",
   },
   {
     id: 5,
-    question: 'What is your return policy?',
+    question: "What is your return policy?",
     answer:
-      'We offer a 30-day satisfaction guarantee. If you\'re not completely satisfied with your purchase, return it in original condition for a full refund. Shipping is free on all returns.',
+      "We offer a 30-day satisfaction guarantee. If you're not completely satisfied with your purchase, return it in original condition for a full refund. Shipping is free on all returns.",
   },
 ];
 
@@ -59,9 +59,15 @@ interface FaqItemProps {
   index: number;
 }
 
-function FaqItem({ question, answer, isOpen, onToggle, index }: FaqItemProps): React.ReactElement {
+function FaqItem({
+  question,
+  answer,
+  isOpen,
+  onToggle,
+  index,
+}: FaqItemProps): React.ReactElement {
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onToggle();
     }
@@ -70,32 +76,34 @@ function FaqItem({ question, answer, isOpen, onToggle, index }: FaqItemProps): R
   return (
     <div
       className={cn(
-        'border border-white/[0.08] rounded-xl overflow-hidden',
-        'transition-colors duration-300',
-        isOpen && 'border-white/[0.14] bg-white/[0.02]'
+        "border border-white/[0.08] rounded-xl overflow-hidden",
+        "transition-colors duration-300",
+        isOpen && "border-white/[0.14] bg-white/[0.02]",
       )}
     >
       <button
         onClick={onToggle}
         onKeyDown={handleKeyDown}
         className={cn(
-          'w-full flex items-center justify-between p-5',
-          'text-left',
-          'hover:bg-white/[0.02]',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50',
-          'transition-colors duration-200'
+          "w-full flex items-center justify-between p-5",
+          "text-left",
+          "hover:bg-white/[0.02]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50",
+          "transition-colors duration-200",
         )}
         aria-expanded={isOpen}
         aria-controls={`faq-answer-${index}`}
         id={`faq-question-${index}`}
       >
-        <span className="text-base font-medium text-white pr-4">{question}</span>
+        <span className="text-base font-medium text-white pr-4">
+          {question}
+        </span>
         <span
           className={cn(
-            'flex-shrink-0 w-8 h-8 rounded-full',
-            'bg-white/[0.08] flex items-center justify-center',
-            'transition-transform duration-300',
-            isOpen && 'rotate-180'
+            "flex-shrink-0 w-8 h-8 rounded-full",
+            "bg-white/[0.08] flex items-center justify-center",
+            "transition-transform duration-300",
+            isOpen && "rotate-180",
           )}
         >
           <svg
@@ -105,7 +113,11 @@ function FaqItem({ question, answer, isOpen, onToggle, index }: FaqItemProps): R
             stroke="currentColor"
             strokeWidth={2}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </span>
       </button>
@@ -115,8 +127,8 @@ function FaqItem({ question, answer, isOpen, onToggle, index }: FaqItemProps): R
         role="region"
         aria-labelledby={`faq-question-${index}`}
         className={cn(
-          'overflow-hidden transition-all duration-300 ease-in-out',
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          "overflow-hidden transition-all duration-300 ease-in-out",
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
         )}
       >
         <div className="px-5 pb-5">
@@ -137,7 +149,7 @@ export function FaqSection({ className }: FaqSectionProps): React.ReactElement {
   return (
     <section
       id="faq"
-      className={cn('py-16 md:py-24 bg-[#0d1218]', className)}
+      className={cn("py-16 md:py-24 bg-[#0d1218]", className)}
       aria-labelledby="faq-heading"
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -173,15 +185,20 @@ export function FaqSection({ className }: FaqSectionProps): React.ReactElement {
           <p className="text-white/60 mb-4">Still have questions?</p>
           <button
             className={cn(
-              'inline-flex items-center gap-2 px-6 py-3 rounded-full',
-              'bg-white/[0.08] border border-white/[0.14]',
-              'text-white font-medium',
-              'hover:bg-white/[0.12] hover:border-white/[0.20]',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50',
-              'transition-all duration-200'
+              "inline-flex items-center gap-2 px-6 py-3 rounded-full",
+              "bg-white/[0.08] border border-white/[0.14]",
+              "text-white font-medium",
+              "hover:bg-white/[0.12] hover:border-white/[0.20]",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
+              "transition-all duration-200",
             )}
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -197,6 +214,6 @@ export function FaqSection({ className }: FaqSectionProps): React.ReactElement {
   );
 }
 
-FaqSection.displayName = 'FaqSection';
+FaqSection.displayName = "FaqSection";
 
 export default FaqSection;
