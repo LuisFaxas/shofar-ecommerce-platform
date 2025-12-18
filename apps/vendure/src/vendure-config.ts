@@ -36,7 +36,7 @@ function getDbConfig(): any {
       username: process.env.DB_USERNAME || "vendure",
       password: process.env.DB_PASSWORD || "vendure",
       database: process.env.DB_NAME || "vendure",
-      synchronize: IS_DEV,
+      synchronize: true, // Enable for initial schema creation
       migrations: [path.join(__dirname, "../migrations/*.+(js|ts)")],
       logging: false,
     };
