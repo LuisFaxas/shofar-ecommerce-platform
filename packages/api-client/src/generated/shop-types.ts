@@ -209,6 +209,42 @@ export type ChannelCustomFields = {
   __typename?: "ChannelCustomFields";
   heroImage?: Maybe<Asset>;
   homeGalleryAssets?: Maybe<Array<Asset>>;
+  storefrontDeliveryEstimate?: Maybe<Scalars["String"]["output"]>;
+  storefrontDisclaimer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature1Body?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature1Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature2Body?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature2Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature3Body?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature3Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature4Body?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature4Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature5Body?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature5Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature6Body?: Maybe<Scalars["String"]["output"]>;
+  storefrontFeature6Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontGalleryHeading?: Maybe<Scalars["String"]["output"]>;
+  storefrontGallerySubhead?: Maybe<Scalars["String"]["output"]>;
+  storefrontHeroHeadlineAccent?: Maybe<Scalars["String"]["output"]>;
+  storefrontHeroHeadlineLine1?: Maybe<Scalars["String"]["output"]>;
+  storefrontHeroHeadlineLine3?: Maybe<Scalars["String"]["output"]>;
+  storefrontHeroPill?: Maybe<Scalars["String"]["output"]>;
+  storefrontHeroSubhead?: Maybe<Scalars["String"]["output"]>;
+  storefrontInStockLabel?: Maybe<Scalars["String"]["output"]>;
+  storefrontOutOfStockLabel?: Maybe<Scalars["String"]["output"]>;
+  storefrontPrimaryCtaLabel?: Maybe<Scalars["String"]["output"]>;
+  storefrontSecondaryCtaLabel?: Maybe<Scalars["String"]["output"]>;
+  storefrontShippingBlurb?: Maybe<Scalars["String"]["output"]>;
+  storefrontShowAuthLinks?: Maybe<Scalars["Boolean"]["output"]>;
+  storefrontShowSearch?: Maybe<Scalars["Boolean"]["output"]>;
+  storefrontTrust1Sub?: Maybe<Scalars["String"]["output"]>;
+  storefrontTrust1Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontTrust2Sub?: Maybe<Scalars["String"]["output"]>;
+  storefrontTrust2Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontTrust3Sub?: Maybe<Scalars["String"]["output"]>;
+  storefrontTrust3Title?: Maybe<Scalars["String"]["output"]>;
+  storefrontTrust4Sub?: Maybe<Scalars["String"]["output"]>;
+  storefrontTrust4Title?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type Collection = Node & {
@@ -4448,6 +4484,42 @@ export type GetToolyProductQuery = {
     code: string;
     customFields?: {
       __typename?: "ChannelCustomFields";
+      storefrontHeroPill?: string | null;
+      storefrontHeroHeadlineLine1?: string | null;
+      storefrontHeroHeadlineAccent?: string | null;
+      storefrontHeroHeadlineLine3?: string | null;
+      storefrontHeroSubhead?: string | null;
+      storefrontPrimaryCtaLabel?: string | null;
+      storefrontSecondaryCtaLabel?: string | null;
+      storefrontTrust1Title?: string | null;
+      storefrontTrust1Sub?: string | null;
+      storefrontTrust2Title?: string | null;
+      storefrontTrust2Sub?: string | null;
+      storefrontTrust3Title?: string | null;
+      storefrontTrust3Sub?: string | null;
+      storefrontTrust4Title?: string | null;
+      storefrontTrust4Sub?: string | null;
+      storefrontFeature1Title?: string | null;
+      storefrontFeature1Body?: string | null;
+      storefrontFeature2Title?: string | null;
+      storefrontFeature2Body?: string | null;
+      storefrontFeature3Title?: string | null;
+      storefrontFeature3Body?: string | null;
+      storefrontFeature4Title?: string | null;
+      storefrontFeature4Body?: string | null;
+      storefrontFeature5Title?: string | null;
+      storefrontFeature5Body?: string | null;
+      storefrontFeature6Title?: string | null;
+      storefrontFeature6Body?: string | null;
+      storefrontGalleryHeading?: string | null;
+      storefrontGallerySubhead?: string | null;
+      storefrontShippingBlurb?: string | null;
+      storefrontDeliveryEstimate?: string | null;
+      storefrontInStockLabel?: string | null;
+      storefrontOutOfStockLabel?: string | null;
+      storefrontDisclaimer?: string | null;
+      storefrontShowAuthLinks?: boolean | null;
+      storefrontShowSearch?: boolean | null;
       heroImage?: {
         __typename?: "Asset";
         id: string;
@@ -5836,6 +5908,42 @@ export const GetToolyProductDocument = gql`
           source
           name
         }
+        storefrontHeroPill
+        storefrontHeroHeadlineLine1
+        storefrontHeroHeadlineAccent
+        storefrontHeroHeadlineLine3
+        storefrontHeroSubhead
+        storefrontPrimaryCtaLabel
+        storefrontSecondaryCtaLabel
+        storefrontTrust1Title
+        storefrontTrust1Sub
+        storefrontTrust2Title
+        storefrontTrust2Sub
+        storefrontTrust3Title
+        storefrontTrust3Sub
+        storefrontTrust4Title
+        storefrontTrust4Sub
+        storefrontFeature1Title
+        storefrontFeature1Body
+        storefrontFeature2Title
+        storefrontFeature2Body
+        storefrontFeature3Title
+        storefrontFeature3Body
+        storefrontFeature4Title
+        storefrontFeature4Body
+        storefrontFeature5Title
+        storefrontFeature5Body
+        storefrontFeature6Title
+        storefrontFeature6Body
+        storefrontGalleryHeading
+        storefrontGallerySubhead
+        storefrontShippingBlurb
+        storefrontDeliveryEstimate
+        storefrontInStockLabel
+        storefrontOutOfStockLabel
+        storefrontDisclaimer
+        storefrontShowAuthLinks
+        storefrontShowSearch
       }
     }
   }

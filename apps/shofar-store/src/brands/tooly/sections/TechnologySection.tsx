@@ -8,51 +8,49 @@
  * - Glass morphism styling
  */
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import type { Feature } from "../lib/storefront-content";
 
 interface TechnologySectionProps {
   className?: string;
+  /** Features from Vendure Channel customFields */
+  features?: [Feature, Feature, Feature, Feature, Feature, Feature];
 }
 
-const FEATURES = [
+// Default features with icons (icons are code-controlled, text from Vendure)
+const DEFAULT_FEATURES = [
   {
-    icon: 'precision',
-    title: 'Precision Engineering',
-    description:
-      'CNC-machined from aerospace-grade aluminum with tolerances under 0.01mm for unmatched accuracy.',
+    icon: "precision",
+    title: "Precision Machining",
+    body: "CNC-machined from aerospace-grade aluminum with tolerances under 0.01mm.",
   },
   {
-    icon: 'airflow',
-    title: 'Advanced Airflow',
-    description:
-      'Patented vortex chamber design delivers consistent, smooth draws every time.',
+    icon: "airflow",
+    title: "Optimized Airflow",
+    body: "Engineered chamber design delivers smooth, consistent draws every time.",
   },
   {
-    icon: 'temp',
-    title: 'Temperature Control',
-    description:
-      'Intelligent heating system maintains optimal temperature for perfect results.',
+    icon: "materials",
+    title: "Premium Materials",
+    body: "Medical-grade stainless steel and borosilicate glass for purity.",
   },
   {
-    icon: 'battery',
-    title: 'All-Day Battery',
-    description:
-      'High-capacity lithium cell provides 50+ sessions on a single charge.',
+    icon: "design",
+    title: "Easy Maintenance",
+    body: "Simple disassembly and cleaning. Dishwasher-safe components.",
   },
   {
-    icon: 'materials',
-    title: 'Premium Materials',
-    description:
-      'Medical-grade stainless steel and borosilicate glass for pure flavor.',
+    icon: "temp",
+    title: "Ergonomic Design",
+    body: "Balanced weight distribution and textured grip for comfortable use.",
   },
   {
-    icon: 'design',
-    title: 'Ergonomic Design',
-    description:
-      'Balanced weight distribution and textured grip for comfortable extended use.',
+    icon: "battery",
+    title: "Travel Ready",
+    body: "Compact form factor with included protective case for portability.",
   },
 ];
 
@@ -115,11 +113,21 @@ function FeatureIcon({ type }: { type: string }): React.ReactElement {
   );
 }
 
-export function TechnologySection({ className }: TechnologySectionProps): React.ReactElement {
+export function TechnologySection({
+  className,
+  features,
+}: TechnologySectionProps): React.ReactElement {
+  // Merge features prop with default icons
+  const displayFeatures = DEFAULT_FEATURES.map((defaultFeature, index) => ({
+    icon: defaultFeature.icon,
+    title: features?.[index]?.title ?? defaultFeature.title,
+    body: features?.[index]?.body ?? defaultFeature.body,
+  }));
+
   return (
     <section
       id="technology"
-      className={cn('py-16 md:py-24', className)}
+      className={cn("py-16 md:py-24", className)}
       aria-labelledby="technology-heading"
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -132,40 +140,43 @@ export function TechnologySection({ className }: TechnologySectionProps): React.
             Engineered for Excellence
           </h2>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            Every detail has been meticulously designed to deliver the ultimate experience
+            Every detail has been meticulously designed to deliver the ultimate
+            experience
           </p>
         </div>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURES.map((feature, index) => (
+          {displayFeatures.map((feature, index) => (
             <div
               key={index}
               className={cn(
-                'group p-6 rounded-xl',
-                'bg-white/[0.04] border border-white/[0.08]',
-                'hover:bg-white/[0.06] hover:border-white/[0.12]',
-                'transition-all duration-300'
+                "group p-6 rounded-xl",
+                "bg-white/[0.04] border border-white/[0.08]",
+                "hover:bg-white/[0.06] hover:border-white/[0.12]",
+                "transition-all duration-300",
               )}
             >
               {/* Icon */}
               <div
                 className={cn(
-                  'w-14 h-14 rounded-xl mb-4',
-                  'bg-gradient-to-br from-[#02fcef]/10 to-[#a02bfe]/10',
-                  'border border-white/[0.08]',
-                  'flex items-center justify-center',
-                  'text-[#02fcef] group-hover:text-white',
-                  'transition-colors duration-300'
+                  "w-14 h-14 rounded-xl mb-4",
+                  "bg-gradient-to-br from-[#02fcef]/10 to-[#a02bfe]/10",
+                  "border border-white/[0.08]",
+                  "flex items-center justify-center",
+                  "text-[#02fcef] group-hover:text-white",
+                  "transition-colors duration-300",
                 )}
               >
                 <FeatureIcon type={feature.icon} />
               </div>
 
               {/* Content */}
-              <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-              <p className="text-sm text-white/60 leading-relaxed">
-                {feature.description}
+              <h3 className="text-lg font-semibold text-white mb-2 line-clamp-1">
+                {feature.title}
+              </h3>
+              <p className="text-sm text-white/60 leading-relaxed line-clamp-3">
+                {feature.body}
               </p>
             </div>
           ))}
@@ -175,6 +186,6 @@ export function TechnologySection({ className }: TechnologySectionProps): React.
   );
 }
 
-TechnologySection.displayName = 'TechnologySection';
+TechnologySection.displayName = "TechnologySection";
 
 export default TechnologySection;

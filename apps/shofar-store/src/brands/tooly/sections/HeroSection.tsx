@@ -17,6 +17,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ButtonPrimary } from "../components/ui/ButtonPrimary";
 import { ButtonSecondary } from "../components/ui/ButtonSecondary";
+import type { HeroContent } from "../lib/storefront-content";
 
 interface ProductAsset {
   id: string;
@@ -32,6 +33,8 @@ interface HeroSectionProps {
   featuredAsset?: ProductAsset | null;
   /** Product name for alt text */
   productName?: string;
+  /** Content from Vendure Channel customFields */
+  content?: HeroContent;
 }
 
 export function HeroSection({
@@ -39,6 +42,7 @@ export function HeroSection({
   heroImage,
   featuredAsset,
   productName = "TOOLY Device",
+  content,
 }: HeroSectionProps): React.ReactElement {
   // Use heroImage if available, fallback to product featuredAsset
   const backgroundImage = heroImage || featuredAsset?.preview || null;
@@ -113,7 +117,7 @@ export function HeroSection({
         <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-white/[0.08] border border-white/[0.14] backdrop-blur-md">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-sm text-white/70">
-            Premium Professional Tools
+            {content?.pill ?? "Precision Aroma Delivery"}
           </span>
         </div>
 
@@ -122,17 +126,21 @@ export function HeroSection({
           id="hero-heading"
           className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6"
         >
-          <span className="block">Precision.</span>
-          <span className="block bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe] bg-clip-text text-transparent">
-            Airflow.
+          <span className="block">
+            {content?.headlineLine1 ?? "Precision."}
           </span>
-          <span className="block">Perfection.</span>
+          <span className="block bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe] bg-clip-text text-transparent">
+            {content?.headlineAccent ?? "Aroma."}
+          </span>
+          <span className="block">
+            {content?.headlineLine3 ?? "Perfection."}
+          </span>
         </h1>
 
         {/* Subheadline */}
         <p className="text-lg md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto mb-10">
-          Experience the next generation of precision tools. Engineered for
-          professionals, designed for perfection.
+          {content?.subhead ??
+            "Experience the art of precision aroma delivery. Crafted for connoisseurs, designed for ritual."}
         </p>
 
         {/* CTAs */}
@@ -143,10 +151,10 @@ export function HeroSection({
             showArrow
             data-testid="cta-shop-now"
           >
-            Shop Now
+            {content?.primaryCtaLabel ?? "Shop Now"}
           </ButtonPrimary>
           <ButtonSecondary size="lg" onClick={handleLearnMore}>
-            Learn More
+            {content?.secondaryCtaLabel ?? "Learn More"}
           </ButtonSecondary>
         </div>
       </div>

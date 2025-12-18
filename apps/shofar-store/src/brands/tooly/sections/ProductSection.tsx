@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { ButtonPrimary } from "../components/ui/ButtonPrimary";
 import { ProductCarousel } from "../components/ui/ProductCarousel";
 import { useCart } from "@/contexts/CartContext";
+import type { ShopContent } from "../lib/storefront-content";
 
 interface VariantFacetValue {
   id: string;
@@ -68,6 +69,8 @@ interface ProductSectionProps {
   className?: string;
   /** Product data from Vendure */
   product?: ProductData | null;
+  /** Shop content from Vendure Channel customFields */
+  shopContent?: ShopContent;
 }
 
 // Color code to CSS color mapping
@@ -112,6 +115,7 @@ function getVariantFinish(facetValues: VariantFacetValue[]): string | null {
 export function ProductSection({
   className,
   product,
+  shopContent,
 }: ProductSectionProps): React.ReactElement {
   const { addToCart } = useCart();
   const hasProduct = !!product && product.variants.length > 0;
@@ -129,24 +133,32 @@ export function ProductSection({
     }
   };
 
-  // Get stock status display
+  // Get stock status display (uses shopContent labels)
   const getStockDisplay = (stockLevel: string) => {
     const level = stockLevel.toUpperCase();
+    const inStockLabel = shopContent?.inStockLabel ?? "In Stock";
+    const outOfStockLabel = shopContent?.outOfStockLabel ?? "Out of Stock";
+    const deliveryEstimate =
+      shopContent?.deliveryEstimate ?? "Ships within 3-5 business days";
+
     if (level === "IN_STOCK" || level === "IN STOCK") {
       return {
         color: "bg-emerald-400",
-        text: "In Stock - Ships within 24h",
+        text: `${inStockLabel} - ${deliveryEstimate}`,
       };
     }
     if (level === "LOW_STOCK" || level === "LOW STOCK") {
       return { color: "bg-yellow-400", text: "Low Stock - Order Soon" };
     }
-    return { color: "bg-red-400", text: "Out of Stock" };
+    return { color: "bg-red-400", text: outOfStockLabel };
   };
 
   const stockStatus = selectedVariant
     ? getStockDisplay(selectedVariant.stockLevel)
-    : { color: "bg-emerald-400", text: "In Stock - Ships within 24h" };
+    : {
+        color: "bg-emerald-400",
+        text: `${shopContent?.inStockLabel ?? "In Stock"} - ${shopContent?.deliveryEstimate ?? "Ships within 3-5 business days"}`,
+      };
 
   return (
     <section
@@ -340,7 +352,8 @@ export function ProductSection({
                   Add to Cart
                 </ButtonPrimary>
                 <p className="text-xs text-white/40 text-center">
-                  Free shipping on orders over $100
+                  {shopContent?.shippingBlurb ??
+                    "Shipping calculated at checkout"}
                 </p>
               </div>
             </div>

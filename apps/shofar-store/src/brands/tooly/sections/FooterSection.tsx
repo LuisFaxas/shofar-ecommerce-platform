@@ -8,59 +8,77 @@
  * - Newsletter signup placeholder
  */
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface FooterSectionProps {
   className?: string;
+  /** Footer disclaimer from Vendure Channel customFields */
+  disclaimer?: string;
 }
 
 const FOOTER_LINKS = {
   product: [
-    { label: 'Features', href: '#technology' },
-    { label: 'Gallery', href: '#gallery' },
-    { label: 'Reviews', href: '#reviews' },
-    { label: 'Accessories', href: '#accessories' },
+    { label: "Features", href: "#technology" },
+    { label: "Gallery", href: "#gallery" },
+    { label: "Reviews", href: "#reviews" },
+    { label: "Accessories", href: "#accessories" },
   ],
   support: [
-    { label: 'FAQ', href: '#faq' },
-    { label: 'Shipping', href: '#' },
-    { label: 'Returns', href: '#' },
-    { label: 'Contact', href: '#' },
+    { label: "FAQ", href: "#faq" },
+    { label: "Shipping", href: "#" },
+    { label: "Returns", href: "#" },
+    { label: "Contact", href: "#" },
   ],
   company: [
-    { label: 'About', href: '#' },
-    { label: 'Blog', href: '#' },
-    { label: 'Careers', href: '#' },
-    { label: 'Press', href: '#' },
+    { label: "About", href: "#" },
+    { label: "Blog", href: "#" },
+    { label: "Careers", href: "#" },
+    { label: "Press", href: "#" },
   ],
 };
 
 const SOCIAL_LINKS = [
   {
-    name: 'Twitter',
-    href: '#',
+    name: "Twitter",
+    href: "#",
     icon: (
       <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
     ),
   },
   {
-    name: 'Instagram',
-    href: '#',
+    name: "Instagram",
+    href: "#",
     icon: (
       <>
-        <rect x="2" y="2" width="20" height="20" rx="5" strokeWidth="2" fill="none" stroke="currentColor" />
-        <circle cx="12" cy="12" r="4" strokeWidth="2" fill="none" stroke="currentColor" />
+        <rect
+          x="2"
+          y="2"
+          width="20"
+          height="20"
+          rx="5"
+          strokeWidth="2"
+          fill="none"
+          stroke="currentColor"
+        />
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+          strokeWidth="2"
+          fill="none"
+          stroke="currentColor"
+        />
         <circle cx="18" cy="6" r="1" fill="currentColor" />
       </>
     ),
   },
   {
-    name: 'YouTube',
-    href: '#',
+    name: "YouTube",
+    href: "#",
     icon: (
       <path
         fillRule="evenodd"
@@ -71,15 +89,18 @@ const SOCIAL_LINKS = [
   },
 ];
 
-export function FooterSection({ className }: FooterSectionProps): React.ReactElement {
+export function FooterSection({
+  className,
+  disclaimer,
+}: FooterSectionProps): React.ReactElement {
   const handleBackToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <footer
       id="footer"
-      className={cn('py-16 md:py-20 border-t border-white/[0.08]', className)}
+      className={cn("py-16 md:py-20 border-t border-white/[0.08]", className)}
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">
@@ -108,16 +129,20 @@ export function FooterSection({ className }: FooterSectionProps): React.ReactEle
                   key={social.name}
                   href={social.href}
                   className={cn(
-                    'w-10 h-10 rounded-lg',
-                    'bg-white/[0.04] border border-white/[0.08]',
-                    'flex items-center justify-center',
-                    'text-white/60 hover:text-white hover:bg-white/[0.08]',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50',
-                    'transition-all duration-200'
+                    "w-10 h-10 rounded-lg",
+                    "bg-white/[0.04] border border-white/[0.08]",
+                    "flex items-center justify-center",
+                    "text-white/60 hover:text-white hover:bg-white/[0.08]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
+                    "transition-all duration-200",
                   )}
                   aria-label={social.name}
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     {social.icon}
                   </svg>
                 </a>
@@ -178,7 +203,9 @@ export function FooterSection({ className }: FooterSectionProps): React.ReactEle
 
           {/* Newsletter (optional) */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1">
-            <h3 className="text-sm font-semibold text-white mb-4">Stay Updated</h3>
+            <h3 className="text-sm font-semibold text-white mb-4">
+              Stay Updated
+            </h3>
             <p className="text-sm text-white/60 mb-4">
               Get the latest news and exclusive offers.
             </p>
@@ -187,22 +214,22 @@ export function FooterSection({ className }: FooterSectionProps): React.ReactEle
                 type="email"
                 placeholder="Email"
                 className={cn(
-                  'flex-1 h-10 px-4 rounded-lg',
-                  'bg-white/[0.04] border border-white/[0.14]',
-                  'text-white placeholder-white/40 text-sm',
-                  'focus:outline-none focus:ring-2 focus:ring-white/20',
-                  'transition-all duration-200'
+                  "flex-1 h-10 px-4 rounded-lg",
+                  "bg-white/[0.04] border border-white/[0.14]",
+                  "text-white placeholder-white/40 text-sm",
+                  "focus:outline-none focus:ring-2 focus:ring-white/20",
+                  "transition-all duration-200",
                 )}
               />
               <button
                 type="submit"
                 className={cn(
-                  'h-10 px-4 rounded-lg',
-                  'bg-white/[0.08] border border-white/[0.14]',
-                  'text-white text-sm font-medium',
-                  'hover:bg-white/[0.12]',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50',
-                  'transition-all duration-200'
+                  "h-10 px-4 rounded-lg",
+                  "bg-white/[0.08] border border-white/[0.14]",
+                  "text-white text-sm font-medium",
+                  "hover:bg-white/[0.12]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
+                  "transition-all duration-200",
                 )}
               >
                 Subscribe
@@ -213,10 +240,17 @@ export function FooterSection({ className }: FooterSectionProps): React.ReactEle
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/[0.08]">
+          {/* Disclaimer */}
+          {disclaimer && (
+            <p className="text-xs text-white/30 text-center mb-4">
+              {disclaimer}
+            </p>
+          )}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Copyright */}
             <p className="text-sm text-white/40">
-              &copy; {new Date().getFullYear()} TOOLY by SHOFAR. All rights reserved.
+              &copy; {new Date().getFullYear()} TOOLY by SHOFAR. All rights
+              reserved.
             </p>
 
             {/* Legal Links */}
@@ -236,14 +270,24 @@ export function FooterSection({ className }: FooterSectionProps): React.ReactEle
               <button
                 onClick={handleBackToTop}
                 className={cn(
-                  'flex items-center gap-1 text-sm text-white/40',
-                  'hover:text-white/60 transition-colors',
-                  'focus-visible:outline-none focus-visible:underline'
+                  "flex items-center gap-1 text-sm text-white/40",
+                  "hover:text-white/60 transition-colors",
+                  "focus-visible:outline-none focus-visible:underline",
                 )}
               >
                 Back to top
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 15l7-7 7 7"
+                  />
                 </svg>
               </button>
             </div>
@@ -254,6 +298,6 @@ export function FooterSection({ className }: FooterSectionProps): React.ReactEle
   );
 }
 
-FooterSection.displayName = 'FooterSection';
+FooterSection.displayName = "FooterSection";
 
 export default FooterSection;

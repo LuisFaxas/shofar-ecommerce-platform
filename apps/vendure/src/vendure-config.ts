@@ -331,6 +331,383 @@ export const config: VendureConfig = {
         ],
         ui: { tab: "Marketing" },
       },
+      // ============================================================================
+      // STOREFRONT CONTENT - Hero Section
+      // ============================================================================
+      {
+        name: "storefrontHeroPill",
+        type: "string",
+        nullable: true,
+        defaultValue: "Precision Aroma Delivery",
+        label: [{ languageCode: LanguageCode.en, value: "Hero Badge Text" }],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              "Small badge text above headline (e.g., 'Precision Aroma Delivery')",
+          },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontHeroHeadlineLine1",
+        type: "string",
+        nullable: true,
+        defaultValue: "Precision.",
+        label: [
+          { languageCode: LanguageCode.en, value: "Hero Headline Line 1" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontHeroHeadlineAccent",
+        type: "string",
+        nullable: true,
+        defaultValue: "Aroma.",
+        label: [
+          {
+            languageCode: LanguageCode.en,
+            value: "Hero Headline Accent (gradient)",
+          },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontHeroHeadlineLine3",
+        type: "string",
+        nullable: true,
+        defaultValue: "Perfection.",
+        label: [
+          { languageCode: LanguageCode.en, value: "Hero Headline Line 3" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontHeroSubhead",
+        type: "text",
+        nullable: true,
+        defaultValue:
+          "Experience the art of precision aroma delivery. Crafted for connoisseurs, designed for ritual.",
+        label: [{ languageCode: LanguageCode.en, value: "Hero Subheadline" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontPrimaryCtaLabel",
+        type: "string",
+        nullable: true,
+        defaultValue: "Shop Now",
+        label: [{ languageCode: LanguageCode.en, value: "Primary CTA Label" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontSecondaryCtaLabel",
+        type: "string",
+        nullable: true,
+        defaultValue: "Learn More",
+        label: [
+          { languageCode: LanguageCode.en, value: "Secondary CTA Label" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      // ============================================================================
+      // STOREFRONT CONTENT - Trust Badges (4)
+      // ============================================================================
+      {
+        name: "storefrontTrust1Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Secure Checkout",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 1 Title" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontTrust1Sub",
+        type: "string",
+        nullable: true,
+        defaultValue: "256-bit encryption",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 1 Subtitle" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontTrust2Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Premium Quality",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 2 Title" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontTrust2Sub",
+        type: "string",
+        nullable: true,
+        defaultValue: "Crafted with care",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 2 Subtitle" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontTrust3Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Easy Returns",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 3 Title" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontTrust3Sub",
+        type: "string",
+        nullable: true,
+        defaultValue: "30-day return policy",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 3 Subtitle" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontTrust4Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Support",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 4 Title" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontTrust4Sub",
+        type: "string",
+        nullable: true,
+        defaultValue: "Email support available",
+        label: [
+          { languageCode: LanguageCode.en, value: "Trust Badge 4 Subtitle" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      // ============================================================================
+      // STOREFRONT CONTENT - Feature Grid (6 cards)
+      // ============================================================================
+      {
+        name: "storefrontFeature1Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Precision Machining",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 1 Title" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature1Body",
+        type: "text",
+        nullable: true,
+        defaultValue:
+          "CNC-machined from aerospace-grade aluminum with tolerances under 0.01mm.",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 1 Body" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature2Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Optimized Airflow",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 2 Title" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature2Body",
+        type: "text",
+        nullable: true,
+        defaultValue:
+          "Engineered chamber design delivers smooth, consistent draws every time.",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 2 Body" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature3Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Premium Materials",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 3 Title" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature3Body",
+        type: "text",
+        nullable: true,
+        defaultValue:
+          "Medical-grade stainless steel and borosilicate glass for purity.",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 3 Body" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature4Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Easy Maintenance",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 4 Title" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature4Body",
+        type: "text",
+        nullable: true,
+        defaultValue:
+          "Simple disassembly and cleaning. Dishwasher-safe components.",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 4 Body" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature5Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Ergonomic Design",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 5 Title" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature5Body",
+        type: "text",
+        nullable: true,
+        defaultValue:
+          "Balanced weight distribution and textured grip for comfortable use.",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 5 Body" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature6Title",
+        type: "string",
+        nullable: true,
+        defaultValue: "Travel Ready",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 6 Title" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFeature6Body",
+        type: "text",
+        nullable: true,
+        defaultValue:
+          "Compact form factor with included protective case for portability.",
+        label: [{ languageCode: LanguageCode.en, value: "Feature 6 Body" }],
+        ui: { tab: "Storefront" },
+      },
+      // ============================================================================
+      // STOREFRONT CONTENT - Gallery Section
+      // ============================================================================
+      {
+        name: "storefrontGalleryHeading",
+        type: "string",
+        nullable: true,
+        defaultValue: "Gallery",
+        label: [
+          { languageCode: LanguageCode.en, value: "Gallery Section Heading" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontGallerySubhead",
+        type: "string",
+        nullable: true,
+        defaultValue: "Every angle showcases the precision craftsmanship",
+        label: [
+          { languageCode: LanguageCode.en, value: "Gallery Section Subhead" },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      // ============================================================================
+      // STOREFRONT CONTENT - Shop Widget / Product Section
+      // ============================================================================
+      {
+        name: "storefrontShippingBlurb",
+        type: "string",
+        nullable: true,
+        defaultValue: "Shipping calculated at checkout",
+        label: [{ languageCode: LanguageCode.en, value: "Shipping Blurb" }],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              "Text shown near price (e.g., 'Free shipping over $100' or 'Shipping calculated at checkout')",
+          },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontDeliveryEstimate",
+        type: "string",
+        nullable: true,
+        defaultValue: "Ships within 3-5 business days",
+        label: [{ languageCode: LanguageCode.en, value: "Delivery Estimate" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontInStockLabel",
+        type: "string",
+        nullable: true,
+        defaultValue: "In Stock",
+        label: [{ languageCode: LanguageCode.en, value: "In Stock Label" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontOutOfStockLabel",
+        type: "string",
+        nullable: true,
+        defaultValue: "Out of Stock",
+        label: [{ languageCode: LanguageCode.en, value: "Out of Stock Label" }],
+        ui: { tab: "Storefront" },
+      },
+      // ============================================================================
+      // STOREFRONT CONTENT - Footer / Compliance
+      // ============================================================================
+      {
+        name: "storefrontDisclaimer",
+        type: "text",
+        nullable: true,
+        defaultValue: "For aromatic and sensory evaluation purposes only.",
+        label: [{ languageCode: LanguageCode.en, value: "Footer Disclaimer" }],
+        ui: { tab: "Storefront" },
+      },
+      // ============================================================================
+      // STOREFRONT CONTENT - Header Toggles
+      // ============================================================================
+      {
+        name: "storefrontShowAuthLinks",
+        type: "boolean",
+        nullable: true,
+        defaultValue: false,
+        label: [
+          { languageCode: LanguageCode.en, value: "Show Sign In/Up Links" },
+        ],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              "Enable authentication links in header (disable if auth not ready)",
+          },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontShowSearch",
+        type: "boolean",
+        nullable: true,
+        defaultValue: false,
+        label: [{ languageCode: LanguageCode.en, value: "Show Search" }],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              "Enable search functionality in header (disable if search not ready)",
+          },
+        ],
+        ui: { tab: "Storefront" },
+      },
     ],
   },
   logger: new DefaultLogger({ level: IS_DEV ? LogLevel.Debug : LogLevel.Info }),

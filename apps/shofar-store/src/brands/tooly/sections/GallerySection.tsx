@@ -14,6 +14,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import type { GalleryContent } from "../lib/storefront-content";
 
 interface GalleryAsset {
   id: string;
@@ -28,6 +29,8 @@ interface GallerySectionProps {
   assets?: GalleryAsset[] | null;
   /** Marketing gallery assets from Channel (takes priority) */
   channelGalleryAssets?: GalleryAsset[] | null;
+  /** Content from Vendure Channel customFields */
+  content?: GalleryContent;
 }
 
 const DEFAULT_GALLERY_ITEMS = [
@@ -43,6 +46,7 @@ export function GallerySection({
   className,
   assets,
   channelGalleryAssets,
+  content,
 }: GallerySectionProps): React.ReactElement {
   // Prioritize channel marketing gallery, fallback to product assets, then placeholders
   const effectiveAssets = channelGalleryAssets?.length
@@ -64,10 +68,11 @@ export function GallerySection({
             id="gallery-heading"
             className="text-3xl md:text-4xl font-bold text-white mb-4"
           >
-            Gallery
+            {content?.heading ?? "Gallery"}
           </h2>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            Every angle showcases the precision craftsmanship of TOOLY
+            {content?.subhead ??
+              "Every angle showcases the precision craftsmanship"}
           </p>
         </div>
 

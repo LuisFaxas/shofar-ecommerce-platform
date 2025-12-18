@@ -8,36 +8,47 @@
  * - Fixed dimensions for zero CLS
  */
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import type { TrustBadge } from "../lib/storefront-content";
 
 interface CredibilitySectionProps {
   className?: string;
+  /** Trust badges from Vendure Channel customFields */
+  trustBadges?: [TrustBadge, TrustBadge, TrustBadge, TrustBadge];
 }
 
+// Stats remain hardcoded for now (could be made dynamic later)
 const STATS = [
-  { value: '10,000+', label: 'Happy Customers' },
-  { value: '4.9', label: 'Average Rating', stars: true },
-  { value: '99%', label: 'Satisfaction Rate' },
-  { value: '2 Year', label: 'Warranty' },
+  { value: "10,000+", label: "Happy Customers" },
+  { value: "4.9", label: "Average Rating", stars: true },
+  { value: "99%", label: "Satisfaction Rate" },
+  { value: "2 Year", label: "Warranty" },
 ];
 
-const TRUST_BADGES = [
-  { icon: 'shield', label: 'Secure Checkout' },
-  { icon: 'truck', label: 'Free Shipping' },
-  { icon: 'refresh', label: '30-Day Returns' },
-  { icon: 'support', label: '24/7 Support' },
+// Default trust badges (used when no content prop provided)
+const DEFAULT_TRUST_BADGES = [
+  { icon: "shield", title: "Secure Checkout", subtitle: "256-bit encryption" },
+  { icon: "truck", title: "Premium Quality", subtitle: "Crafted with care" },
+  { icon: "refresh", title: "Easy Returns", subtitle: "30-day return policy" },
+  { icon: "support", title: "Support", subtitle: "Email support available" },
 ];
 
 function StarRating({ rating = 5 }: { rating?: number }): React.ReactElement {
   return (
-    <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+    <div
+      className="flex items-center gap-0.5"
+      aria-label={`${rating} out of 5 stars`}
+    >
       {[...Array(5)].map((_, i) => (
         <svg
           key={i}
-          className={cn('w-5 h-5', i < rating ? 'text-yellow-400' : 'text-white/20')}
+          className={cn(
+            "w-5 h-5",
+            i < rating ? "text-yellow-400" : "text-white/20",
+          )}
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -93,11 +104,21 @@ function TrustIcon({ type }: { type: string }): React.ReactElement {
   );
 }
 
-export function CredibilitySection({ className }: CredibilitySectionProps): React.ReactElement {
+export function CredibilitySection({
+  className,
+  trustBadges,
+}: CredibilitySectionProps): React.ReactElement {
+  // Merge trustBadges with default icons
+  const badges = DEFAULT_TRUST_BADGES.map((defaultBadge, index) => ({
+    icon: defaultBadge.icon,
+    title: trustBadges?.[index]?.title ?? defaultBadge.title,
+    subtitle: trustBadges?.[index]?.subtitle ?? defaultBadge.subtitle,
+  }));
+
   return (
     <section
       id="credibility"
-      className={cn('py-16 md:py-24 bg-[#0d1218]', className)}
+      className={cn("py-16 md:py-24 bg-[#0d1218]", className)}
       aria-labelledby="credibility-heading"
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -110,7 +131,8 @@ export function CredibilitySection({ className }: CredibilitySectionProps): Reac
             Trusted by Professionals Worldwide
           </p>
           <p className="text-white/60 max-w-xl mx-auto">
-            Join thousands of satisfied customers who have elevated their craft with TOOLY
+            Join thousands of satisfied customers who have elevated their craft
+            with TOOLY
           </p>
         </div>
 
@@ -120,9 +142,9 @@ export function CredibilitySection({ className }: CredibilitySectionProps): Reac
             <div
               key={index}
               className={cn(
-                'p-6 rounded-xl text-center',
-                'bg-white/[0.04] border border-white/[0.08]',
-                'backdrop-blur-sm'
+                "p-6 rounded-xl text-center",
+                "bg-white/[0.04] border border-white/[0.08]",
+                "backdrop-blur-sm",
               )}
             >
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
@@ -136,18 +158,25 @@ export function CredibilitySection({ className }: CredibilitySectionProps): Reac
 
         {/* Trust Badges */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {TRUST_BADGES.map((badge, index) => (
+          {badges.map((badge, index) => (
             <div
               key={index}
               className={cn(
-                'flex items-center gap-3 p-4 rounded-lg',
-                'bg-white/[0.02] border border-white/[0.06]'
+                "flex items-center gap-3 p-4 rounded-lg",
+                "bg-white/[0.02] border border-white/[0.06]",
               )}
             >
               <div className="w-10 h-10 rounded-lg bg-white/[0.08] flex items-center justify-center text-white/60">
                 <TrustIcon type={badge.icon} />
               </div>
-              <span className="text-sm font-medium text-white/80">{badge.label}</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-white/80 line-clamp-1">
+                  {badge.title}
+                </span>
+                <span className="text-xs text-white/50 line-clamp-1">
+                  {badge.subtitle}
+                </span>
+              </div>
             </div>
           ))}
         </div>
@@ -156,6 +185,6 @@ export function CredibilitySection({ className }: CredibilitySectionProps): Reac
   );
 }
 
-CredibilitySection.displayName = 'CredibilitySection';
+CredibilitySection.displayName = "CredibilitySection";
 
 export default CredibilitySection;

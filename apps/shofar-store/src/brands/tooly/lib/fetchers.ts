@@ -15,6 +15,11 @@ import {
   type GetProductGalleryQuery,
   type GetAccessoriesCollectionQuery,
 } from "@shofar/api-client";
+import {
+  buildStorefrontContent,
+  type StorefrontContent,
+  type ChannelStorefrontFields,
+} from "./storefront-content";
 
 // ============================================================================
 // TYPES
@@ -47,6 +52,8 @@ export interface ToolyPageData {
   heroImage: string | null;
   /** Marketing gallery images from Channel customFields */
   homeGalleryAssets: HomeGalleryAsset[] | null;
+  /** Storefront content from Channel customFields (text, labels, toggles) */
+  storefrontContent: StorefrontContent;
 }
 
 // ============================================================================
@@ -85,6 +92,7 @@ interface ProductAndChannelData {
   product: ToolyProductData | null;
   heroImage: string | null;
   homeGalleryAssets: HomeGalleryAsset[] | null;
+  storefrontContent: StorefrontContent;
 }
 
 /**
@@ -101,36 +109,48 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
 
     if (error) {
       console.error("[TOOLY] Failed to fetch product:", error.message);
-      return { product: null, heroImage: null, homeGalleryAssets: null };
+      return {
+        product: null,
+        heroImage: null,
+        homeGalleryAssets: null,
+        storefrontContent: buildStorefrontContent(null),
+      };
     }
 
-    // Extract heroImage from activeChannel customFields
-    const heroImagePreview =
-      (
-        data?.activeChannel?.customFields as {
+    // Extract customFields from activeChannel
+    const customFields = data?.activeChannel?.customFields as
+      | (ChannelStorefrontFields & {
           heroImage?: { preview?: string };
-        }
-      )?.heroImage?.preview ?? null;
+          homeGalleryAssets?: HomeGalleryAsset[];
+        })
+      | null;
+
+    // Extract heroImage from activeChannel customFields
+    const heroImagePreview = customFields?.heroImage?.preview ?? null;
 
     // Build full URL for heroImage
     const heroImage = buildAssetUrl(heroImagePreview);
 
     // Extract homeGalleryAssets from activeChannel customFields
-    const homeGalleryAssets =
-      (
-        data?.activeChannel?.customFields as {
-          homeGalleryAssets?: HomeGalleryAsset[];
-        }
-      )?.homeGalleryAssets ?? null;
+    const homeGalleryAssets = customFields?.homeGalleryAssets ?? null;
+
+    // Build storefront content with fallbacks
+    const storefrontContent = buildStorefrontContent(customFields);
 
     return {
       product: data?.product ?? null,
       heroImage,
       homeGalleryAssets,
+      storefrontContent,
     };
   } catch (err) {
     console.error("[TOOLY] Product fetch error:", err);
-    return { product: null, heroImage: null, homeGalleryAssets: null };
+    return {
+      product: null,
+      heroImage: null,
+      homeGalleryAssets: null,
+      storefrontContent: buildStorefrontContent(null),
+    };
   }
 }
 
@@ -208,6 +228,7 @@ export async function fetchToolyPageData(): Promise<ToolyPageData> {
     accessories,
     heroImage: productAndChannel.heroImage,
     homeGalleryAssets: productAndChannel.homeGalleryAssets,
+    storefrontContent: productAndChannel.storefrontContent,
   };
 }
 

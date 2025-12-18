@@ -34,6 +34,7 @@ import {
   augmentWithMockData,
   getDebugBannerProps,
 } from "./lib/debug-mock";
+import { getDefaultStorefrontContent } from "./lib/storefront-content";
 
 // Import design tokens
 import "./styles/tokens.css";
@@ -83,21 +84,50 @@ function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
           heroImage={effectiveData?.heroImage}
           featuredAsset={effectiveData?.product?.featuredAsset}
           productName={effectiveData?.product?.name}
+          content={
+            effectiveData?.storefrontContent?.hero ??
+            getDefaultStorefrontContent().hero
+          }
         />
-        <CredibilitySection />
-        <TechnologySection />
+        <CredibilitySection
+          trustBadges={
+            effectiveData?.storefrontContent?.trustBadges ??
+            getDefaultStorefrontContent().trustBadges
+          }
+        />
+        <TechnologySection
+          features={
+            effectiveData?.storefrontContent?.features ??
+            getDefaultStorefrontContent().features
+          }
+        />
         <GallerySection
           assets={effectiveData?.gallery?.assets}
           channelGalleryAssets={effectiveData?.homeGalleryAssets}
+          content={
+            effectiveData?.storefrontContent?.gallery ??
+            getDefaultStorefrontContent().gallery
+          }
         />
-        <ProductSection product={effectiveData?.product} />
+        <ProductSection
+          product={effectiveData?.product}
+          shopContent={
+            effectiveData?.storefrontContent?.shop ??
+            getDefaultStorefrontContent().shop
+          }
+        />
         <AccessoriesSection accessories={effectiveData?.accessories} />
         <ReviewsSection />
         <FaqSection />
       </main>
 
       {/* Footer */}
-      <FooterSection />
+      <FooterSection
+        disclaimer={
+          effectiveData?.storefrontContent?.disclaimer ??
+          getDefaultStorefrontContent().disclaimer
+        }
+      />
 
       {/* Cart Drawer (renders as portal-like overlay) */}
       <CartDrawer />

@@ -60,6 +60,7 @@ query GetToolyProduct($slug: String!) {
     id
     code
     customFields {
+      # Marketing assets
       heroImage {
         id
         preview
@@ -71,6 +72,49 @@ query GetToolyProduct($slug: String!) {
         source
         name
       }
+      # Hero section
+      storefrontHeroPill
+      storefrontHeroHeadlineLine1
+      storefrontHeroHeadlineAccent
+      storefrontHeroHeadlineLine3
+      storefrontHeroSubhead
+      storefrontPrimaryCtaLabel
+      storefrontSecondaryCtaLabel
+      # Trust badges (4)
+      storefrontTrust1Title
+      storefrontTrust1Sub
+      storefrontTrust2Title
+      storefrontTrust2Sub
+      storefrontTrust3Title
+      storefrontTrust3Sub
+      storefrontTrust4Title
+      storefrontTrust4Sub
+      # Feature grid (6)
+      storefrontFeature1Title
+      storefrontFeature1Body
+      storefrontFeature2Title
+      storefrontFeature2Body
+      storefrontFeature3Title
+      storefrontFeature3Body
+      storefrontFeature4Title
+      storefrontFeature4Body
+      storefrontFeature5Title
+      storefrontFeature5Body
+      storefrontFeature6Title
+      storefrontFeature6Body
+      # Gallery section
+      storefrontGalleryHeading
+      storefrontGallerySubhead
+      # Shop widget / product section
+      storefrontShippingBlurb
+      storefrontDeliveryEstimate
+      storefrontInStockLabel
+      storefrontOutOfStockLabel
+      # Footer / compliance
+      storefrontDisclaimer
+      # Header toggles
+      storefrontShowAuthLinks
+      storefrontShowSearch
     }
   }
 }
