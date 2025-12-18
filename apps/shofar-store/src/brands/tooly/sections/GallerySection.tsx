@@ -1,12 +1,14 @@
 /**
  * GallerySection - Product image gallery
- * WO 3.1 / 3.2 Implementation
+ * WO 3.1 / 3.2 Implementation + WO-CONTENT-02 Phase D Hotfix
  *
  * Features:
  * - 6-image grid with glass border placeholders
- * - Fixed 16:9 aspect ratio for zero CLS
- * - Hover effects
+ * - Fixed 16:9 aspect ratio for zero CLS (featured: square on desktop)
+ * - Images fill tiles completely with no gray gaps
+ * - Hover effects with label overlay
  * - Accepts optional gallery data from Vendure
+ * - Content from Vendure Channel customFields
  */
 
 "use client";
@@ -91,8 +93,12 @@ export function GallerySection({
                   key={asset?.id || `placeholder-${index}`}
                   className={cn(
                     "group relative overflow-hidden rounded-xl",
-                    "bg-white/[0.04] border border-white/[0.08]",
-                    "hover:border-white/[0.16] transition-all duration-300",
+                    // Only show glass background when no image (placeholder)
+                    asset?.preview
+                      ? "bg-[#0d1218]"
+                      : "bg-white/[0.04] border border-white/[0.08]",
+                    !asset?.preview && "hover:border-white/[0.16]",
+                    "transition-all duration-300",
                     // Featured item spans 2 columns on larger screens
                     index === 0 && "md:col-span-2 md:row-span-2",
                   )}
@@ -100,7 +106,7 @@ export function GallerySection({
                   {/* Fixed aspect ratio container */}
                   <div
                     className={cn(
-                      "aspect-video relative",
+                      "aspect-video relative w-full h-full",
                       index === 0 && "md:aspect-square",
                     )}
                   >
@@ -109,7 +115,7 @@ export function GallerySection({
                         src={asset.preview}
                         alt={label}
                         fill
-                        className="object-cover"
+                        className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                         sizes={
                           index === 0
                             ? "(max-width: 768px) 100vw, 66vw"
