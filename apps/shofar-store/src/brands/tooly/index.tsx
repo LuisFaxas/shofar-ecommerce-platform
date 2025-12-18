@@ -118,7 +118,12 @@ function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
         />
         <AccessoriesSection accessories={effectiveData?.accessories} />
         <ReviewsSection />
-        <FaqSection />
+        <FaqSection
+          content={
+            effectiveData?.storefrontContent?.faq ??
+            getDefaultStorefrontContent().faq
+          }
+        />
       </main>
 
       {/* Footer */}
