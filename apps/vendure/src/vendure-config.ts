@@ -313,6 +313,24 @@ export const config: VendureConfig = {
           },
         ],
       },
+      {
+        name: "homeGalleryAssets",
+        type: "relation",
+        entity: Asset,
+        list: true,
+        eager: true,
+        nullable: true,
+        label: [
+          { languageCode: LanguageCode.en, value: "Homepage Gallery Images" },
+        ],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value: "Decorative images for homepage gallery section (max 6)",
+          },
+        ],
+        ui: { tab: "Marketing" },
+      },
     ],
   },
   logger: new DefaultLogger({ level: IS_DEV ? LogLevel.Debug : LogLevel.Info }),

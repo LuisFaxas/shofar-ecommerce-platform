@@ -65,6 +65,12 @@ query GetToolyProduct($slug: String!) {
         preview
         source
       }
+      homeGalleryAssets {
+        id
+        preview
+        source
+        name
+      }
     }
   }
 }
