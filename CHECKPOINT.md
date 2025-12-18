@@ -30,22 +30,15 @@
 **Branch**: `tooly-storefront`
 **Credentials**: superadmin / superadmin123
 
-### Vercel Deployment (PENDING)
+### Vercel Deployment (LIVE)
 
-**Environment Variables Required:**
-| Variable | Value |
-|----------|-------|
-| `NEXT_PUBLIC_VENDURE_SHOP_API_URL` | `https://vendure-server-production-75fc.up.railway.app/shop-api` |
-| `NEXT_PUBLIC_ASSET_HOST` | `pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev` |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_51SfTcZ...` (use full key) |
+| Service     | URL                                                    | Status    |
+| ----------- | ------------------------------------------------------ | --------- |
+| TOOLY Store | https://shofar-ecommerce-platform-shofar-st.vercel.app | ✅ Online |
 
-**Build Settings:**
-
-- **Framework**: Next.js (auto-detected)
-- **Root Directory**: `apps/shofar-store`
-- **Build Command**: `cd ../.. && pnpm install && pnpm --filter @shofar/shofar-store build`
-- **Output Directory**: `.next`
-- **Install Command**: (leave empty - handled in build command)
+**Deployed**: 2025-12-18
+**Branch**: `master` (merged from `tooly-storefront`)
+**Build Command**: `pnpm install --filter @shofar/shofar-store... && pnpm --filter @shofar/shofar-store build`
 
 ### Active Brand: TOOLY
 
@@ -68,7 +61,7 @@
 | Admin Organize | ➖     | Optional: Brand facet created, not required for single prod        |
 | Real Payment   | ✅     | Stripe WORKING! Local: XSG7ZEWV6LSGHJBR, Railway: 14M9T5V98G22UDCY |
 | Railway Deploy | ✅     | vendure-server + vendure-worker ONLINE, Stripe webhook configured  |
-| Vercel Deploy  | 🔜     | Ready to deploy shofar-store to Vercel                             |
+| Vercel Deploy  | ✅     | LIVE at shofar-ecommerce-platform-shofar-st.vercel.app             |
 
 ---
 
