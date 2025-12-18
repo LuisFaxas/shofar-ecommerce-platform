@@ -27,8 +27,25 @@
 | Stripe Webhook | https://vendure-server-production-75fc.up.railway.app/payments/stripe | ✅ Configured |
 
 **Railway Project**: `tooly-vendure-staging`
-**Branch**: `feature/frontend-polish`
+**Branch**: `tooly-storefront`
 **Credentials**: superadmin / superadmin123
+
+### Vercel Deployment (PENDING)
+
+**Environment Variables Required:**
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_VENDURE_SHOP_API_URL` | `https://vendure-server-production-75fc.up.railway.app/shop-api` |
+| `NEXT_PUBLIC_ASSET_HOST` | `pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev` |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_51SfTcZ...` (use full key) |
+
+**Build Settings:**
+
+- **Framework**: Next.js (auto-detected)
+- **Root Directory**: `apps/shofar-store`
+- **Build Command**: `cd ../.. && pnpm install && pnpm --filter @shofar/shofar-store build`
+- **Output Directory**: `.next`
+- **Install Command**: (leave empty - handled in build command)
 
 ### Active Brand: TOOLY
 
@@ -45,12 +62,13 @@
 | Payment        | ✅     | Test Payment (dummy) - ready for practice presale                  |
 | Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                     |
 | Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)           |
-| Product Images | ⚠️     | 11 images in `assets-import/`, needs upload to Railway Admin       |
+| Product Images | ✅     | 4 gallery + featuredAsset + heroImage uploaded to Railway          |
 | Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)         |
 | Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed   |
 | Admin Organize | ➖     | Optional: Brand facet created, not required for single prod        |
 | Real Payment   | ✅     | Stripe WORKING! Local: XSG7ZEWV6LSGHJBR, Railway: 14M9T5V98G22UDCY |
 | Railway Deploy | ✅     | vendure-server + vendure-worker ONLINE, Stripe webhook configured  |
+| Vercel Deploy  | 🔜     | Ready to deploy shofar-store to Vercel                             |
 
 ---
 
