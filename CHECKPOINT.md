@@ -25,19 +25,19 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                            |
-| -------------- | ------ | ---------------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                  |
-| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                       |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                         |
-| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                   |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)         |
-| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set             |
-| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)       |
-| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed |
-| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod      |
-| Real Payment   | ✅     | Stripe test mode WORKING! Order VN7PGZXUJBZV9JXM confirmed       |
+| Item           | Status | Notes                                                              |
+| -------------- | ------ | ------------------------------------------------------------------ |
+| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                    |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                         |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                           |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                  |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                     |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)           |
+| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set               |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)         |
+| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed   |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod        |
+| Real Payment   | ✅     | Stripe test mode WORKING! Orders confirmed (webhook state pending) |
 
 ---
 
@@ -126,14 +126,23 @@ packages/
 
 - **Status**: ✅ COMPLETE - Stripe test payments working!
 - **Branch**: `feature/frontend-polish`
-- **Test Order**: `VN7PGZXUJBZV9JXM` - $158.99 (test mode)
+- **Test Orders**:
+  - `VN7PGZXUJBZV9JXM` - $158.99 (test mode)
+  - `WVDGQZP9R6MNQZH4` - $158.99 (with webhook forwarding)
 - **Commits**:
   - `6972300` fix(web): gate setcustomerfororder and isolate shop/admin sessions
   - `5502cd7` fix(web): checkout mutation fields and input label styling
+  - `dbeecf9` docs(repo): update checkpoint with stripe success and next steps
 - **Bugs Fixed**:
   1. `Cannot set a Customer for the Order when already logged in` - Added activeCustomer check
   2. `Cannot read properties of undefined (reading 'map')` - Fixed SET_SHIPPING_METHOD_MUTATION to return all order fields
   3. Input label black background - Removed hardcoded bg color from floating label
+- **Stripe Setup Completed**:
+  - ✅ Stripe CLI installed via winget
+  - ✅ `stripe login` authenticated to Faxas Enterprise LLC sandbox
+  - ✅ `stripe listen --forward-to localhost:3001/payments/stripe` running
+  - ✅ Webhook secret updated in Vendure Admin (whsec_725f78aa...)
+  - ⚠️ Order state not updating to PaymentSettled (webhook processing issue)
 - **Files Modified**:
   - `apps/shofar-store/src/app/checkout/page.tsx` - activeCustomer check + full mutation fields
   - `apps/vendure/src/vendure-config.ts` - Cookie name isolation
