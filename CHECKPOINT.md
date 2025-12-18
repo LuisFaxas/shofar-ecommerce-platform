@@ -25,19 +25,19 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                                      |
-| -------------- | ------ | -------------------------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                            |
-| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                                 |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                                   |
-| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                          |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                             |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)                   |
-| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set                       |
-| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)                 |
-| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed           |
-| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod                |
-| Real Payment   | ⚠️     | Stripe captures funds, but order state not settling (webhook fix required) |
+| Item           | Status | Notes                                                            |
+| -------------- | ------ | ---------------------------------------------------------------- |
+| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                  |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                       |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                         |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                   |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)         |
+| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set             |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)       |
+| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod      |
+| Real Payment   | ✅     | Stripe WORKING! Order XSG7ZEWV6LSGHJBR → PaymentSettled          |
 
 ---
 
@@ -124,11 +124,12 @@ packages/
 
 ### MILESTONE 12: Stripe Payment Integration (2025-12-17)
 
-- **Status**: ⚠️ PARTIAL - Payments capture, order state not settling
+- **Status**: ✅ COMPLETE - Full Stripe flow working (PaymentSettled confirmed)
 - **Branch**: `feature/frontend-polish`
 - **Test Orders**:
-  - `VN7PGZXUJBZV9JXM` - $158.99 (test mode)
-  - `WVDGQZP9R6MNQZH4` - $158.99 (with webhook forwarding)
+  - `VN7PGZXUJBZV9JXM` - $158.99 (test mode, webhook not configured)
+  - `WVDGQZP9R6MNQZH4` - $158.99 (webhook configured, state stuck)
+  - `XSG7ZEWV6LSGHJBR` - $158.99 ✅ **PaymentSettled confirmed!**
 - **Commits**:
   - `6972300` fix(web): gate setcustomerfororder and isolate shop/admin sessions
   - `5502cd7` fix(web): checkout mutation fields and input label styling
@@ -519,10 +520,10 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ### Immediate (BLOCKING for Launch)
 
-1. **🔴 FIX WEBHOOK**: Orders must reach PaymentSettled state
-   - Debug why Vendure isn't processing Stripe webhooks
-   - Verify webhook endpoint `/payments/stripe` is receiving events
-   - Check Vendure logs for webhook errors
+1. **✅ WEBHOOK FIXED**: Orders reach PaymentSettled state
+   - Root cause: Webhook secret wasn't saving via Admin UI
+   - Fixed via Admin API update
+   - Confirmed working: Order `XSG7ZEWV6LSGHJBR` → PaymentSettled
 2. **Practice Presale**: Internal rehearsal (3 runs: incognito, normal, mobile)
 
 ### Production Prep (After Webhook Fixed)
