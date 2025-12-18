@@ -157,6 +157,15 @@ const ELIGIBLE_SHIPPING_QUERY = `
   }
 `;
 
+// Check if user is logged in (to avoid setCustomerForOrder error)
+const ACTIVE_CUSTOMER_QUERY = `
+  query ActiveCustomer {
+    activeCustomer {
+      id
+    }
+  }
+`;
+
 const SET_CUSTOMER_MUTATION = `
   mutation SetCustomer($input: CreateCustomerInput!) {
     setCustomerForOrder(input: $input) {
@@ -287,17 +296,29 @@ export default function CheckoutPage() {
       setError(null);
 
       try {
-        // Set customer info
-        const customerResult = await graphqlRequest<{
-          setCustomerForOrder:
-            | ActiveOrder
-            | { errorCode: string; message: string };
-        }>(SET_CUSTOMER_MUTATION, {
-          input: { firstName, lastName, emailAddress: email },
-        });
+        // Check if user is already logged in (to avoid "already logged in" error)
+        const activeCustomerData = await graphqlRequest<{
+          activeCustomer: { id: string } | null;
+        }>(ACTIVE_CUSTOMER_QUERY);
 
-        if ("errorCode" in customerResult.setCustomerForOrder) {
-          throw new Error(customerResult.setCustomerForOrder.message);
+        // Only set customer if not already logged in
+        if (!activeCustomerData.activeCustomer) {
+          const customerResult = await graphqlRequest<{
+            setCustomerForOrder:
+              | ActiveOrder
+              | { errorCode: string; message: string };
+          }>(SET_CUSTOMER_MUTATION, {
+            input: { firstName, lastName, emailAddress: email },
+          });
+
+          // If error contains "already logged in", just continue (fallback safety)
+          if ("errorCode" in customerResult.setCustomerForOrder) {
+            const errorMsg = customerResult.setCustomerForOrder.message;
+            if (!errorMsg.toLowerCase().includes("already logged in")) {
+              throw new Error(errorMsg);
+            }
+            // else: proceed anyway - customer is already set
+          }
         }
 
         // Set shipping address

@@ -75,6 +75,8 @@ export const config: VendureConfig = {
     },
     cookieOptions: {
       secret: process.env.COOKIE_SECRET || "cookie-secret-change-in-production",
+      // Use distinct cookie name to avoid collision with admin session on localhost
+      name: "vendure-shop-session",
     },
   },
   dbConnectionOptions: getDbConfig(),
