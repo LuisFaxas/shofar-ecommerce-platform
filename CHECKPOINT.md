@@ -27,7 +27,7 @@
 
 | Item           | Status | Notes                                                            |
 | -------------- | ------ | ---------------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: eb7c39e)                  |
+| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                  |
 | Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                       |
 | Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                         |
 | Payment        | ✅     | Test Payment (dummy) - ready for practice presale                |
@@ -129,7 +129,7 @@ packages/
 - **Test Order**: `VN7PGZXUJBZV9JXM` - $158.99 (test mode)
 - **Commits**:
   - `6972300` fix(web): gate setcustomerfororder and isolate shop/admin sessions
-  - (pending) fix(web): checkout mutation fields and input label styling
+  - `5502cd7` fix(web): checkout mutation fields and input label styling
 - **Bugs Fixed**:
   1. `Cannot set a Customer for the Order when already logged in` - Added activeCustomer check
   2. `Cannot read properties of undefined (reading 'map')` - Fixed SET_SHIPPING_METHOD_MUTATION to return all order fields
@@ -176,7 +176,7 @@ packages/
 
 ### MILESTONE 10: Stripe Payment Integration (2025-12-17)
 
-- **Status**: ⚠️ Code Complete (needs API keys)
+- **Status**: ✅ Complete (see Milestone 12 for final fixes)
 - **Branch**: `feature/stripe-payments`
 - **Commits**:
   - `6c19a3b` feat(vendure): enable stripe plugin (test mode)
@@ -188,15 +188,12 @@ packages/
   - Created `StripePaymentForm.tsx` component with Stripe Payment Element
   - Checkout page conditionally uses Stripe (if configured) or test payment
   - Created `docs/STRIPE-TESTING.md` with setup guide
-- **User Action Required**:
-  1. Get Stripe test API keys from https://dashboard.stripe.com/test/apikeys
-  2. Create Payment Method in Admin UI (Settings → Payment Methods → Create)
-     - Handler: "Stripe payments"
-     - Enter API key (sk*test*...) and webhook secret
-     - Assign to tooly channel
-  3. Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...` to `apps/shofar-store/.env.local`
-  4. Run `stripe listen --forward-to localhost:3001/payments/stripe` for webhooks
-- **Test**: After setup, use card `4242 4242 4242 4242` to complete checkout
+- **Configuration Done**:
+  - ✅ Stripe Payment Method created in Admin UI (ID: 2)
+  - ✅ API key (sk*test*...) entered
+  - ✅ `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` in .env.local
+  - ⚠️ Webhook secret is placeholder (update for production)
+- **Test Card**: `4242 4242 4242 4242` (any future date, any CVC)
 - **Files Modified**:
   - `apps/vendure/src/vendure-config.ts` - Added StripePlugin
   - `apps/vendure/.env.example` - Documented Stripe setup
@@ -513,15 +510,20 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ### Immediate (Pre-Launch)
 
-1. **Practice Presale**: Internal rehearsal with dummy payment (3 runs: incognito, normal, mobile)
-2. **Stripe Integration**: Replace dummy with Stripe (test mode → live)
-3. **Production Deploy**: Vercel (frontend) + hosted Vendure + PostgreSQL + Cloudflare R2
+1. ✅ ~~**Stripe Integration**: Test mode working!~~ (Order VN7PGZXUJBZV9JXM confirmed)
+2. **Practice Presale**: Internal rehearsal (3 runs: incognito, normal, mobile)
+3. **Production Prep**:
+   - Replace test Stripe keys with live keys (`sk_live_...`, `pk_live_...`)
+   - Update webhook secret with real `whsec_...` from Stripe Dashboard
+   - Upload hero image in Admin UI (Settings → Channels → tooly)
+4. **Production Deploy**: Vercel (frontend) + hosted Vendure + PostgreSQL + Cloudflare R2
 
 ### Post-Launch
 
-4. **Order Emails**: Configure transactional email templates
-5. **Policies**: Privacy policy, terms of service, refund policy pages
-6. **pharma-store**: Begin PEPTIDES channel setup (separate store)
+5. **Order Emails**: Configure transactional email templates
+6. **Policies**: Privacy policy, terms of service, refund policy pages
+7. **pharma-store**: Begin PEPTIDES channel setup (separate store)
+8. **Auth System**: Implement Vendure-native authentication (login/signup/account)
 
 ---
 
