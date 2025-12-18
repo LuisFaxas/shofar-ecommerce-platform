@@ -7,6 +7,7 @@ import {
   DefaultLogger,
   LogLevel,
   Asset,
+  Permission,
 } from "@vendure/core";
 import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
@@ -100,6 +101,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "sequence",
@@ -114,6 +116,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "family",
@@ -127,6 +130,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "researchGoals",
@@ -140,6 +144,7 @@ export const config: VendureConfig = {
               "Research goal categories (Recovery, Metabolic, Longevity, Cognitive, Cosmetic, Research)",
           },
         ],
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "molecularWeight",
@@ -152,6 +157,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "molecularFormula",
@@ -164,6 +170,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "sdsUrl",
@@ -176,6 +183,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "coaUrl",
@@ -188,6 +196,7 @@ export const config: VendureConfig = {
           },
         ],
         nullable: true,
+        requiresPermission: Permission.SuperAdmin,
       },
       {
         name: "featured",

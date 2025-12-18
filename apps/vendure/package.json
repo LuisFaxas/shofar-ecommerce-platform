@@ -6,6 +6,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "start:server": "node dist/index.js",
+    "start:worker": "node dist/index-worker.js",
     "setup": "ts-node src/init-vendure.ts",
     "populate": "ts-node src/populate-db.ts",
     "seed:tooly": "ts-node src/initial-data/seed-tooly-full.ts",
