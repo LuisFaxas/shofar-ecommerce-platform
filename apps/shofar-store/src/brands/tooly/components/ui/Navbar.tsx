@@ -11,21 +11,21 @@
  * - ESC key closes mobile menu
  */
 
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
-import FocusTrap from 'focus-trap-react';
-import { cn } from '@/lib/utils';
-import { ButtonSecondary } from './ButtonSecondary';
-import { ButtonPill } from './ButtonPill';
+import React, { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import FocusTrap from "focus-trap-react";
+import { cn } from "@/lib/utils";
+import { ButtonSecondary } from "./ButtonSecondary";
+import { ButtonPill } from "./ButtonPill";
 
 // Default anchor links for one-page navigation
 const NAV_LINKS: Array<{ href: string; label: string; active?: boolean }> = [
-  { href: '#product', label: 'Shop' },
-  { href: '#technology', label: 'Technology' },
-  { href: '#reviews', label: 'Reviews' },
-  { href: '#faq', label: 'FAQ' },
+  { href: "#product", label: "Shop" },
+  { href: "#technology", label: "Technology" },
+  { href: "#reviews", label: "Reviews" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 export interface NavbarProps {
@@ -62,60 +62,55 @@ export interface NavbarProps {
  * Includes logo, search, cart, and user menu
  */
 export const Navbar: React.FC<NavbarProps> = ({
-  logo = 'TOOLY',
+  logo = "TOOLY",
   links = NAV_LINKS,
   cartCount,
   isLoggedIn = false,
   userName,
-  searchPlaceholder = 'Search for tools...',
+  searchPlaceholder = "Search for tools...",
   onSearch,
   onCartClick,
   onUserClick,
   sticky = true,
-  className
+  className,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   // Use props for cart (provided by parent component using CartContext)
   const itemCount = cartCount ?? 0;
   const handleCartClick = useCallback(() => {
+    // Close mobile menu first if open, then trigger cart
+    if (isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
     if (onCartClick) {
       onCartClick();
     }
-  }, [onCartClick]);
+  }, [onCartClick, isMobileMenuOpen]);
 
   // Handle ESC key to close mobile menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isMobileMenuOpen) {
+      if (e.key === "Escape" && isMobileMenuOpen) {
         setIsMobileMenuOpen(false);
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isMobileMenuOpen]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
-
-  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    if (onSearch && searchQuery.trim()) {
-      onSearch(searchQuery.trim());
-    }
-  }, [onSearch, searchQuery]);
 
   const handleMobileNavClick = useCallback(() => {
     // Close mobile menu when clicking a nav link
@@ -125,11 +120,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <nav
       className={cn(
-        'relative z-50',
-        'bg-[#0b0e14]/80 backdrop-blur-xl',
-        'border-b border-white/[0.08]',
-        sticky && 'sticky top-0',
-        className
+        "relative z-50",
+        "bg-[#0b0e14]/80 backdrop-blur-xl",
+        "border-b border-white/[0.08]",
+        sticky && "sticky top-0",
+        className,
       )}
     >
       <div className="container mx-auto px-4">
@@ -137,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2">
-              {typeof logo === 'string' ? (
+              {typeof logo === "string" ? (
                 <span className="text-2xl font-bold bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe] bg-clip-text text-transparent">
                   {logo}
                 </span>
@@ -148,76 +143,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center flex-1 mx-8">
-            {/* Nav Links */}
-            <div className="flex items-center gap-1">
-              {links.map((link, index) => (
-                <a
-                  key={index}
-                  href={link.href}
-                  className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-medium',
-                    'transition-all duration-200',
-                    link.active ? (
-                      'bg-white/[0.08] text-white'
-                    ) : (
-                      'text-white/70 hover:text-white hover:bg-white/[0.05]'
-                    )
-                  )}
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-
-            {/* Search Bar - Centered */}
-            <form
-              onSubmit={handleSearchSubmit}
-              className="flex-1 max-w-xl mx-auto px-6"
-            >
-              <div className="relative">
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
-                  placeholder={searchPlaceholder}
-                  className={cn(
-                    'w-full h-10 pl-10 pr-4 rounded-full',
-                    'bg-white/[0.08] backdrop-blur-md',
-                    'border border-white/[0.14]',
-                    'text-white placeholder-white/40',
-                    'transition-all duration-200',
-                    'focus:outline-none focus:ring-2 focus:ring-white/20',
-                    'focus:bg-white/[0.12] focus:border-white/[0.20]'
-                  )}
-                />
-                {/* Search Icon */}
-                <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-                {/* Search Button (optional) */}
-                {isSearchFocused && searchQuery && (
-                  <button
-                    type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs hover:bg-white/20 transition-colors"
-                  >
-                    Search
-                  </button>
+          <div className="hidden lg:flex items-center gap-1">
+            {links.map((link, index) => (
+              <a
+                key={index}
+                href={link.href}
+                className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium",
+                  "transition-all duration-200",
+                  link.active
+                    ? "bg-white/[0.08] text-white"
+                    : "text-white/70 hover:text-white hover:bg-white/[0.05]",
                 )}
-              </div>
-            </form>
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
 
           {/* Right Section - Cart & User */}
@@ -227,10 +168,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={handleCartClick}
               data-testid="cart-drawer-toggle"
               className={cn(
-                'relative p-2 rounded-lg',
-                'text-white/80 hover:text-white',
-                'hover:bg-white/[0.08] transition-all duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50'
+                "relative p-2 rounded-lg",
+                "text-white/80 hover:text-white",
+                "hover:bg-white/[0.08] transition-all duration-200",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
               )}
               aria-label={`Cart with ${itemCount} items`}
             >
@@ -250,7 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Cart Badge */}
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-r from-[#02fcef] to-[#a02bfe] text-[10px] font-bold text-white">
-                  {itemCount > 99 ? '99+' : itemCount}
+                  {itemCount > 99 ? "99+" : itemCount}
                 </span>
               )}
             </button>
@@ -260,16 +201,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={onUserClick}
                 className={cn(
-                  'flex items-center gap-2 px-3 py-2 rounded-lg',
-                  'text-white/80 hover:text-white',
-                  'hover:bg-white/[0.08] transition-all duration-200'
+                  "flex items-center gap-2 px-3 py-2 rounded-lg",
+                  "text-white/80 hover:text-white",
+                  "hover:bg-white/[0.08] transition-all duration-200",
                 )}
               >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#02fcef] to-[#a02bfe] flex items-center justify-center text-white font-bold text-sm">
-                  {userName ? userName[0].toUpperCase() : 'U'}
+                  {userName ? userName[0].toUpperCase() : "U"}
                 </div>
                 <span className="hidden md:block text-sm font-medium">
-                  {userName || 'Account'}
+                  {userName || "Account"}
                 </span>
                 <svg
                   className="w-4 h-4"
@@ -278,7 +219,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   stroke="currentColor"
                   strokeWidth={2}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
             ) : (
@@ -296,12 +241,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={cn(
-                'lg:hidden p-2 rounded-lg',
-                'text-white/80 hover:text-white',
-                'hover:bg-white/[0.08] transition-all duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50'
+                "lg:hidden p-2 rounded-lg",
+                "text-white/80 hover:text-white",
+                "hover:bg-white/[0.08] transition-all duration-200",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
               )}
-              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"
             >
@@ -313,59 +258,46 @@ export const Navbar: React.FC<NavbarProps> = ({
                 strokeWidth={2}
               >
                 {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
           </div>
         </div>
 
+        {/* Mobile Menu Backdrop */}
+        {isMobileMenuOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+
         {/* Mobile Menu with Focus Trap */}
         <FocusTrap active={isMobileMenuOpen}>
           <div
             id="mobile-menu"
             className={cn(
-              'lg:hidden',
-              'overflow-hidden transition-all duration-300',
-              isMobileMenuOpen ? 'max-h-screen py-4 border-t border-white/[0.08]' : 'max-h-0'
+              "lg:hidden relative z-50",
+              "overflow-hidden transition-all duration-300",
+              "bg-[#0b0e14]", // Solid background for menu content
+              isMobileMenuOpen
+                ? "max-h-screen py-4 border-t border-white/[0.08]"
+                : "max-h-0",
             )}
             aria-hidden={!isMobileMenuOpen}
           >
-            {/* Mobile Search */}
-            <form onSubmit={handleSearchSubmit} className="mb-4">
-              <div className="relative">
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={searchPlaceholder}
-                  tabIndex={isMobileMenuOpen ? 0 : -1}
-                  className={cn(
-                    'w-full h-10 pl-10 pr-4 rounded-lg',
-                    'bg-white/[0.08] backdrop-blur-md',
-                    'border border-white/[0.14]',
-                    'text-white placeholder-white/40',
-                    'focus:outline-none focus:ring-2 focus:ring-white/20'
-                  )}
-                />
-                <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-            </form>
-
             {/* Mobile Links */}
             <div className="space-y-1">
               {links.map((link, index) => (
@@ -375,13 +307,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={handleMobileNavClick}
                   tabIndex={isMobileMenuOpen ? 0 : -1}
                   className={cn(
-                    'block px-3 py-2 rounded-lg text-sm font-medium',
-                    'transition-all duration-200',
-                    link.active ? (
-                      'bg-white/[0.08] text-white'
-                    ) : (
-                      'text-white/70 hover:text-white hover:bg-white/[0.05]'
-                    )
+                    "block px-3 py-2 rounded-lg text-sm font-medium",
+                    "transition-all duration-200",
+                    link.active
+                      ? "bg-white/[0.08] text-white"
+                      : "text-white/70 hover:text-white hover:bg-white/[0.05]",
                   )}
                 >
                   {link.label}
@@ -424,6 +354,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   );
 };
 
-Navbar.displayName = 'Navbar';
+Navbar.displayName = "Navbar";
 
 export default Navbar;
