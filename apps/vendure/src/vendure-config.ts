@@ -9,7 +9,8 @@ import {
   Asset,
   Permission,
 } from "@vendure/core";
-import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
+// EmailPlugin disabled for initial deployment
+// import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
 import { StripePlugin } from "@vendure/payments-plugin/package/stripe";
@@ -335,16 +336,17 @@ export const config: VendureConfig = {
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
     DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
-    EmailPlugin.init({
-      devMode: true,
-      outputPath: path.join(__dirname, "../static/email/test-emails"),
-      route: "mailbox",
-      handlers: defaultEmailHandlers,
-      templatePath: path.join(__dirname, "../static/email/templates"),
-      globalTemplateVars: {
-        fromAddress: '"TOOLY Store" <noreply@tooly.com>',
-      },
-    }),
+    // EmailPlugin disabled for initial deployment (no templates in prod yet)
+    // EmailPlugin.init({
+    //   devMode: true,
+    //   outputPath: path.join(__dirname, "../static/email/test-emails"),
+    //   route: "mailbox",
+    //   handlers: defaultEmailHandlers,
+    //   templatePath: path.join(__dirname, "../static/email/templates"),
+    //   globalTemplateVars: {
+    //     fromAddress: '"TOOLY Store" <noreply@tooly.com>',
+    //   },
+    // }),
     AdminUiPlugin.init({
       route: "admin",
       port: 3002,
