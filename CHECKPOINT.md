@@ -25,19 +25,19 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                             |
-| -------------- | ------ | ----------------------------------------------------------------- |
-| Build          | ✅     | lint + typecheck + build PASS (commit: eb7c39e)                   |
-| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                        |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                          |
-| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                 |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                    |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)          |
-| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set              |
-| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)        |
-| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed  |
-| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod       |
-| Real Payment   | ⚠️     | Stripe plugin + Payment Element ready, needs API keys in Admin UI |
+| Item           | Status | Notes                                                            |
+| -------------- | ------ | ---------------------------------------------------------------- |
+| Build          | ✅     | lint + typecheck + build PASS (commit: eb7c39e)                  |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                       |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                         |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                   |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)         |
+| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set             |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)       |
+| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod      |
+| Real Payment   | ✅     | Stripe test mode WORKING! Order VN7PGZXUJBZV9JXM confirmed       |
 
 ---
 
@@ -121,6 +121,23 @@ packages/
 ---
 
 ## PRESALE SPRINT LOG (2025-12-17)
+
+### MILESTONE 12: Stripe Payments WORKING (2025-12-17)
+
+- **Status**: ✅ COMPLETE - Stripe test payments working!
+- **Branch**: `feature/frontend-polish`
+- **Test Order**: `VN7PGZXUJBZV9JXM` - $158.99 (test mode)
+- **Commits**:
+  - `6972300` fix(web): gate setcustomerfororder and isolate shop/admin sessions
+  - (pending) fix(web): checkout mutation fields and input label styling
+- **Bugs Fixed**:
+  1. `Cannot set a Customer for the Order when already logged in` - Added activeCustomer check
+  2. `Cannot read properties of undefined (reading 'map')` - Fixed SET_SHIPPING_METHOD_MUTATION to return all order fields
+  3. Input label black background - Removed hardcoded bg color from floating label
+- **Files Modified**:
+  - `apps/shofar-store/src/app/checkout/page.tsx` - activeCustomer check + full mutation fields
+  - `apps/vendure/src/vendure-config.ts` - Cookie name isolation
+  - `apps/shofar-store/src/brands/tooly/components/ui/Input.tsx` - Label styling fix
 
 ### MILESTONE 11: Frontend Polish + Hero Redesign (2025-12-17)
 

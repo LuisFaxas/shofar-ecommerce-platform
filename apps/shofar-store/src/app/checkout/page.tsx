@@ -192,9 +192,19 @@ const SET_SHIPPING_METHOD_MUTATION = `
     setOrderShippingMethod(shippingMethodId: $id) {
       ... on Order {
         id
-        shippingLines { shippingMethod { id name } priceWithTax }
+        code
+        state
         totalWithTax
+        subTotalWithTax
         shippingWithTax
+        currencyCode
+        lines {
+          id
+          quantity
+          linePriceWithTax
+          productVariant { id name sku priceWithTax }
+        }
+        shippingLines { shippingMethod { id name } priceWithTax }
       }
       ... on ErrorResult { errorCode message }
     }

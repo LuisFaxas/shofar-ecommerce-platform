@@ -133,10 +133,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               sizeClasses[size].label,
               floatingLabel
                 ? cn(
-                    "absolute left-4 pointer-events-none",
+                    "absolute left-4 pointer-events-none z-10",
                     "transform-origin-top-left",
                     isFocused || hasValue || placeholder
-                      ? "top-0 -translate-y-1/2 scale-75 px-1 bg-[#0b0e14] text-white/70"
+                      ? "top-0 -translate-y-1/2 scale-75 px-1 text-white/70"
                       : "top-1/2 -translate-y-1/2 scale-100 text-white/50",
                   )
                 : "block mb-2 font-medium text-white/80",
