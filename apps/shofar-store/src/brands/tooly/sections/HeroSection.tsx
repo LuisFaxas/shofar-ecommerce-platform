@@ -86,7 +86,7 @@ export function HeroSection({
         )}
 
         {/* Frosted Overlay - Creates depth and ensures text readability */}
-        <div className="absolute inset-0 bg-[#0b0e14]/15" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[#0b0e14]/20" aria-hidden="true" />
 
         {/* Gradient Overlays - Top and bottom fade for seamless integration */}
         <div
@@ -121,6 +121,9 @@ export function HeroSection({
         <h1
           id="hero-heading"
           className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6"
+          style={{
+            textShadow: "0 4px 20px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.6)",
+          }}
         >
           <span className="block">Precision.</span>
           <span className="block bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe] bg-clip-text text-transparent">
@@ -130,7 +133,10 @@ export function HeroSection({
         </h1>
 
         {/* Subheadline */}
-        <p className="text-lg md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto mb-10">
+        <p
+          className="text-lg md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto mb-10"
+          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.7)" }}
+        >
           Experience the next generation of precision tools. Engineered for
           professionals, designed for perfection.
         </p>
