@@ -25,19 +25,19 @@
 
 ### Presale Readiness Checklist
 
-| Item           | Status | Notes                                                              |
-| -------------- | ------ | ------------------------------------------------------------------ |
-| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                    |
-| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                         |
-| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                           |
-| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                  |
-| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                     |
-| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)           |
-| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set               |
-| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)         |
-| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed   |
-| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod        |
-| Real Payment   | ✅     | Stripe test mode WORKING! Orders confirmed (webhook state pending) |
+| Item           | Status | Notes                                                                      |
+| -------------- | ------ | -------------------------------------------------------------------------- |
+| Build          | ✅     | lint + typecheck + build PASS (commit: 5502cd7)                            |
+| Stock          | ✅     | 1 sellable variant IN_STOCK (TOOLY-DLC-GM)                                 |
+| Shipping       | ✅     | Standard Shipping $9.99 in tooly channel                                   |
+| Payment        | ✅     | Test Payment (dummy) - ready for practice presale                          |
+| Checkout API   | ✅     | Full flow tested: AddingItems → PaymentSettled                             |
+| Checkout UI    | ✅     | /checkout route (Address → Shipping → Payment → Confirm)                   |
+| Product Images | ✅     | TOOLY has 5 gallery assets on R2 + featuredAsset set                       |
+| Asset Hosting  | ✅     | Cloudflare R2 configured (legacy assets exist, not in use)                 |
+| Frontend/UI    | ✅     | Hero redesign, mobile menu fixed, search bar removed, cart fixed           |
+| Admin Organize | ➖     | Optional: Brand facet created, not required for single prod                |
+| Real Payment   | ⚠️     | Stripe captures funds, but order state not settling (webhook fix required) |
 
 ---
 
@@ -122,9 +122,9 @@ packages/
 
 ## PRESALE SPRINT LOG (2025-12-17)
 
-### MILESTONE 12: Stripe Payments WORKING (2025-12-17)
+### MILESTONE 12: Stripe Payment Integration (2025-12-17)
 
-- **Status**: ✅ COMPLETE - Stripe test payments working!
+- **Status**: ⚠️ PARTIAL - Payments capture, order state not settling
 - **Branch**: `feature/frontend-polish`
 - **Test Orders**:
   - `VN7PGZXUJBZV9JXM` - $158.99 (test mode)
@@ -517,13 +517,19 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ## NEXT STEPS (Phase 2)
 
-### Immediate (Pre-Launch)
+### Immediate (BLOCKING for Launch)
 
-1. ✅ ~~**Stripe Integration**: Test mode working!~~ (Order VN7PGZXUJBZV9JXM confirmed)
+1. **🔴 FIX WEBHOOK**: Orders must reach PaymentSettled state
+   - Debug why Vendure isn't processing Stripe webhooks
+   - Verify webhook endpoint `/payments/stripe` is receiving events
+   - Check Vendure logs for webhook errors
 2. **Practice Presale**: Internal rehearsal (3 runs: incognito, normal, mobile)
-3. **Production Prep**:
-   - Replace test Stripe keys with live keys (`sk_live_...`, `pk_live_...`)
-   - Update webhook secret with real `whsec_...` from Stripe Dashboard
+
+### Production Prep (After Webhook Fixed)
+
+3. **Stripe Production Keys**:
+   - Replace test keys with live keys (`sk_live_...`, `pk_live_...`)
+   - Set up permanent webhook in Stripe Dashboard (not CLI forwarding)
    - Upload hero image in Admin UI (Settings → Channels → tooly)
 4. **Production Deploy**: Vercel (frontend) + hosted Vendure + PostgreSQL + Cloudflare R2
 
