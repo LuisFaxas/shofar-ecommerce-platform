@@ -98,6 +98,11 @@ interface ProductAndChannelData {
 /**
  * Fetch main TOOLY product data and channel configuration
  * Used by: HeroSection, ProductSection
+ *
+ * Error handling:
+ * - GraphQL errors = FAIL LOUD (log warning, return null - don't hide the problem)
+ * - Parsing errors = FALLBACK (use defaults for storefront content only)
+ * - Product data is sacred - if we got data.product, return it
  */
 export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelData> {
   try {
@@ -107,8 +112,12 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
       fetchPolicy: "network-only",
     });
 
+    // GraphQL errors = FAIL LOUD - don't silently return stale/partial results
     if (error) {
-      console.error("[TOOLY] Failed to fetch product:", error.message);
+      console.error(
+        "[TOOLY] Shop API mismatch - GraphQL error:",
+        error.message,
+      );
       return {
         product: null,
         heroImage: null,
@@ -117,34 +126,50 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
       };
     }
 
-    // Extract customFields from activeChannel
-    const customFields = data?.activeChannel?.customFields as
-      | (ChannelStorefrontFields & {
-          heroImage?: { preview?: string };
-          homeGalleryAssets?: HomeGalleryAsset[];
-        })
-      | null;
+    // Product data is sacred - extract first
+    const product = data?.product ?? null;
 
-    // Extract heroImage from activeChannel customFields
-    const heroImagePreview = customFields?.heroImage?.preview ?? null;
+    // Channel customFields parsing - wrap in try-catch for resilience
+    let heroImage: string | null = null;
+    let homeGalleryAssets: HomeGalleryAsset[] | null = null;
+    let storefrontContent: StorefrontContent;
 
-    // Build full URL for heroImage
-    const heroImage = buildAssetUrl(heroImagePreview);
+    try {
+      // Extract customFields from activeChannel
+      const customFields = data?.activeChannel?.customFields as
+        | (ChannelStorefrontFields & {
+            heroImage?: { preview?: string };
+            homeGalleryAssets?: HomeGalleryAsset[];
+          })
+        | null;
 
-    // Extract homeGalleryAssets from activeChannel customFields
-    const homeGalleryAssets = customFields?.homeGalleryAssets ?? null;
+      // Extract heroImage from activeChannel customFields
+      const heroImagePreview = customFields?.heroImage?.preview ?? null;
+      heroImage = buildAssetUrl(heroImagePreview);
 
-    // Build storefront content with fallbacks
-    const storefrontContent = buildStorefrontContent(customFields);
+      // Extract homeGalleryAssets from activeChannel customFields
+      homeGalleryAssets = customFields?.homeGalleryAssets ?? null;
+
+      // Build storefront content with fallbacks
+      storefrontContent = buildStorefrontContent(customFields);
+    } catch (parseError) {
+      // Parsing errors = FALLBACK - use defaults for storefront content
+      console.warn(
+        "[TOOLY] customFields parse error, using defaults:",
+        parseError,
+      );
+      storefrontContent = buildStorefrontContent(null);
+    }
 
     return {
-      product: data?.product ?? null,
+      product,
       heroImage,
       homeGalleryAssets,
       storefrontContent,
     };
   } catch (err) {
-    console.error("[TOOLY] Product fetch error:", err);
+    // Network/unexpected errors = FAIL LOUD
+    console.error("[TOOLY] Shop API mismatch - fetch error:", err);
     return {
       product: null,
       heroImage: null,

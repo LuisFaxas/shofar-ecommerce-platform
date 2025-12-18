@@ -302,6 +302,7 @@ export const config: VendureConfig = {
         entity: Asset,
         eager: true,
         nullable: true,
+        public: true,
         label: [
           { languageCode: LanguageCode.en, value: "Hero Background Image" },
         ],
@@ -312,6 +313,7 @@ export const config: VendureConfig = {
               "Full-width hero background image for the storefront homepage",
           },
         ],
+        ui: { tab: "Marketing" },
       },
       {
         name: "homeGalleryAssets",
@@ -320,6 +322,7 @@ export const config: VendureConfig = {
         list: true,
         eager: true,
         nullable: true,
+        public: true,
         label: [
           { languageCode: LanguageCode.en, value: "Homepage Gallery Images" },
         ],
@@ -338,6 +341,7 @@ export const config: VendureConfig = {
         name: "storefrontHeroPill",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Precision Aroma Delivery",
         label: [{ languageCode: LanguageCode.en, value: "Hero Badge Text" }],
         description: [
@@ -353,6 +357,7 @@ export const config: VendureConfig = {
         name: "storefrontHeroHeadlineLine1",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Precision.",
         label: [
           { languageCode: LanguageCode.en, value: "Hero Headline Line 1" },
@@ -363,6 +368,7 @@ export const config: VendureConfig = {
         name: "storefrontHeroHeadlineAccent",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Aroma.",
         label: [
           {
@@ -376,6 +382,7 @@ export const config: VendureConfig = {
         name: "storefrontHeroHeadlineLine3",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Perfection.",
         label: [
           { languageCode: LanguageCode.en, value: "Hero Headline Line 3" },
@@ -386,6 +393,7 @@ export const config: VendureConfig = {
         name: "storefrontHeroSubhead",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue:
           "Experience the art of precision aroma delivery. Crafted for connoisseurs, designed for ritual.",
         label: [{ languageCode: LanguageCode.en, value: "Hero Subheadline" }],
@@ -395,6 +403,7 @@ export const config: VendureConfig = {
         name: "storefrontPrimaryCtaLabel",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Shop Now",
         label: [{ languageCode: LanguageCode.en, value: "Primary CTA Label" }],
         ui: { tab: "Storefront" },
@@ -403,6 +412,7 @@ export const config: VendureConfig = {
         name: "storefrontSecondaryCtaLabel",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Learn More",
         label: [
           { languageCode: LanguageCode.en, value: "Secondary CTA Label" },
@@ -416,6 +426,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust1Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Secure Checkout",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 1 Title" },
@@ -426,6 +437,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust1Sub",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "256-bit encryption",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 1 Subtitle" },
@@ -436,6 +448,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust2Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Premium Quality",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 2 Title" },
@@ -446,6 +459,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust2Sub",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Crafted with care",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 2 Subtitle" },
@@ -456,6 +470,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust3Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Easy Returns",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 3 Title" },
@@ -466,6 +481,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust3Sub",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "30-day return policy",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 3 Subtitle" },
@@ -476,6 +492,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust4Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Support",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 4 Title" },
@@ -486,6 +503,7 @@ export const config: VendureConfig = {
         name: "storefrontTrust4Sub",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Email support available",
         label: [
           { languageCode: LanguageCode.en, value: "Trust Badge 4 Subtitle" },
@@ -499,6 +517,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature1Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Precision Machining",
         label: [{ languageCode: LanguageCode.en, value: "Feature 1 Title" }],
         ui: { tab: "Storefront" },
@@ -507,6 +526,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature1Body",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue:
           "CNC-machined from aerospace-grade aluminum with tolerances under 0.01mm.",
         label: [{ languageCode: LanguageCode.en, value: "Feature 1 Body" }],
@@ -516,6 +536,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature2Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Optimized Airflow",
         label: [{ languageCode: LanguageCode.en, value: "Feature 2 Title" }],
         ui: { tab: "Storefront" },
@@ -524,6 +545,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature2Body",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue:
           "Engineered chamber design delivers smooth, consistent draws every time.",
         label: [{ languageCode: LanguageCode.en, value: "Feature 2 Body" }],
@@ -533,6 +555,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature3Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Premium Materials",
         label: [{ languageCode: LanguageCode.en, value: "Feature 3 Title" }],
         ui: { tab: "Storefront" },
@@ -541,6 +564,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature3Body",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue:
           "Medical-grade stainless steel and borosilicate glass for purity.",
         label: [{ languageCode: LanguageCode.en, value: "Feature 3 Body" }],
@@ -550,6 +574,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature4Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Easy Maintenance",
         label: [{ languageCode: LanguageCode.en, value: "Feature 4 Title" }],
         ui: { tab: "Storefront" },
@@ -558,6 +583,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature4Body",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue:
           "Simple disassembly and cleaning. Dishwasher-safe components.",
         label: [{ languageCode: LanguageCode.en, value: "Feature 4 Body" }],
@@ -567,6 +593,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature5Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Ergonomic Design",
         label: [{ languageCode: LanguageCode.en, value: "Feature 5 Title" }],
         ui: { tab: "Storefront" },
@@ -575,6 +602,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature5Body",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue:
           "Balanced weight distribution and textured grip for comfortable use.",
         label: [{ languageCode: LanguageCode.en, value: "Feature 5 Body" }],
@@ -584,6 +612,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature6Title",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Travel Ready",
         label: [{ languageCode: LanguageCode.en, value: "Feature 6 Title" }],
         ui: { tab: "Storefront" },
@@ -592,6 +621,7 @@ export const config: VendureConfig = {
         name: "storefrontFeature6Body",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue:
           "Compact form factor with included protective case for portability.",
         label: [{ languageCode: LanguageCode.en, value: "Feature 6 Body" }],
@@ -604,6 +634,7 @@ export const config: VendureConfig = {
         name: "storefrontGalleryHeading",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Gallery",
         label: [
           { languageCode: LanguageCode.en, value: "Gallery Section Heading" },
@@ -614,6 +645,7 @@ export const config: VendureConfig = {
         name: "storefrontGallerySubhead",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Every angle showcases the precision craftsmanship",
         label: [
           { languageCode: LanguageCode.en, value: "Gallery Section Subhead" },
@@ -627,6 +659,7 @@ export const config: VendureConfig = {
         name: "storefrontShippingBlurb",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Shipping calculated at checkout",
         label: [{ languageCode: LanguageCode.en, value: "Shipping Blurb" }],
         description: [
@@ -642,6 +675,7 @@ export const config: VendureConfig = {
         name: "storefrontDeliveryEstimate",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Ships within 3-5 business days",
         label: [{ languageCode: LanguageCode.en, value: "Delivery Estimate" }],
         ui: { tab: "Storefront" },
@@ -650,6 +684,7 @@ export const config: VendureConfig = {
         name: "storefrontInStockLabel",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "In Stock",
         label: [{ languageCode: LanguageCode.en, value: "In Stock Label" }],
         ui: { tab: "Storefront" },
@@ -658,6 +693,7 @@ export const config: VendureConfig = {
         name: "storefrontOutOfStockLabel",
         type: "string",
         nullable: true,
+        public: true,
         defaultValue: "Out of Stock",
         label: [{ languageCode: LanguageCode.en, value: "Out of Stock Label" }],
         ui: { tab: "Storefront" },
@@ -669,6 +705,7 @@ export const config: VendureConfig = {
         name: "storefrontDisclaimer",
         type: "text",
         nullable: true,
+        public: true,
         defaultValue: "For aromatic and sensory evaluation purposes only.",
         label: [{ languageCode: LanguageCode.en, value: "Footer Disclaimer" }],
         ui: { tab: "Storefront" },
@@ -680,6 +717,7 @@ export const config: VendureConfig = {
         name: "storefrontShowAuthLinks",
         type: "boolean",
         nullable: true,
+        public: true,
         defaultValue: false,
         label: [
           { languageCode: LanguageCode.en, value: "Show Sign In/Up Links" },
@@ -697,6 +735,7 @@ export const config: VendureConfig = {
         name: "storefrontShowSearch",
         type: "boolean",
         nullable: true,
+        public: true,
         defaultValue: false,
         label: [{ languageCode: LanguageCode.en, value: "Show Search" }],
         description: [
