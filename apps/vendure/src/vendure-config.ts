@@ -971,20 +971,16 @@ export const config: VendureConfig = {
         ],
       }) as { path: string; route?: string; compile?: () => Promise<void> };
 
-      // Angular 17+ outputs to browser/ subfolder
-      const distBrowser = path.join(adminUiApp.path, "browser");
-      const resolvedAdminUiPath = fs.existsSync(
-        path.join(distBrowser, "index.html"),
-      )
-        ? distBrowser
-        : adminUiApp.path;
+      // Angular 17+ ALWAYS outputs to browser/ subfolder
+      const browserPath = path.join(adminUiApp.path, "browser");
 
-      console.log(`[Admin UI] Serving from: ${resolvedAdminUiPath}`);
+      console.log(`[Admin UI] Compiled path: ${adminUiApp.path}`);
+      console.log(`[Admin UI] Serving from: ${browserPath}`);
 
       return AdminUiPlugin.init({
         route: "admin",
         port: 3002,
-        app: { ...adminUiApp, path: resolvedAdminUiPath },
+        app: { ...adminUiApp, path: browserPath },
         adminUiConfig: {
           brand: "FAXAS",
           hideVendureBranding: true,
