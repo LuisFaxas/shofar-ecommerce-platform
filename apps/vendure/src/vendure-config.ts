@@ -959,19 +959,32 @@ export const config: VendureConfig = {
 
       const adminUiOutputPath = path.join(vendureRoot, "admin-ui-build");
 
+      // Compile Admin UI with branding
+      const adminUiApp = compileUiExtensions({
+        outputPath: adminUiOutputPath,
+        extensions: [
+          setBranding({
+            smallLogoPath: brandingPath("faxas-wordmark-sm.svg"),
+            largeLogoPath: brandingPath("faxas-wordmark.svg"),
+            faviconPath: brandingPath("fx-favicon.png"),
+          }),
+        ],
+      }) as { path: string; route?: string; compile?: () => Promise<void> };
+
+      // Angular 17+ outputs to browser/ subfolder
+      const distBrowser = path.join(adminUiApp.path, "browser");
+      const resolvedAdminUiPath = fs.existsSync(
+        path.join(distBrowser, "index.html"),
+      )
+        ? distBrowser
+        : adminUiApp.path;
+
+      console.log(`[Admin UI] Serving from: ${resolvedAdminUiPath}`);
+
       return AdminUiPlugin.init({
         route: "admin",
         port: 3002,
-        app: compileUiExtensions({
-          outputPath: adminUiOutputPath,
-          extensions: [
-            setBranding({
-              smallLogoPath: brandingPath("faxas-wordmark-sm.svg"),
-              largeLogoPath: brandingPath("faxas-wordmark.svg"),
-              faviconPath: brandingPath("fx-favicon.png"),
-            }),
-          ],
-        }),
+        app: { ...adminUiApp, path: resolvedAdminUiPath },
         adminUiConfig: {
           brand: "FAXAS",
           hideVendureBranding: true,
