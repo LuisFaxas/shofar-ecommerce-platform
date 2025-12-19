@@ -982,7 +982,7 @@ export const config: VendureConfig = {
         port: 3002,
         app: { ...adminUiApp, path: browserPath },
         adminUiConfig: {
-          brand: "FAXAS Ecom Solutions",
+          brand: "FAXAS eCom Dashboard",
           hideVendureBranding: true,
           hideVersion: true,
           defaultLanguage: LanguageCode.en,
