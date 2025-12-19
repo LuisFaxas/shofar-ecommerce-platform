@@ -66,6 +66,8 @@ export const config: VendureConfig = {
     shopApiPath: "shop-api",
     adminApiPlayground: IS_DEV,
     shopApiPlayground: IS_DEV,
+    // Required behind Railway/reverse proxy for express-rate-limit
+    trustProxy: 1,
     cors: {
       origin: true,
       credentials: true,
