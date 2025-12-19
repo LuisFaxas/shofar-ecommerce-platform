@@ -16,6 +16,7 @@ import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
 import { compileUiExtensions, setBranding } from "@vendure/ui-devkit/compiler";
 import { StripePlugin } from "@vendure/payments-plugin/package/stripe";
 import path from "path";
+import fs from "fs";
 import * as dotenv from "dotenv";
 import { configureS3AssetStorage } from "./config/s3-asset-storage";
 
@@ -938,36 +939,46 @@ export const config: VendureConfig = {
     //     fromAddress: '"TOOLY Store" <noreply@tooly.com>',
     //   },
     // }),
-    AdminUiPlugin.init({
-      route: "admin",
-      port: 3002,
-      app: compileUiExtensions({
-        outputPath: path.join(__dirname, "../../admin-ui-build"),
-        extensions: [
-          setBranding({
-            smallLogoPath: path.join(
-              __dirname,
-              "admin-ui/branding/faxas-wordmark-sm.svg",
-            ),
-            largeLogoPath: path.join(
-              __dirname,
-              "admin-ui/branding/faxas-wordmark.svg",
-            ),
-            faviconPath: path.join(
-              __dirname,
-              "admin-ui/branding/fx-favicon.png",
-            ),
-          }),
-        ],
-      }),
-      adminUiConfig: {
-        brand: "FAXAS",
-        hideVendureBranding: true,
-        hideVersion: true,
-        defaultLanguage: LanguageCode.en,
-        availableLanguages: [LanguageCode.en],
-      },
-    }),
+    // Admin UI Branding - resolve paths for both dev (src/) and prod (dist/)
+    (() => {
+      const vendureRoot = path.join(__dirname, "..");
+      const brandingSrcDir = path.join(vendureRoot, "src/admin-ui/branding");
+      const brandingDistDir = path.join(vendureRoot, "dist/admin-ui/branding");
+
+      function brandingPath(file: string): string {
+        const p1 = path.join(brandingSrcDir, file);
+        const p2 = path.join(brandingDistDir, file);
+        if (fs.existsSync(p1)) return p1;
+        if (fs.existsSync(p2)) return p2;
+        throw new Error(
+          `[Admin Branding] Missing branding asset: ${file}. Looked in ${p1} and ${p2}`,
+        );
+      }
+
+      const adminUiOutputPath = path.join(vendureRoot, "admin-ui-build");
+
+      return AdminUiPlugin.init({
+        route: "admin",
+        port: 3002,
+        app: compileUiExtensions({
+          outputPath: adminUiOutputPath,
+          extensions: [
+            setBranding({
+              smallLogoPath: brandingPath("faxas-wordmark-sm.svg"),
+              largeLogoPath: brandingPath("faxas-wordmark.svg"),
+              faviconPath: brandingPath("fx-favicon.png"),
+            }),
+          ],
+        }),
+        adminUiConfig: {
+          brand: "FAXAS",
+          hideVendureBranding: true,
+          hideVersion: true,
+          defaultLanguage: LanguageCode.en,
+          availableLanguages: [LanguageCode.en],
+        },
+      });
+    })(),
     // Stripe Payment Integration
     // API key and webhook secret are configured per PaymentMethod in Admin UI
     StripePlugin.init({
