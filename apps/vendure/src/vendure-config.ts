@@ -793,8 +793,7 @@ export const config: VendureConfig = {
         type: "text",
         nullable: true,
         public: true,
-        defaultValue:
-          "TOOLY is precision CNC-machined from aerospace-grade 6061 aluminum with a medical-grade stainless steel chamber. The heating element uses premium ceramics for optimal heat distribution and purity.",
+        defaultValue: "",
         label: [{ languageCode: LanguageCode.en, value: "FAQ 1 Answer" }],
         ui: { tab: "Storefront" },
       },
@@ -813,8 +812,7 @@ export const config: VendureConfig = {
         type: "text",
         nullable: true,
         public: true,
-        defaultValue:
-          "Every TOOLY comes with the precision-machined device, a protective carrying case, cleaning brush, spare screens, and a detailed user guide. Everything you need to get started is included in the box.",
+        defaultValue: "",
         label: [{ languageCode: LanguageCode.en, value: "FAQ 2 Answer" }],
         ui: { tab: "Storefront" },
       },
@@ -833,8 +831,7 @@ export const config: VendureConfig = {
         type: "text",
         nullable: true,
         public: true,
-        defaultValue:
-          "Every TOOLY device comes with a comprehensive 2-year warranty covering manufacturing defects and component performance. Extended warranty options are available at checkout.",
+        defaultValue: "",
         label: [{ languageCode: LanguageCode.en, value: "FAQ 3 Answer" }],
         ui: { tab: "Storefront" },
       },
@@ -853,8 +850,7 @@ export const config: VendureConfig = {
         type: "text",
         nullable: true,
         public: true,
-        defaultValue:
-          "We recommend cleaning your TOOLY after every 5-10 sessions using the included cleaning kit. The modular design allows easy access to all components. Detailed maintenance guides are available in your account.",
+        defaultValue: "",
         label: [{ languageCode: LanguageCode.en, value: "FAQ 4 Answer" }],
         ui: { tab: "Storefront" },
       },
@@ -873,8 +869,7 @@ export const config: VendureConfig = {
         type: "text",
         nullable: true,
         public: true,
-        defaultValue:
-          "We offer a 30-day satisfaction guarantee. If you're not completely satisfied with your purchase, return it in original condition for a full refund. Shipping is free on all returns.",
+        defaultValue: "",
         label: [{ languageCode: LanguageCode.en, value: "FAQ 5 Answer" }],
         ui: { tab: "Storefront" },
       },
