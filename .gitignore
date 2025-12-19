@@ -44,6 +44,7 @@ pnpm-debug.log*
 vendure-db.sqlite
 vendure-db.sqlite-journal
 static/assets
+admin-ui-build
 
 # Playwright
 test-results

@@ -13,6 +13,7 @@ import {
 // import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
+import { compileUiExtensions, setBranding } from "@vendure/ui-devkit/compiler";
 import { StripePlugin } from "@vendure/payments-plugin/package/stripe";
 import path from "path";
 import * as dotenv from "dotenv";
@@ -747,6 +748,167 @@ export const config: VendureConfig = {
         ],
         ui: { tab: "Storefront" },
       },
+      // ============================================================================
+      // STOREFRONT CONTENT - FAQ Section
+      // ============================================================================
+      {
+        name: "storefrontFaqHeading",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "Frequently Asked Questions",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ Heading" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFaqSubhead",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "Everything you need to know about TOOLY",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ Subheading" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontShowFaq",
+        type: "boolean",
+        nullable: true,
+        public: true,
+        defaultValue: true,
+        label: [{ languageCode: LanguageCode.en, value: "Show FAQ Section" }],
+        ui: { tab: "Storefront" },
+      },
+      // FAQ Item 1
+      {
+        name: "storefrontFaq1Question",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "What materials is TOOLY made from?",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 1 Question" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFaq1Answer",
+        type: "text",
+        nullable: true,
+        public: true,
+        defaultValue:
+          "TOOLY is precision CNC-machined from aerospace-grade 6061 aluminum with a medical-grade stainless steel chamber. The heating element uses premium ceramics for optimal heat distribution and purity.",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 1 Answer" }],
+        ui: { tab: "Storefront" },
+      },
+      // FAQ Item 2
+      {
+        name: "storefrontFaq2Question",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "What is included with my TOOLY?",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 2 Question" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFaq2Answer",
+        type: "text",
+        nullable: true,
+        public: true,
+        defaultValue:
+          "Every TOOLY comes with the precision-machined device, a protective carrying case, cleaning brush, spare screens, and a detailed user guide. Everything you need to get started is included in the box.",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 2 Answer" }],
+        ui: { tab: "Storefront" },
+      },
+      // FAQ Item 3
+      {
+        name: "storefrontFaq3Question",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "What is your warranty policy?",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 3 Question" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFaq3Answer",
+        type: "text",
+        nullable: true,
+        public: true,
+        defaultValue:
+          "Every TOOLY device comes with a comprehensive 2-year warranty covering manufacturing defects and component performance. Extended warranty options are available at checkout.",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 3 Answer" }],
+        ui: { tab: "Storefront" },
+      },
+      // FAQ Item 4
+      {
+        name: "storefrontFaq4Question",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "How do I clean and maintain my TOOLY?",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 4 Question" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFaq4Answer",
+        type: "text",
+        nullable: true,
+        public: true,
+        defaultValue:
+          "We recommend cleaning your TOOLY after every 5-10 sessions using the included cleaning kit. The modular design allows easy access to all components. Detailed maintenance guides are available in your account.",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 4 Answer" }],
+        ui: { tab: "Storefront" },
+      },
+      // FAQ Item 5
+      {
+        name: "storefrontFaq5Question",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "What is your return policy?",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 5 Question" }],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFaq5Answer",
+        type: "text",
+        nullable: true,
+        public: true,
+        defaultValue:
+          "We offer a 30-day satisfaction guarantee. If you're not completely satisfied with your purchase, return it in original condition for a full refund. Shipping is free on all returns.",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 5 Answer" }],
+        ui: { tab: "Storefront" },
+      },
+      // FAQ Item 6
+      {
+        name: "storefrontFaq6Question",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 6 Question" }],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value: "Optional - leave empty to hide",
+          },
+        ],
+        ui: { tab: "Storefront" },
+      },
+      {
+        name: "storefrontFaq6Answer",
+        type: "text",
+        nullable: true,
+        public: true,
+        defaultValue: "",
+        label: [{ languageCode: LanguageCode.en, value: "FAQ 6 Answer" }],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value: "Optional - leave empty to hide",
+          },
+        ],
+        ui: { tab: "Storefront" },
+      },
     ],
   },
   logger: new DefaultLogger({ level: IS_DEV ? LogLevel.Debug : LogLevel.Info }),
@@ -784,10 +946,29 @@ export const config: VendureConfig = {
     AdminUiPlugin.init({
       route: "admin",
       port: 3002,
+      app: compileUiExtensions({
+        outputPath: path.join(__dirname, "../../admin-ui-build"),
+        extensions: [
+          setBranding({
+            smallLogoPath: path.join(
+              __dirname,
+              "admin-ui/branding/faxas-wordmark-sm.svg",
+            ),
+            largeLogoPath: path.join(
+              __dirname,
+              "admin-ui/branding/faxas-wordmark.svg",
+            ),
+            faviconPath: path.join(
+              __dirname,
+              "admin-ui/branding/fx-favicon.png",
+            ),
+          }),
+        ],
+      }),
       adminUiConfig: {
-        brand: "TOOLY Admin",
-        hideVendureBranding: false,
-        hideVersion: false,
+        brand: "FAXAS",
+        hideVendureBranding: true,
+        hideVersion: true,
         defaultLanguage: LanguageCode.en,
         availableLanguages: [LanguageCode.en],
       },
