@@ -391,6 +391,71 @@ chmod +x .husky/*  # Make hooks executable (Unix)
 
 ---
 
+## TOOLY Storefront Addendum (Design v2.0)
+
+### File Locations
+
+```
+apps/shofar-store/               # TOOLY frontend (Next.js 16)
+├── src/app/                     # App router pages
+│   ├── checkout/                # Checkout flow
+│   └── api/shop/                # Vendure proxy
+└── src/brands/tooly/            # TOOLY-specific code
+    ├── index.tsx                # Main page shell
+    ├── sections/                # Page sections
+    ├── components/ui/           # UI components
+    ├── lib/                     # Fetchers, utilities
+    └── styles/tokens.css        # Design tokens
+```
+
+### Locked Layout Constraints
+
+**CRITICAL**: Section order and IDs must NOT change without explicit approval.
+
+| Order | Section            | ID             | Notes                 |
+| ----- | ------------------ | -------------- | --------------------- |
+| 1     | HeroSection        | `#hero`        | Full-bleed background |
+| 2     | CredibilitySection | `#credibility` | Trust badges + stats  |
+| 3     | TechnologySection  | `#technology`  | Feature cards         |
+| 4     | GallerySection     | `#gallery`     | Product gallery       |
+| 5     | ProductSection     | `#shop`        | Product widget + cart |
+| 6     | AccessoriesSection | `#accessories` | Accessory grid        |
+| 7     | ReviewsSection     | `#reviews`     | Customer reviews      |
+| 8     | FaqSection         | `#faq`         | FAQ accordion         |
+| 9     | FooterSection      | (footer)       | Links + disclaimer    |
+
+**Rules**:
+
+- Do NOT reorder sections
+- Do NOT rename section IDs (breaks anchor navigation)
+- Do NOT delete sections (hide via feature flag if needed)
+- Do NOT add new sections without WO approval
+
+### WO Execution Protocol
+
+For all Design v2.0 work orders:
+
+1. **Create branch**: `git checkout -b wo/<wo-id>`
+2. **Implement minimal diff**: Only change what the WO specifies
+3. **Run build**: `pnpm --filter @shofar/shofar-store build`
+4. **Run Puppeteer quick-check**: 2 viewports (desktop 1440px, mobile 430px)
+5. **Commit with WO ID**: `git commit -m "type(scope): WO-<ID> description"`
+6. **Update CHECKPOINT.md**: Add WO status + commit hash to Design v2.0 tracker
+
+### Standard Commands
+
+```bash
+# Development
+pnpm --filter @shofar/shofar-store dev
+
+# Build verification
+pnpm --filter @shofar/shofar-store build
+pnpm --filter @shofar/shofar-store typecheck
+pnpm --filter @shofar/shofar-store lint
+```
+
+---
+
 ## Peptide Store Addendum (Append-Only)
 
 This section documents pharma-store (PEPTIDES brand) specific requirements.

@@ -40,6 +40,14 @@
 **Branch**: `master` (merged from `tooly-storefront`)
 **Build Command**: `pnpm install --filter @shofar/shofar-store... && pnpm --filter @shofar/shofar-store build`
 
+**Required Vercel Environment Variables**:
+| Variable | Value |
+|----------|-------|
+| `VENDURE_INTERNAL_URL` | `https://vendure-server-production-75fc.up.railway.app` |
+| `NEXT_PUBLIC_VENDURE_SHOP_API_URL` | `https://vendure-server-production-75fc.up.railway.app/shop-api` |
+| `NEXT_PUBLIC_ASSET_HOST` | `pub-e4e7d92e0a3944a6a461ce45f91336dc.r2.dev` |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_...` |
+
 ### Active Brand: TOOLY
 
 **BRAND_KEY**: `tooly`
@@ -145,6 +153,21 @@ packages/
 ---
 
 ## PRESALE SPRINT LOG (2025-12-18)
+
+### MILESTONE 15: Vercel Proxy Fix - VENDURE_INTERNAL_URL (2025-12-18)
+
+- **Status**: ✅ COMPLETE - Cart and Add to Cart working on production
+- **Root Cause**: `/api/shop` proxy route reads `VENDURE_INTERNAL_URL` env var, but it was NOT set in Vercel. Proxy defaulted to `localhost:3001` which doesn't exist on Vercel → 500 error.
+- **Fix Applied**: Added `VENDURE_INTERNAL_URL=https://vendure-server-production-75fc.up.railway.app` to Vercel Environment Variables (Production) + Redeployed
+- **Verification**:
+  ```bash
+  # All 3 tests pass:
+  # 1. activeChannel → {"code":"tooly","token":"tooly"}
+  # 2. product query → TOOLY IN_STOCK
+  # 3. addItemToOrder → Order BNH1HFPHHFVYUKVW created
+  ```
+- **File Reference**: `apps/shofar-store/src/app/api/shop/route.ts` line 10
+- **Lesson Learned**: Always verify ALL env vars the proxy reads are set in Vercel, not just `NEXT_PUBLIC_*` vars
 
 ### MILESTONE 14: Asset Management Workflows (2025-12-18)
 
@@ -603,42 +626,80 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ## NEXT STEPS (Phase 2)
 
-### Immediate (Railway is LIVE)
+### ✅ COMPLETED - Full Stack LIVE
 
-1. **✅ RAILWAY DEPLOYED**: Backend fully operational on Railway
+1. **✅ RAILWAY DEPLOYED**: Backend fully operational
    - vendure-server + vendure-worker running
    - Stripe TEST payments working (Order `14M9T5V98G22UDCY` → PaymentSettled)
-   - Shop API accessible at https://vendure-server-production-75fc.up.railway.app/shop-api
-2. **Deploy Frontend to Vercel**:
-   - Point `NEXT_PUBLIC_VENDURE_SHOP_API` to Railway URL
-   - Keep `pk_test_...` publishable key
-   - Test full checkout flow from deployed frontend
-3. **Upload Product Images**:
-   - Railway Postgres has no asset records yet
-   - Run `pnpm --filter @shofar/vendure bulk:assets` locally against Railway DB
-   - OR upload via Railway Admin UI
+   - Shop API: https://vendure-server-production-75fc.up.railway.app/shop-api
+2. **✅ VERCEL DEPLOYED**: Frontend fully operational
+   - URL: https://shofar-ecommerce-platform-shofar-st.vercel.app
+   - Cart + Add to Cart working (Order `BNH1HFPHHFVYUKVW` created via curl)
+   - All env vars configured (including `VENDURE_INTERNAL_URL` fix)
+3. **✅ PRODUCT IMAGES**: Uploaded via Railway Admin UI
+
+### Immediate Next (Content Polish)
+
+4. **WO-CONTENT-02: Vendure-Driven Storefront Copy**
+   - Replace hardcoded placeholder text with Vendure Channel custom fields
+   - All storefront copy editable via Admin UI (Settings → Channels → tooly → Storefront tab)
+   - Fields already added to Vendure, GraphQL query updated, adapter created
+   - Remaining: Wire up FaqSection (was reverted due to deployment issue - now safe to retry)
+5. **End-to-End Checkout Test**: Complete a full checkout on production Vercel site using test card
+6. **Hero Overlay Tuning**: Currently at 25% opacity, user can adjust via code or make it a Channel field
 
 ### Production Prep (Before Real Sales)
 
-4. **Stripe Production Keys**:
+7. **Stripe Production Keys**:
    - Create LIVE webhook in Stripe Dashboard (same URL, live mode)
    - Replace `sk_test_...` with `sk_live_...` in Railway Vendure Admin
    - Replace `pk_test_...` with `pk_live_...` in Vercel env
-5. **Domain Setup**: Custom domain for Railway Vendure + Vercel frontend
-6. **Shipping Price**: Change from $9.99 to $5.50 (Admin UI)
+8. **Domain Setup**: Custom domain for Railway Vendure + Vercel frontend
+9. **Shipping Price**: Change from $9.99 to desired price (Admin UI)
 
 ### Post-Launch
 
-7. **Order Emails**: Configure transactional email templates
-8. **Policies**: Privacy policy, terms of service, refund policy pages
-9. **pharma-store**: Begin PEPTIDES channel setup (separate store)
-10. **Auth System**: Implement Vendure-native authentication (login/signup/account)
+10. **Order Emails**: Configure transactional email templates
+11. **Policies**: Privacy policy, terms of service, refund policy pages
+12. **pharma-store**: Begin PEPTIDES channel setup (separate store)
+13. **Auth System**: Implement Vendure-native authentication (login/signup/account)
+
+---
+
+## DESIGN V2.0 WORK ORDER TRACKER
+
+> **Purpose**: Track Design v2.0 work orders for TOOLY storefront polish.
+> **Branch Pattern**: `wo/<wo-id>` (e.g., `wo/agent-guardrails-01`)
+
+| WO ID                   | Title                    | Status      | Commit  | Date       |
+| ----------------------- | ------------------------ | ----------- | ------- | ---------- |
+| WO-AGENT-GUARDRAILS-01  | CLAUDE.md + WO workflow  | ✅ Complete | fa8db70 | 2025-12-24 |
+| WO-DESIGN-IMG-01        | (pending content)        | ⏳ Pending  | —       | —          |
+| WO-DESIGN-TRUST-A11Y-01 | Trust badges + skip link | ⏳ Pending  | —       | —          |
+
+### WO Log
+
+#### WO-AGENT-GUARDRAILS-01 (2025-12-24)
+
+- **Goal**: Add CLAUDE.md rules + Design v2.0 tracker
+- **Files Changed**: CLAUDE.md, CHECKPOINT.md
+- **Verification**: No code changes, build unaffected
+- **Commit**: `fa8db70`
 
 ---
 
 ## TROUBLESHOOTING
 
 ### Common Issues
+
+**Vercel /api/shop returns 500:**
+
+- **Symptom**: Add to Cart does nothing, console shows `POST /api/shop 500`
+- **Cause**: `VENDURE_INTERNAL_URL` env var not set in Vercel
+- **Fix**: Add to Vercel → Settings → Environment Variables:
+  - `VENDURE_INTERNAL_URL` = `https://vendure-server-production-75fc.up.railway.app`
+- **Verify**: `curl -s https://your-vercel-url.vercel.app/api/shop -H "content-type: application/json" --data-raw '{"query":"{ activeChannel { code } }"}'`
+- **File**: `apps/shofar-store/src/app/api/shop/route.ts` line 10
 
 **Port already in use:**
 
