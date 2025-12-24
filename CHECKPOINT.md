@@ -671,11 +671,12 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 > **Purpose**: Track Design v2.0 work orders for TOOLY storefront polish.
 > **Branch Pattern**: `wo/<wo-id>` (e.g., `wo/agent-guardrails-01`)
 
-| WO ID                   | Title                    | Status      | Commit  | Date       |
-| ----------------------- | ------------------------ | ----------- | ------- | ---------- |
-| WO-AGENT-GUARDRAILS-01  | CLAUDE.md + WO workflow  | ✅ Complete | fa8db70 | 2025-12-24 |
-| WO-DESIGN-IMG-01        | (pending content)        | ⏳ Pending  | —       | —          |
-| WO-DESIGN-TRUST-A11Y-01 | Trust badges + skip link | ⏳ Pending  | —       | —          |
+| WO ID                   | Title                     | Status      | Commit  | Date       |
+| ----------------------- | ------------------------- | ----------- | ------- | ---------- |
+| WO-AGENT-GUARDRAILS-01  | CLAUDE.md + WO workflow   | ✅ Complete | 63aedfe | 2025-12-24 |
+| WO-DESIGN-IMG-01        | Premium image experience  | ✅ Complete | pending | 2025-12-24 |
+| WO-DESIGN-SYSTEM-IMG-01 | Design-system image demos | ✅ Complete | pending | 2025-12-24 |
+| WO-DESIGN-TRUST-A11Y-01 | Trust badges + skip link  | ⏳ Pending  | —       | —          |
 
 ### WO Log
 
@@ -684,7 +685,37 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 - **Goal**: Add CLAUDE.md rules + Design v2.0 tracker
 - **Files Changed**: CLAUDE.md, CHECKPOINT.md
 - **Verification**: No code changes, build unaffected
-- **Commit**: `fa8db70`
+- **Commit**: `63aedfe`
+
+#### WO-DESIGN-IMG-01 (2025-12-24)
+
+- **Goal**: Premium image experience with Lightbox + native scroll-snap carousel
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/components/ui/Lightbox.tsx` (NEW)
+  - `apps/shofar-store/src/brands/tooly/components/ui/ProductCarousel.tsx` (refactored)
+  - `apps/shofar-store/src/brands/tooly/sections/GallerySection.tsx` (native scroll-snap carousel)
+  - `apps/shofar-store/src/brands/tooly/sections/ProductSection.tsx` (Lightbox integration)
+- **Features**:
+  - Fullscreen Lightbox with swipe, zoom, keyboard navigation
+  - Native scroll-snap mobile carousel (finger-tracking drag)
+  - `isDraggingRef` guard to prevent accidental lightbox open after drag
+  - 150ms debounce scroll settle detection
+  - Respects `prefers-reduced-motion`
+- **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
+- **Commit**: pending
+
+#### WO-DESIGN-SYSTEM-IMG-01 (2025-12-24)
+
+- **Goal**: Add design-system demos for image experience components
+- **Files Changed**:
+  - `apps/shofar-store/src/app/design-system/page.tsx` (added Image Experience section)
+- **Features**:
+  - ProductCarousel demo (reuses production component)
+  - Gallery Mobile Carousel demo (mobile frame simulation)
+  - Fullscreen Lightbox demo (image grid with Lightbox)
+  - Uses same production components (no code duplication)
+- **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
+- **Commit**: pending
 
 ---
 

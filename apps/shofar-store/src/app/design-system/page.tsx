@@ -18,7 +18,6 @@ import {
 } from "@/brands/tooly/components/ui/ButtonPill";
 // Import experimental buttons from their new location
 import {
-  ButtonMarketingPrimary,
   ButtonRotatingWhite,
   ButtonRotatingPurple,
   ButtonConicShine,
@@ -29,11 +28,7 @@ import {
   ToolyWordmark,
   ToolyWordmarkStacked,
 } from "@/brands/tooly/components/ui/ToolyWordmark";
-import {
-  Watermark,
-  WatermarkGrid,
-  WatermarkAnimated,
-} from "@/brands/tooly/components/ui/Watermark";
+import { Watermark } from "@/brands/tooly/components/ui/Watermark";
 import {
   ReviewsMarquee,
   ReviewsMarqueeMultiRow,
@@ -43,7 +38,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   CardGrid,
   Section,
   HeroSection,
@@ -52,11 +46,10 @@ import {
   ProductCard,
   SearchBar,
   Input,
-  ToastProvider,
-  useToast,
-  toast,
 } from "@/brands/tooly/components/ui";
 import { ButtonSecondary } from "@/brands/tooly/components/ui/ButtonSecondary";
+import { ProductCarousel } from "@/brands/tooly/components/ui/ProductCarousel";
+import { Lightbox } from "@/brands/tooly/components/ui/Lightbox";
 
 // Sample data for components
 const sampleReviews = [
@@ -115,6 +108,68 @@ const sampleReviews = [
   },
 ];
 
+// Sample images for Image Experience demos
+const sampleCarouselImages = [
+  {
+    id: "img-1",
+    preview:
+      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800",
+    source:
+      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1600",
+  },
+  {
+    id: "img-2",
+    preview:
+      "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=800",
+    source:
+      "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=1600",
+  },
+  {
+    id: "img-3",
+    preview:
+      "https://images.unsplash.com/photo-1609205807490-b18b16d0b2e7?w=800",
+    source:
+      "https://images.unsplash.com/photo-1609205807490-b18b16d0b2e7?w=1600",
+  },
+  {
+    id: "img-4",
+    preview:
+      "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800",
+    source:
+      "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=1600",
+  },
+  {
+    id: "img-5",
+    preview:
+      "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=800",
+    source:
+      "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=1600",
+  },
+];
+
+const sampleLightboxImages = [
+  {
+    src: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1600",
+    alt: "Professional drill in workshop",
+    label: "Workshop Tools",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=1600",
+    alt: "Titanium hammer close-up",
+    label: "Precision Crafted",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1609205807490-b18b16d0b2e7?w=1600",
+    alt: "Digital level display",
+    label: "Smart Technology",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=1600",
+    alt: "Tool collection overview",
+    label: "Complete Set",
+  },
+];
+
 const sampleFeatures = [
   {
     id: "1",
@@ -153,6 +208,15 @@ const sampleFeatures = [
 ];
 
 export default function DesignSystemPage() {
+  // State for lightbox demo
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
+  const [lightboxIndex, setLightboxIndex] = React.useState(0);
+
+  const openLightboxDemo = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   return (
     <PointerVarsProvider>
       {/* Background effects */}
@@ -1016,6 +1080,183 @@ export default function DesignSystemPage() {
               </CardBody>
             </Card>
           </div>
+        </Section>
+
+        {/* Image Experience Section */}
+        <Section
+          title="Image Experience"
+          subtitle="Premium carousel and lightbox components for product imagery"
+          containerSize="lg"
+          spacing="lg"
+        >
+          <div className="space-y-12">
+            {/* ProductCarousel Demo */}
+            <Card glass padding="lg">
+              <CardHeader bordered>
+                <h3 className="text-xl font-semibold text-white">
+                  ProductCarousel
+                </h3>
+                <p className="text-white/60 text-sm mt-2">
+                  Native scroll-snap carousel with lightbox integration. Swipe
+                  or drag to navigate, tap to open fullscreen.
+                </p>
+              </CardHeader>
+              <CardBody>
+                <div className="max-w-md mx-auto">
+                  <ProductCarousel
+                    images={sampleCarouselImages}
+                    altPrefix="TOOLY product"
+                  />
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Gallery Mobile Carousel Demo */}
+            <Card glass padding="lg">
+              <CardHeader bordered>
+                <h3 className="text-xl font-semibold text-white">
+                  Gallery Mobile Carousel
+                </h3>
+                <p className="text-white/60 text-sm mt-2">
+                  Simulated mobile view of the GallerySection carousel. Resize
+                  browser to see responsive behavior.
+                </p>
+              </CardHeader>
+              <CardBody>
+                {/* Mobile frame simulation */}
+                <div className="mx-auto max-w-[390px] border-4 border-white/20 rounded-[2rem] p-2 bg-black">
+                  <div className="rounded-[1.5rem] overflow-hidden bg-[#0d1218]">
+                    {/* Scroll-snap carousel (same as GallerySection mobile) */}
+                    <div
+                      className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth"
+                      style={{
+                        scrollbarWidth: "none",
+                        msOverflowStyle: "none",
+                      }}
+                    >
+                      {sampleCarouselImages.map((img, index) => (
+                        <div
+                          key={img.id}
+                          className="snap-center shrink-0 w-full aspect-[3/4] relative cursor-zoom-in"
+                          onClick={() => openLightboxDemo(index)}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={img.preview}
+                            alt={`Gallery image ${index + 1}`}
+                            className="w-full h-full object-cover object-center"
+                            draggable={false}
+                          />
+                          {/* Counter badge */}
+                          <div className="absolute bottom-3 left-3 px-2 py-1 rounded bg-black/40 backdrop-blur-sm text-white text-xs font-medium">
+                            {index + 1} / {sampleCarouselImages.length}
+                          </div>
+                          {/* Zoom icon */}
+                          <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-60">
+                            <svg
+                              className="w-5 h-5 text-white"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Thumbnail strip */}
+                    <div className="flex gap-2 p-3 overflow-x-auto scrollbar-hide">
+                      {sampleCarouselImages.map((img) => (
+                        <div
+                          key={img.id}
+                          className="shrink-0 w-12 h-12 rounded-lg overflow-hidden border-2 border-white/20"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={img.preview}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-center text-white/40 text-sm mt-4">
+                  Drag horizontally to navigate • Tap image to open lightbox
+                </p>
+              </CardBody>
+            </Card>
+
+            {/* Lightbox Demo */}
+            <Card glass padding="lg">
+              <CardHeader bordered>
+                <h3 className="text-xl font-semibold text-white">
+                  Fullscreen Lightbox
+                </h3>
+                <p className="text-white/60 text-sm mt-2">
+                  Fullscreen image viewer with keyboard navigation (Arrow keys,
+                  ESC), touch swipe, and thumbnail strip.
+                </p>
+              </CardHeader>
+              <CardBody>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {sampleLightboxImages.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => openLightboxDemo(index)}
+                      className="relative aspect-square rounded-lg overflow-hidden group cursor-zoom-in"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img.src}
+                        alt={img.alt}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="absolute bottom-2 left-2 right-2 text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        {img.label}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-center text-white/40 text-sm mt-4">
+                  Click any image to open lightbox • Respects
+                  prefers-reduced-motion
+                </p>
+              </CardBody>
+            </Card>
+          </div>
+
+          {/* Lightbox component (portal renders to body) */}
+          <Lightbox
+            images={sampleLightboxImages}
+            initialIndex={lightboxIndex}
+            open={lightboxOpen}
+            onClose={() => setLightboxOpen(false)}
+          />
         </Section>
 
         {/* CTA Section */}

@@ -1,12 +1,14 @@
 /**
- * ProductCarousel - Mobile-first image carousel
+ * ProductCarousel - Mobile-first image carousel with lightbox
  *
  * Features:
  * - Touch swipe gestures
  * - CSS scroll-snap for smooth snapping
  * - Dot indicators with cyan active state
  * - Thumbnail strip on desktop
- * - Keyboard navigation (← →)
+ * - Keyboard navigation (arrow keys)
+ * - Click to open fullscreen lightbox
+ * - Zoom cursor on desktop hover
  * - ARIA labels for accessibility
  */
 
@@ -15,6 +17,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { Lightbox, type LightboxImage } from "./Lightbox";
 
 interface ProductAsset {
   id: string;
@@ -37,6 +40,7 @@ export function ProductCarousel({
   className,
 }: ProductCarouselProps): React.ReactElement {
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
   // Handle scroll snap detection
@@ -82,6 +86,21 @@ export function ProductCarousel({
     [currentIndex, images.length, scrollToIndex],
   );
 
+  // Open lightbox at current index
+  const openLightbox = React.useCallback(() => {
+    setLightboxOpen(true);
+  }, []);
+
+  // Convert images to lightbox format
+  const lightboxImages: LightboxImage[] = React.useMemo(
+    () =>
+      images.map((img, idx) => ({
+        src: img.source || img.preview,
+        alt: `${altPrefix} ${idx + 1}`,
+      })),
+    [images, altPrefix],
+  );
+
   // Empty state
   if (!images || images.length === 0) {
     return (
@@ -116,162 +135,215 @@ export function ProductCarousel({
   }
 
   return (
-    <div
-      className={cn("relative", className)}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="region"
-      aria-label="Product image carousel"
-      aria-roledescription="carousel"
-    >
-      {/* Main Carousel */}
+    <>
       <div
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-        className={cn(
-          "flex overflow-x-auto snap-x snap-mandatory",
-          "scrollbar-hide scroll-smooth",
-          "rounded-xl bg-white/[0.04] border border-white/[0.08]",
-        )}
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        className={cn("relative", className)}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="region"
+        aria-label="Product image carousel"
+        aria-roledescription="carousel"
       >
-        {images.map((image, index) => (
+        {/* Main Carousel */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className={cn(
+            "flex overflow-x-auto snap-x snap-mandatory",
+            "scrollbar-hide scroll-smooth",
+            "rounded-xl bg-white/[0.04] border border-white/[0.08]",
+          )}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {images.map((image, index) => (
+            <div
+              key={image.id}
+              className="snap-center shrink-0 w-full aspect-square relative group"
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${images.length}`}
+            >
+              {/* Clickable image with zoom cursor */}
+              <button
+                onClick={openLightbox}
+                className={cn(
+                  "absolute inset-0 w-full h-full",
+                  "cursor-zoom-in focus-visible:outline-none",
+                  "focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-inset",
+                )}
+                aria-label={`View ${altPrefix} ${index + 1} fullscreen`}
+              >
+                <Image
+                  src={image.preview}
+                  alt={`${altPrefix} ${index + 1}`}
+                  fill
+                  className="object-contain p-2 md:p-4"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={index === 0}
+                />
+
+                {/* Zoom icon overlay (visible on hover/focus) */}
+                <div
+                  className={cn(
+                    "absolute inset-0 flex items-center justify-center",
+                    "bg-black/0 group-hover:bg-black/20 transition-colors duration-200",
+                    "pointer-events-none",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "w-12 h-12 rounded-full",
+                      "bg-white/20 backdrop-blur-sm",
+                      "flex items-center justify-center",
+                      "opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+                    )}
+                  >
+                    <svg
+                      className="w-6 h-6 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Dot Indicators */}
+        {images.length > 1 && (
           <div
-            key={image.id}
-            className="snap-center shrink-0 w-full aspect-square relative"
-            role="group"
-            aria-roledescription="slide"
-            aria-label={`${index + 1} of ${images.length}`}
+            className="flex justify-center gap-2 mt-4"
+            role="tablist"
+            aria-label="Carousel navigation"
           >
-            <Image
-              src={image.preview}
-              alt={`${altPrefix} ${index + 1}`}
-              fill
-              className="object-contain p-4"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority={index === 0}
-            />
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToIndex(index)}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-200",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e14]",
+                  index === currentIndex
+                    ? "bg-[#02fcef] w-4"
+                    : "bg-white/30 hover:bg-white/50",
+                )}
+                role="tab"
+                aria-selected={index === currentIndex}
+                aria-label={`Go to image ${index + 1}`}
+              />
+            ))}
           </div>
-        ))}
+        )}
+
+        {/* Thumbnail Strip (Desktop) */}
+        {images.length > 1 && (
+          <div className="hidden md:flex gap-2 mt-4 justify-center">
+            {images.map((image, index) => (
+              <button
+                key={image.id}
+                onClick={() => scrollToIndex(index)}
+                className={cn(
+                  "relative w-16 h-16 rounded-lg overflow-hidden",
+                  "border-2 transition-all duration-200",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef]",
+                  index === currentIndex
+                    ? "border-[#02fcef]"
+                    : "border-white/10 hover:border-white/30",
+                )}
+                aria-label={`View image ${index + 1}`}
+              >
+                <Image
+                  src={image.preview}
+                  alt=""
+                  fill
+                  className="object-contain p-1"
+                  sizes="64px"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Arrow Navigation (Desktop) */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={() => scrollToIndex(Math.max(0, currentIndex - 1))}
+              disabled={currentIndex === 0}
+              className={cn(
+                "hidden md:flex absolute left-2 top-1/2 -translate-y-1/2",
+                "w-10 h-10 rounded-full items-center justify-center",
+                "bg-black/50 text-white/80 backdrop-blur-sm",
+                "hover:bg-black/70 hover:text-white transition-all",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef]",
+                "disabled:opacity-30 disabled:cursor-not-allowed",
+              )}
+              aria-label="Previous image"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={() =>
+                scrollToIndex(Math.min(images.length - 1, currentIndex + 1))
+              }
+              disabled={currentIndex === images.length - 1}
+              className={cn(
+                "hidden md:flex absolute right-2 top-1/2 -translate-y-1/2",
+                "w-10 h-10 rounded-full items-center justify-center",
+                "bg-black/50 text-white/80 backdrop-blur-sm",
+                "hover:bg-black/70 hover:text-white transition-all",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef]",
+                "disabled:opacity-30 disabled:cursor-not-allowed",
+              )}
+              aria-label="Next image"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </>
+        )}
       </div>
 
-      {/* Dot Indicators */}
-      {images.length > 1 && (
-        <div
-          className="flex justify-center gap-2 mt-4"
-          role="tablist"
-          aria-label="Carousel navigation"
-        >
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToIndex(index)}
-              className={cn(
-                "w-2 h-2 rounded-full transition-all duration-200",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e14]",
-                index === currentIndex
-                  ? "bg-[#02fcef] w-4"
-                  : "bg-white/30 hover:bg-white/50",
-              )}
-              role="tab"
-              aria-selected={index === currentIndex}
-              aria-label={`Go to image ${index + 1}`}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Thumbnail Strip (Desktop) */}
-      {images.length > 1 && (
-        <div className="hidden md:flex gap-2 mt-4 justify-center">
-          {images.map((image, index) => (
-            <button
-              key={image.id}
-              onClick={() => scrollToIndex(index)}
-              className={cn(
-                "relative w-16 h-16 rounded-lg overflow-hidden",
-                "border-2 transition-all duration-200",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef]",
-                index === currentIndex
-                  ? "border-[#02fcef]"
-                  : "border-white/10 hover:border-white/30",
-              )}
-              aria-label={`View image ${index + 1}`}
-            >
-              <Image
-                src={image.preview}
-                alt=""
-                fill
-                className="object-contain p-1"
-                sizes="64px"
-              />
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Arrow Navigation (Desktop) */}
-      {images.length > 1 && (
-        <>
-          <button
-            onClick={() => scrollToIndex(Math.max(0, currentIndex - 1))}
-            disabled={currentIndex === 0}
-            className={cn(
-              "hidden md:flex absolute left-2 top-1/2 -translate-y-1/2",
-              "w-10 h-10 rounded-full items-center justify-center",
-              "bg-black/50 text-white/80 backdrop-blur-sm",
-              "hover:bg-black/70 hover:text-white transition-all",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef]",
-              "disabled:opacity-30 disabled:cursor-not-allowed",
-            )}
-            aria-label="Previous image"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={() =>
-              scrollToIndex(Math.min(images.length - 1, currentIndex + 1))
-            }
-            disabled={currentIndex === images.length - 1}
-            className={cn(
-              "hidden md:flex absolute right-2 top-1/2 -translate-y-1/2",
-              "w-10 h-10 rounded-full items-center justify-center",
-              "bg-black/50 text-white/80 backdrop-blur-sm",
-              "hover:bg-black/70 hover:text-white transition-all",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef]",
-              "disabled:opacity-30 disabled:cursor-not-allowed",
-            )}
-            aria-label="Next image"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        </>
-      )}
-    </div>
+      {/* Lightbox */}
+      <Lightbox
+        images={lightboxImages}
+        initialIndex={currentIndex}
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
+    </>
   );
 }
 

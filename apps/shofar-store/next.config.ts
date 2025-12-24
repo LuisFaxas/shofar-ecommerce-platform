@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
         hostname: "*.s3.*.amazonaws.com",
         pathname: "/**",
       },
+      // Unsplash (for /design-system demo images)
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 };
