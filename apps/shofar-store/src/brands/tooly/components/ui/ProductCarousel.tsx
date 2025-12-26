@@ -166,25 +166,11 @@ export function ProductCarousel({
               aria-roledescription="slide"
               aria-label={`${index + 1} of ${images.length}`}
             >
-              {/* Blurred backdrop (mobile only) - creates rich fill behind contained image */}
-              <div
-                className="absolute inset-0 overflow-hidden md:hidden pointer-events-none"
-                aria-hidden="true"
-              >
-                <Image
-                  src={image.preview}
-                  alt=""
-                  fill
-                  className="object-cover blur-2xl scale-110 opacity-40"
-                  sizes="100vw"
-                />
-              </div>
-
               {/* Clickable image with zoom cursor */}
               <button
                 onClick={openLightbox}
                 className={cn(
-                  "absolute inset-0 w-full h-full",
+                  "absolute inset-0 w-full h-full overflow-hidden",
                   "cursor-zoom-in focus-visible:outline-none",
                   "focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-inset",
                 )}
@@ -194,10 +180,7 @@ export function ProductCarousel({
                   src={image.preview}
                   alt={`${altPrefix} ${index + 1}`}
                   fill
-                  className={cn(
-                    "md:object-cover md:object-center md:scale-100",
-                    "object-contain object-bottom scale-[1.06]",
-                  )}
+                  className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority={index === 0}
                 />
