@@ -191,40 +191,56 @@ export function ProductSection({
   // Toggle this to switch between layouts (saves ~48px vertical space on mobile)
   const headerLayout = "inline" as "classic" | "inline";
 
-  // Get selection label from variant (color/finish name)
-  const getSelectionLabel = (variant: ProductVariant | null): string | null => {
+  /**
+   * Get selection label from variant (color/finish name)
+   * WO 2.0.5: Robust normalization - strips product name prefix defensively
+   */
+  const getSelectionLabel = (
+    variant: ProductVariant | null,
+    productName: string = "TOOLY",
+  ): string | null => {
     if (!variant) return null;
+
+    let label: string | null = null;
 
     // 1. Try first option value (TOOLY has single option group)
     const variantWithOptions = variant as {
       options?: Array<{ name: string }>;
     };
     if (variantWithOptions.options?.[0]?.name) {
-      return variantWithOptions.options[0].name;
+      label = variantWithOptions.options[0].name;
     }
 
     // 2. Try facetValues (color/finish facet)
-    const colorFacet = variant.facetValues.find(
-      (fv) => fv.facet.code === "color",
-    );
-    if (colorFacet?.name) return colorFacet.name;
-
-    const finishFacet = variant.facetValues.find(
-      (fv) => fv.facet.code === "finish",
-    );
-    if (finishFacet?.name) return finishFacet.name;
-
-    // 3. Fallback: parse variant.name (strip "TOOLY - " prefix)
-    if (variant.name) {
-      const stripped = variant.name.replace(/^TOOLY\s*-\s*/i, "");
-      return stripped || variant.name;
+    if (!label) {
+      const colorFacet = variant.facetValues.find(
+        (fv) => fv.facet.code === "color",
+      );
+      if (colorFacet?.name) label = colorFacet.name;
+    }
+    if (!label) {
+      const finishFacet = variant.facetValues.find(
+        (fv) => fv.facet.code === "finish",
+      );
+      if (finishFacet?.name) label = finishFacet.name;
     }
 
-    return null;
+    // 3. Fallback to variant.name
+    if (!label && variant.name) {
+      label = variant.name;
+    }
+
+    // 4. Strip product name prefix (defensive - prevents "TOOLY — TOOLY Gunmetal")
+    if (label) {
+      const prefixPattern = new RegExp(`^${productName}\\s*[-–—]?\\s*`, "i");
+      label = label.replace(prefixPattern, "").trim();
+    }
+
+    return label || null;
   };
 
-  // Compute selection label once
-  const selectionLabel = getSelectionLabel(selectedVariant);
+  // Compute selection label once (pass product name for prefix stripping)
+  const selectionLabel = getSelectionLabel(selectedVariant, product?.name);
 
   // Get variant-aware media for carousel (uses codegen types)
   const carouselMedia = getVariantMedia(
@@ -312,31 +328,29 @@ export function ProductSection({
 
             {/* Product Info */}
             <div className="flex flex-col">
-              {/* INLINE MODE: Single purchase line (mobile) - never wraps */}
+              {/* INLINE MODE: Single purchase line (mobile) - WO 2.0.5 unified typography */}
               {headerLayout === "inline" && (
-                <div className="flex md:hidden items-center gap-2 mb-4 whitespace-nowrap">
-                  {/* Left: Product name (never truncates) */}
+                <div className="flex md:hidden min-w-0 items-center gap-2 mb-4 whitespace-nowrap">
+                  {/* Product name */}
                   <span className="text-sm font-semibold text-white shrink-0">
                     {product?.name || "TOOLY"}
                   </span>
 
-                  {/* Separator */}
-                  <span className="text-white/30 shrink-0">—</span>
+                  {/* Dot separator */}
+                  <span className="text-white/25 shrink-0">•</span>
 
-                  {/* Middle: Selection label (can truncate) */}
-                  <span className="text-sm min-w-0 truncate">
-                    {selectionLabel ? (
-                      <span className="text-white/60">{selectionLabel}</span>
-                    ) : (
-                      <span className="text-white/40 italic">Select Color</span>
+                  {/* Selection label (can truncate) */}
+                  <span className="text-sm font-medium text-white/60 min-w-0 truncate">
+                    {selectionLabel || (
+                      <span className="italic text-white/40">Select Color</span>
                     )}
                   </span>
 
-                  {/* Separator */}
-                  <span className="text-white/30 shrink-0">—</span>
+                  {/* Dot separator */}
+                  <span className="text-white/25 shrink-0">•</span>
 
-                  {/* Right: Price (never truncates) */}
-                  <span className="text-lg font-bold text-white shrink-0">
+                  {/* Price - same text-sm as others, weight/opacity for hierarchy */}
+                  <span className="text-sm font-semibold text-white tabular-nums shrink-0">
                     {selectedVariant
                       ? formatPrice(
                           selectedVariant.priceWithTax,

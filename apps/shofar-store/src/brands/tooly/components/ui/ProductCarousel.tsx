@@ -221,41 +221,47 @@ export function ProductCarousel({
             ))}
           </div>
 
-          {/* Glass dock thumbnails overlay (mobile only) */}
+          {/* Bottom scrim gradient (mobile only) - WO 2.0.5 */}
           {images.length > 1 && (
             <div
-              className={cn(
-                "absolute left-3 right-3 bottom-3 md:hidden",
-                "bg-black/40 backdrop-blur-md",
-                "border border-white/10 rounded-xl",
-                "p-2 flex gap-2 overflow-x-auto snap-x snap-mandatory scrollbar-hide",
-              )}
+              className="absolute inset-x-0 bottom-0 h-24 md:hidden pointer-events-none"
+              aria-hidden="true"
             >
-              {images.map((img, idx) => (
-                <button
-                  key={img.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    scrollToIndex(idx);
-                  }}
-                  className={cn(
-                    "relative shrink-0 w-10 h-10 rounded-lg overflow-hidden snap-start",
-                    "border-2 transition-all duration-200",
-                    idx === currentIndex
-                      ? "border-[#02fcef]"
-                      : "border-white/20 hover:border-white/40",
-                  )}
-                  aria-label={`View image ${idx + 1}`}
-                >
-                  <Image
-                    src={img.preview}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="40px"
-                  />
-                </button>
-              ))}
+              <div className="absolute inset-0 tooly-media-scrim" />
+            </div>
+          )}
+
+          {/* Floating thumbnails overlay (mobile only) - WO 2.0.5 */}
+          {images.length > 1 && (
+            <div className="absolute left-4 right-4 bottom-4 md:hidden pointer-events-none">
+              <div className="flex gap-2 px-1 overflow-x-auto scrollbar-hide pointer-events-auto">
+                {images.map((img, idx) => (
+                  <button
+                    key={img.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      scrollToIndex(idx);
+                    }}
+                    className={cn(
+                      "relative shrink-0 w-11 h-11 rounded-lg overflow-hidden",
+                      "border-2 transition-all duration-200",
+                      "bg-black/20 backdrop-blur-sm",
+                      idx === currentIndex
+                        ? "border-[#02fcef]"
+                        : "border-white/30 hover:border-white/50",
+                    )}
+                    aria-label={`View image ${idx + 1}`}
+                  >
+                    <Image
+                      src={img.preview}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="44px"
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
