@@ -7,7 +7,7 @@
 
 ## CURRENT TRUTH (Read This First)
 
-**Last Updated**: 2025-12-18
+**Last Updated**: 2025-12-26
 
 ### Service Status
 
@@ -671,14 +671,34 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 > **Purpose**: Track Design v2.0 work orders for TOOLY storefront polish.
 > **Branch Pattern**: `wo/<wo-id>` (e.g., `wo/agent-guardrails-01`)
 
-| WO ID                   | Title                     | Status      | Commit  | Date       |
-| ----------------------- | ------------------------- | ----------- | ------- | ---------- |
-| WO-AGENT-GUARDRAILS-01  | CLAUDE.md + WO workflow   | ✅ Complete | 63aedfe | 2025-12-24 |
-| WO-DESIGN-IMG-01        | Premium image experience  | ✅ Complete | pending | 2025-12-24 |
-| WO-DESIGN-SYSTEM-IMG-01 | Design-system image demos | ✅ Complete | pending | 2025-12-24 |
-| WO-DESIGN-TRUST-A11Y-01 | Trust badges + skip link  | ⏳ Pending  | —       | —          |
+| WO ID                        | Title                          | Status      | Commit  | Date       |
+| ---------------------------- | ------------------------------ | ----------- | ------- | ---------- |
+| WO 2.0.1                     | Variant-aware media + swatches | ✅ Complete | 9321ad6 | 2025-12-26 |
+| WO-AGENT-GUARDRAILS-01       | CLAUDE.md + WO workflow        | ✅ Complete | 63aedfe | 2025-12-24 |
+| WO-DESIGN-IMG-01             | Premium image experience       | ✅ Complete | pending | 2025-12-24 |
+| WO-DESIGN-SYSTEM-IMG-01      | Design-system image demos      | ✅ Complete | pending | 2025-12-24 |
+| WO-DESIGN-TRUST-A11Y-01      | Trust badges + skip link       | ✅ Complete | pending | 2025-12-24 |
+| WO-A11Y-SCROLL-01            | Global scroll offset           | ✅ Complete | pending | 2025-12-24 |
+| WO-DESIGN-SYSTEM-CAROUSEL-01 | Design-system carousel         | ✅ Complete | pending | 2025-12-24 |
 
 ### WO Log
+
+#### WO 2.0.1 (2025-12-26)
+
+- **Goal**: Variant-aware product media + swatches
+- **Files Changed**:
+  - `packages/api-client/src/shop/tooly-product.graphql` (added variants[].assets[])
+  - `packages/api-client/src/generated/shop-types.ts` (regenerated)
+  - `apps/shofar-store/src/brands/tooly/sections/ProductSection.tsx` (getVariantMedia helper + key prop + swatch images)
+- **Features**:
+  - `getVariantMedia()` helper with fallback: variant.assets → variant.featuredAsset → product.assets → product.featuredAsset
+  - Carousel `key={selectedVariant?.id}` forces reset to first image on variant change
+  - Swatches show variant featuredAsset thumbnails (falls back to color dot)
+  - Lightbox receives same variant-aware media list via carousel props
+- **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
+- **Screenshots**: `wo-2.0.1-variant-a-390x844.png`, `wo-2.0.1-product-card-390x844.png`
+- **Note**: Full visual testing requires multiple variants with different assets in Vendure (currently only 1 variant exists)
+- **Commit**: `9321ad6`
 
 #### WO-AGENT-GUARDRAILS-01 (2025-12-24)
 
@@ -714,6 +734,57 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
   - Gallery Mobile Carousel demo (mobile frame simulation)
   - Fullscreen Lightbox demo (image grid with Lightbox)
   - Uses same production components (no code duplication)
+- **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
+- **Commit**: pending
+
+#### WO-DESIGN-TRUST-A11Y-01 (2025-12-24)
+
+- **Goal**: Mobile trust badge readability + skip-to-content link
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/sections/CredibilitySection.tsx` (mobile horizontal scroll)
+  - `apps/shofar-store/src/brands/tooly/components/ui/Navbar.tsx` (skip link)
+  - `apps/shofar-store/src/brands/tooly/index.tsx` (main ID + scroll-mt)
+- **Features**:
+  - Trust badges: mobile horizontal scroll strip with snap, desktop grid unchanged
+  - Skip link: first focusable element, links to #main
+  - Main element: id="main", tabIndex={-1}, scroll-mt-24 for proper focus
+- **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
+- **Commit**: pending
+
+#### WO-A11Y-SCROLL-01 (2025-12-24)
+
+- **Goal**: Global scroll offset system for sticky navbar
+- **Files Changed**:
+  - `apps/shofar-store/src/app/globals.css` (CSS custom property + scroll rules)
+  - `apps/shofar-store/src/brands/tooly/index.tsx` (removed hardcoded scroll-mt-24)
+- **Features**:
+  - CSS custom property `--scroll-offset` (5rem mobile, 6rem desktop)
+  - `html { scroll-padding-top }` for native anchor navigation
+  - `[id] { scroll-margin-top }` for programmatic scrollIntoView()
+  - Smooth scroll only under `@media (prefers-reduced-motion: no-preference)`
+  - Breakpoint at 1024px (lg) matches navbar h-16/h-20 transition
+- **Verification**:
+  - `pnpm --filter @shofar/shofar-store build` PASS
+  - Puppeteer: #product, #technology, skip link (#main) all land correctly
+  - Mobile (430px) and desktop (1440px) both tested
+- **Commit**: pending
+
+#### WO-DESIGN-SYSTEM-CAROUSEL-01 (2025-12-24)
+
+- **Goal**: Add trust badges carousel pattern to /design-system using real components
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/components/ui/HorizontalSnapCarousel.tsx` (NEW)
+  - `apps/shofar-store/src/brands/tooly/components/ui/index.ts` (export added)
+  - `apps/shofar-store/src/brands/tooly/sections/CredibilitySection.tsx` (uses shared component)
+  - `apps/shofar-store/src/app/design-system/page.tsx` (carousel demos added)
+- **Features**:
+  - Reusable `HorizontalSnapCarousel` component
+  - Mobile: horizontal scroll-snap with configurable item width
+  - Desktop: CSS grid (2-6 columns configurable)
+  - Gap and snap alignment options
+  - ARIA region for accessibility
+  - No duplicated logic - CredibilitySection uses the shared component
+  - Design-system demos: trust badges, product cards, configuration options
 - **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
 - **Commit**: pending
 
