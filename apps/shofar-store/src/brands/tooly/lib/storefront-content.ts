@@ -47,11 +47,28 @@ export interface ChannelStorefrontFields {
   storefrontDeliveryEstimate?: string | null;
   storefrontInStockLabel?: string | null;
   storefrontOutOfStockLabel?: string | null;
+  storefrontCarouselNavStyle?: string | null;
   // Footer / compliance
   storefrontDisclaimer?: string | null;
   // Header toggles
   storefrontShowAuthLinks?: boolean | null;
   storefrontShowSearch?: boolean | null;
+  // FAQ section
+  storefrontFaqHeading?: string | null;
+  storefrontFaqSubhead?: string | null;
+  storefrontShowFaq?: boolean | null;
+  storefrontFaq1Question?: string | null;
+  storefrontFaq1Answer?: string | null;
+  storefrontFaq2Question?: string | null;
+  storefrontFaq2Answer?: string | null;
+  storefrontFaq3Question?: string | null;
+  storefrontFaq3Answer?: string | null;
+  storefrontFaq4Question?: string | null;
+  storefrontFaq4Answer?: string | null;
+  storefrontFaq5Question?: string | null;
+  storefrontFaq5Answer?: string | null;
+  storefrontFaq6Question?: string | null;
+  storefrontFaq6Answer?: string | null;
 }
 
 // ============================================================================
@@ -88,11 +105,24 @@ export interface ShopContent {
   deliveryEstimate: string;
   inStockLabel: string;
   outOfStockLabel: string;
+  carouselNavStyle: "dots" | "thumbs";
 }
 
 export interface HeaderToggles {
   showAuthLinks: boolean;
   showSearch: boolean;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface FaqContent {
+  heading: string;
+  subhead: string;
+  showFaq: boolean;
+  items: FaqItem[];
 }
 
 export interface StorefrontContent {
@@ -103,6 +133,7 @@ export interface StorefrontContent {
   shop: ShopContent;
   disclaimer: string;
   header: HeaderToggles;
+  faq: FaqContent;
 }
 
 // ============================================================================
@@ -161,11 +192,44 @@ const DEFAULTS: StorefrontContent = {
     deliveryEstimate: "Ships within 3-5 business days",
     inStockLabel: "In Stock",
     outOfStockLabel: "Out of Stock",
+    carouselNavStyle: "dots",
   },
   disclaimer: "For aromatic and sensory evaluation purposes only.",
   header: {
     showAuthLinks: false,
     showSearch: false,
+  },
+  faq: {
+    heading: "Frequently Asked Questions",
+    subhead: "Everything you need to know about TOOLY",
+    showFaq: true,
+    items: [
+      {
+        question: "What materials is TOOLY made from?",
+        answer:
+          "TOOLY is precision CNC-machined from aerospace-grade 6061 aluminum with a medical-grade stainless steel chamber. The heating element uses premium ceramics for optimal heat distribution and purity.",
+      },
+      {
+        question: "What is included with my TOOLY?",
+        answer:
+          "Every TOOLY comes with the precision-machined device, a protective carrying case, cleaning brush, spare screens, and a detailed user guide. Everything you need to get started is included in the box.",
+      },
+      {
+        question: "What is your warranty policy?",
+        answer:
+          "Every TOOLY device comes with a comprehensive 2-year warranty covering manufacturing defects and component performance. Extended warranty options are available at checkout.",
+      },
+      {
+        question: "How do I clean and maintain my TOOLY?",
+        answer:
+          "We recommend cleaning your TOOLY after every 5-10 sessions using the included cleaning kit. The modular design allows easy access to all components. Detailed maintenance guides are available in your account.",
+      },
+      {
+        question: "What is your return policy?",
+        answer:
+          "We offer a 30-day satisfaction guarantee. If you're not completely satisfied with your purchase, return it in original condition for a full refund. Shipping is free on all returns.",
+      },
+    ],
   },
 };
 
@@ -260,6 +324,9 @@ export function buildStorefrontContent(
       inStockLabel: fields.storefrontInStockLabel || DEFAULTS.shop.inStockLabel,
       outOfStockLabel:
         fields.storefrontOutOfStockLabel || DEFAULTS.shop.outOfStockLabel,
+      carouselNavStyle:
+        (fields.storefrontCarouselNavStyle as "dots" | "thumbs") ||
+        DEFAULTS.shop.carouselNavStyle,
     },
     disclaimer: fields.storefrontDisclaimer || DEFAULTS.disclaimer,
     header: {
@@ -267,6 +334,41 @@ export function buildStorefrontContent(
         fields.storefrontShowAuthLinks ?? DEFAULTS.header.showAuthLinks,
       showSearch: fields.storefrontShowSearch ?? DEFAULTS.header.showSearch,
     },
+    faq: buildFaqContent(fields),
+  };
+}
+
+/**
+ * Build FAQ content from Channel custom fields
+ * Only includes items where both question AND answer are non-empty
+ */
+function buildFaqContent(fields: ChannelStorefrontFields): FaqContent {
+  const items: FaqItem[] = [];
+
+  // Collect FAQ items 1-6, only include if both Q and A are non-empty
+  const faqPairs = [
+    { q: fields.storefrontFaq1Question, a: fields.storefrontFaq1Answer },
+    { q: fields.storefrontFaq2Question, a: fields.storefrontFaq2Answer },
+    { q: fields.storefrontFaq3Question, a: fields.storefrontFaq3Answer },
+    { q: fields.storefrontFaq4Question, a: fields.storefrontFaq4Answer },
+    { q: fields.storefrontFaq5Question, a: fields.storefrontFaq5Answer },
+    { q: fields.storefrontFaq6Question, a: fields.storefrontFaq6Answer },
+  ];
+
+  for (const pair of faqPairs) {
+    if (pair.q && pair.a) {
+      items.push({ question: pair.q, answer: pair.a });
+    }
+  }
+
+  // If no items from Vendure, use defaults
+  const finalItems = items.length > 0 ? items : DEFAULTS.faq.items;
+
+  return {
+    heading: fields.storefrontFaqHeading || DEFAULTS.faq.heading,
+    subhead: fields.storefrontFaqSubhead || DEFAULTS.faq.subhead,
+    showFaq: fields.storefrontShowFaq ?? DEFAULTS.faq.showFaq,
+    items: finalItems,
   };
 }
 

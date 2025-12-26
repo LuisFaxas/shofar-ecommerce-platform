@@ -32,12 +32,15 @@ interface ProductCarouselProps {
   altPrefix?: string;
   /** Additional className */
   className?: string;
+  /** Mobile navigation style: 'dots' (default) or 'thumbs' - WO 2.0.6c */
+  navStyle?: "dots" | "thumbs";
 }
 
 export function ProductCarousel({
   images,
   altPrefix = "Product image",
   className,
+  navStyle = "dots",
 }: ProductCarouselProps): React.ReactElement {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
@@ -223,8 +226,35 @@ export function ProductCarousel({
           </div>
         </div>
 
-        {/* Mobile thumbnails - below image (WO 2.0.6b) */}
-        {images.length > 1 && (
+        {/* Mobile Navigation - WO 2.0.6c: Configurable via Vendure */}
+        {/* Option A: Dots (minimal) */}
+        {images.length > 1 && navStyle === "dots" && (
+          <div
+            className="md:hidden flex justify-center gap-2 mt-3"
+            role="tablist"
+            aria-label="Carousel navigation"
+          >
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToIndex(index)}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-200",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e14]",
+                  index === currentIndex
+                    ? "bg-[#02fcef] w-4"
+                    : "bg-white/30 hover:bg-white/50",
+                )}
+                role="tab"
+                aria-selected={index === currentIndex}
+                aria-label={`Go to image ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Option B: Thumbnails */}
+        {images.length > 1 && navStyle === "thumbs" && (
           <div className="md:hidden flex justify-center gap-2 mt-3">
             {images.map((img, idx) => (
               <button
@@ -251,7 +281,7 @@ export function ProductCarousel({
           </div>
         )}
 
-        {/* Dot Indicators (desktop only) */}
+        {/* Desktop: Dot Indicators (always shown) */}
         {images.length > 1 && (
           <div
             className="hidden md:flex justify-center gap-2 mt-4"

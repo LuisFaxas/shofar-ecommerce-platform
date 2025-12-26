@@ -325,6 +325,7 @@ export function ProductSection({
               key={selectedVariant?.id || "default"}
               images={carouselMedia}
               altPrefix={product?.name || "TOOLY"}
+              navStyle={shopContent?.carouselNavStyle}
             />
 
             {/* Product Info */}

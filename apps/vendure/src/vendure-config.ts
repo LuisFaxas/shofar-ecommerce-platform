@@ -752,6 +752,34 @@ export const config: VendureConfig = {
         ui: { tab: "Storefront" },
       },
       // ============================================================================
+      // STOREFRONT CONTENT - Product Section
+      // ============================================================================
+      {
+        name: "storefrontCarouselNavStyle",
+        type: "string",
+        nullable: true,
+        public: true,
+        defaultValue: "dots",
+        label: [
+          { languageCode: LanguageCode.en, value: "Carousel Navigation Style" },
+        ],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              'Mobile product carousel navigation: "dots" (minimal) or "thumbs" (thumbnail images)',
+          },
+        ],
+        ui: {
+          tab: "Storefront",
+          component: "select-form-input",
+          options: [
+            { value: "dots", label: "Dots (minimal)" },
+            { value: "thumbs", label: "Thumbnails" },
+          ],
+        },
+      },
+      // ============================================================================
       // STOREFRONT CONTENT - FAQ Section
       // ============================================================================
       {
