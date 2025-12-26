@@ -106,7 +106,7 @@ export function ProductCarousel({
     return (
       <div
         className={cn(
-          "relative aspect-square rounded-xl",
+          "relative tooly-product-media aspect-[3/4] md:aspect-square rounded-xl",
           "bg-white/[0.04] border border-white/[0.08]",
           "flex items-center justify-center",
           className,
@@ -158,11 +158,28 @@ export function ProductCarousel({
           {images.map((image, index) => (
             <div
               key={image.id}
-              className="snap-center shrink-0 w-full aspect-square relative group"
+              className={cn(
+                "snap-center shrink-0 w-full relative group",
+                "tooly-product-media aspect-[3/4] md:aspect-square",
+              )}
               role="group"
               aria-roledescription="slide"
               aria-label={`${index + 1} of ${images.length}`}
             >
+              {/* Blurred backdrop (mobile only) - creates rich fill behind contained image */}
+              <div
+                className="absolute inset-0 overflow-hidden md:hidden pointer-events-none"
+                aria-hidden="true"
+              >
+                <Image
+                  src={image.preview}
+                  alt=""
+                  fill
+                  className="object-cover blur-2xl scale-110 opacity-40"
+                  sizes="100vw"
+                />
+              </div>
+
               {/* Clickable image with zoom cursor */}
               <button
                 onClick={openLightbox}
@@ -177,43 +194,42 @@ export function ProductCarousel({
                   src={image.preview}
                   alt={`${altPrefix} ${index + 1}`}
                   fill
-                  className="object-contain p-2 md:p-4"
+                  className={cn(
+                    "md:object-cover md:object-center md:scale-100",
+                    "object-contain object-bottom scale-[1.06]",
+                  )}
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority={index === 0}
                 />
+              </button>
 
-                {/* Zoom icon overlay (visible on hover/focus) */}
+              {/* Zoom icon (top-right corner) */}
+              <div
+                className={cn("absolute top-3 right-3", "pointer-events-none")}
+              >
                 <div
                   className={cn(
-                    "absolute inset-0 flex items-center justify-center",
-                    "bg-black/0 group-hover:bg-black/20 transition-colors duration-200",
-                    "pointer-events-none",
+                    "w-8 h-8 md:w-10 md:h-10 rounded-full",
+                    "bg-black/30 md:bg-white/20 backdrop-blur-sm",
+                    "flex items-center justify-center",
+                    "opacity-70 md:opacity-0 group-hover:opacity-100 transition-opacity duration-200",
                   )}
                 >
-                  <div
-                    className={cn(
-                      "w-12 h-12 rounded-full",
-                      "bg-white/20 backdrop-blur-sm",
-                      "flex items-center justify-center",
-                      "opacity-0 group-hover:opacity-100 transition-opacity duration-200",
-                    )}
+                  <svg
+                    className="w-4 h-4 md:w-5 md:h-5 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
                   >
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
-                      />
-                    </svg>
-                  </div>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
+                    />
+                  </svg>
                 </div>
-              </button>
+              </div>
             </div>
           ))}
         </div>
@@ -244,15 +260,21 @@ export function ProductCarousel({
           </div>
         )}
 
-        {/* Thumbnail Strip (Desktop) */}
+        {/* Thumbnail Strip (Mobile: horizontal scroll snap, Desktop: centered) */}
         {images.length > 1 && (
-          <div className="hidden md:flex gap-2 mt-4 justify-center">
+          <div
+            className={cn(
+              "flex gap-2 mt-4 overflow-x-auto snap-x snap-mandatory",
+              "md:justify-center md:overflow-visible",
+              "scrollbar-hide pb-1",
+            )}
+          >
             {images.map((image, index) => (
               <button
                 key={image.id}
                 onClick={() => scrollToIndex(index)}
                 className={cn(
-                  "relative w-16 h-16 rounded-lg overflow-hidden",
+                  "relative shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-lg overflow-hidden snap-start",
                   "border-2 transition-all duration-200",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef]",
                   index === currentIndex
@@ -266,7 +288,7 @@ export function ProductCarousel({
                   alt=""
                   fill
                   className="object-contain p-1"
-                  sizes="64px"
+                  sizes="56px"
                 />
               </button>
             ))}

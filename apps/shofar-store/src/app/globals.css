@@ -44,19 +44,73 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--focus-ring);
 }
 
-/* Scroll offset for sticky navbar - WO-FRONTEND-01 */
-/* Navbar height: h-16 (4rem) on mobile, h-20 (5rem) on desktop */
-[id] {
-  scroll-margin-top: 5rem;
+/* ==========================================================================
+   SCROLL OFFSET SYSTEM - WO-A11Y-SCROLL-01
+   Navbar height: h-16 (4rem/64px) mobile, lg:h-20 (5rem/80px) desktop
+   Breakpoint: lg = min-width: 1024px
+   Adding 1rem buffer for visual breathing room
+   ========================================================================== */
+
+:root {
+  --scroll-offset: 5rem; /* Mobile: 4rem navbar + 1rem buffer */
 }
 
-@media (max-width: 1023px) {
-  [id] {
-    scroll-margin-top: 4rem;
+@media (min-width: 1024px) {
+  :root {
+    --scroll-offset: 6rem; /* Desktop (lg+): 5rem navbar + 1rem buffer */
   }
 }
 
-/* Smooth scroll behavior */
+/* Scroll padding for native anchor navigation - always applied */
 html {
-  scroll-behavior: smooth;
+  scroll-padding-top: var(--scroll-offset);
+}
+
+/* Smooth scroll only when user hasn't requested reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Scroll margin for programmatic scrollIntoView() - all ID targets */
+[id] {
+  scroll-margin-top: var(--scroll-offset);
+}
+
+/* ==========================================================================
+   SHORT-HEIGHT DENSITY MODE - WO-ANCHOR-DENSITY-01
+   Target: Short phones (≤700px height) where Product section needs compaction
+   Only affects Product section - does NOT shrink entire page
+   ========================================================================== */
+
+:root {
+  --tooly-density: 0;
+}
+
+@media (max-height: 700px) {
+  :root {
+    --tooly-density: 1;
+  }
+
+  /* Product section density adjustments - use higher specificity to avoid !important */
+  section.tooly-product-section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  section.tooly-product-section .tooly-product-heading {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ==========================================================================
+   PRODUCT MEDIA SHORT-PHONE CLAMP - WO 2.0.2
+   On short phones (≤700px height), clamp media to square so CTA stays reachable
+   ========================================================================== */
+
+@media (max-height: 700px) and (max-width: 767px) {
+  .tooly-product-media {
+    aspect-ratio: 1/1;
+  }
 }
