@@ -1,9 +1,11 @@
 /**
  * TechnologySection - Features and technology showcase
- * WO 3.1 Implementation
+ * WO 3.1 + WO 2.1.1 Implementation
  *
  * Features:
- * - 3-column grid with FeatureCards
+ * - 3-column grid with FeatureCards (desktop)
+ * - 2-page horizontal pager with 3 cards each (mobile)
+ * - Dot navigation matching ProductCarousel
  * - Icon + title + description pattern
  * - Glass morphism styling
  */
@@ -13,6 +15,15 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import type { Feature } from "../lib/storefront-content";
+
+// Utility to chunk array into groups
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
+}
 
 interface TechnologySectionProps {
   className?: string;
@@ -113,16 +124,87 @@ function FeatureIcon({ type }: { type: string }): React.ReactElement {
   );
 }
 
+// Reusable FeatureCard component
+function FeatureCard({
+  feature,
+}: {
+  feature: { icon: string; title: string; body: string };
+}): React.ReactElement {
+  return (
+    <div
+      className={cn(
+        "group p-6 rounded-xl",
+        "bg-white/[0.04] border border-white/[0.08]",
+        "hover:bg-white/[0.06] hover:border-white/[0.12]",
+        "transition-all duration-300",
+      )}
+    >
+      {/* Icon */}
+      <div
+        className={cn(
+          "w-14 h-14 rounded-xl mb-4",
+          "bg-gradient-to-br from-[#02fcef]/10 to-[#a02bfe]/10",
+          "border border-white/[0.08]",
+          "flex items-center justify-center",
+          "text-[#02fcef] group-hover:text-white",
+          "transition-colors duration-300",
+        )}
+      >
+        <FeatureIcon type={feature.icon} />
+      </div>
+
+      {/* Content */}
+      <h3 className="text-lg font-semibold text-white mb-2 line-clamp-1">
+        {feature.title}
+      </h3>
+      <p className="text-sm text-white/60 leading-relaxed line-clamp-3">
+        {feature.body}
+      </p>
+    </div>
+  );
+}
+
 export function TechnologySection({
   className,
   features,
 }: TechnologySectionProps): React.ReactElement {
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const [activePageIndex, setActivePageIndex] = React.useState(0);
+
   // Merge features prop with default icons
   const displayFeatures = DEFAULT_FEATURES.map((defaultFeature, index) => ({
     icon: defaultFeature.icon,
     title: features?.[index]?.title ?? defaultFeature.title,
     body: features?.[index]?.body ?? defaultFeature.body,
   }));
+
+  // Split features into pages of 3 for mobile pager
+  const pages = chunkArray(displayFeatures, 3);
+
+  // Handle scroll to detect active page
+  const handleScroll = React.useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const newIndex = Math.round(container.scrollLeft / container.offsetWidth);
+    if (
+      newIndex !== activePageIndex &&
+      newIndex >= 0 &&
+      newIndex < pages.length
+    ) {
+      setActivePageIndex(newIndex);
+    }
+  }, [activePageIndex, pages.length]);
+
+  // Scroll to specific page
+  const scrollToPage = React.useCallback((index: number) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    container.scrollTo({
+      left: index * container.offsetWidth,
+      behavior: "smooth",
+    });
+    setActivePageIndex(index);
+  }, []);
 
   return (
     <section
@@ -145,42 +227,57 @@ export function TechnologySection({
           </p>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Desktop Grid - hidden on mobile */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayFeatures.map((feature, index) => (
-            <div
-              key={index}
-              className={cn(
-                "group p-6 rounded-xl",
-                "bg-white/[0.04] border border-white/[0.08]",
-                "hover:bg-white/[0.06] hover:border-white/[0.12]",
-                "transition-all duration-300",
-              )}
-            >
-              {/* Icon */}
-              <div
-                className={cn(
-                  "w-14 h-14 rounded-xl mb-4",
-                  "bg-gradient-to-br from-[#02fcef]/10 to-[#a02bfe]/10",
-                  "border border-white/[0.08]",
-                  "flex items-center justify-center",
-                  "text-[#02fcef] group-hover:text-white",
-                  "transition-colors duration-300",
-                )}
-              >
-                <FeatureIcon type={feature.icon} />
-              </div>
+            <FeatureCard key={index} feature={feature} />
+          ))}
+        </div>
 
-              {/* Content */}
-              <h3 className="text-lg font-semibold text-white mb-2 line-clamp-1">
-                {feature.title}
-              </h3>
-              <p className="text-sm text-white/60 leading-relaxed line-clamp-3">
-                {feature.body}
-              </p>
+        {/* Mobile Pager - hidden on desktop */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="md:hidden flex overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth -mx-4"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {pages.map((pageFeatures, pageIndex) => (
+            <div
+              key={pageIndex}
+              className="snap-center shrink-0 w-full flex flex-col gap-4 px-4"
+            >
+              {pageFeatures.map((feature, featureIndex) => (
+                <FeatureCard key={featureIndex} feature={feature} />
+              ))}
             </div>
           ))}
         </div>
+
+        {/* Mobile Dot Indicators - matching ProductCarousel */}
+        {pages.length > 1 && (
+          <div
+            className="md:hidden flex justify-center gap-2 mt-4"
+            role="tablist"
+            aria-label="Feature pages navigation"
+          >
+            {pages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToPage(index)}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-200",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e14]",
+                  index === activePageIndex
+                    ? "bg-[#02fcef] w-4"
+                    : "bg-white/30 hover:bg-white/50",
+                )}
+                role="tab"
+                aria-selected={index === activePageIndex}
+                aria-label={`Go to page ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
