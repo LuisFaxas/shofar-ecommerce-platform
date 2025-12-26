@@ -187,6 +187,45 @@ export function ProductSection({
     ? product.variants[selectedVariantIndex]
     : null;
 
+  // Layout mode: "classic" = TOOLY|$109 header, "inline" = price in variant row
+  // Toggle this to switch between layouts (saves ~48px vertical space on mobile)
+  const headerLayout = "inline" as "classic" | "inline";
+
+  // Get selection label from variant (color/finish name)
+  const getSelectionLabel = (variant: ProductVariant | null): string | null => {
+    if (!variant) return null;
+
+    // 1. Try first option value (TOOLY has single option group)
+    const variantWithOptions = variant as {
+      options?: Array<{ name: string }>;
+    };
+    if (variantWithOptions.options?.[0]?.name) {
+      return variantWithOptions.options[0].name;
+    }
+
+    // 2. Try facetValues (color/finish facet)
+    const colorFacet = variant.facetValues.find(
+      (fv) => fv.facet.code === "color",
+    );
+    if (colorFacet?.name) return colorFacet.name;
+
+    const finishFacet = variant.facetValues.find(
+      (fv) => fv.facet.code === "finish",
+    );
+    if (finishFacet?.name) return finishFacet.name;
+
+    // 3. Fallback: parse variant.name (strip "TOOLY - " prefix)
+    if (variant.name) {
+      const stripped = variant.name.replace(/^TOOLY\s*-\s*/i, "");
+      return stripped || variant.name;
+    }
+
+    return null;
+  };
+
+  // Compute selection label once
+  const selectionLabel = getSelectionLabel(selectedVariant);
+
   // Get variant-aware media for carousel (uses codegen types)
   const carouselMedia = getVariantMedia(
     product as ToolyProduct | null,
@@ -273,14 +312,31 @@ export function ProductSection({
 
             {/* Product Info */}
             <div className="flex flex-col">
-              {/* Title & Price - Compact row on mobile, stacked on desktop */}
-              <div className="mb-4 md:mb-6">
-                {/* Mobile: Single row */}
-                <div className="flex md:hidden items-baseline justify-between">
-                  <h3 className="text-xl font-semibold text-white">
+              {/* INLINE MODE: Single purchase line (mobile) - never wraps */}
+              {headerLayout === "inline" && (
+                <div className="flex md:hidden items-center gap-2 mb-4 whitespace-nowrap">
+                  {/* Left: Product name (never truncates) */}
+                  <span className="text-sm font-semibold text-white shrink-0">
                     {product?.name || "TOOLY"}
-                  </h3>
-                  <span className="text-2xl font-bold text-white">
+                  </span>
+
+                  {/* Separator */}
+                  <span className="text-white/30 shrink-0">—</span>
+
+                  {/* Middle: Selection label (can truncate) */}
+                  <span className="text-sm min-w-0 truncate">
+                    {selectionLabel ? (
+                      <span className="text-white/60">{selectionLabel}</span>
+                    ) : (
+                      <span className="text-white/40 italic">Select Color</span>
+                    )}
+                  </span>
+
+                  {/* Separator */}
+                  <span className="text-white/30 shrink-0">—</span>
+
+                  {/* Right: Price (never truncates) */}
+                  <span className="text-lg font-bold text-white shrink-0">
                     {selectedVariant
                       ? formatPrice(
                           selectedVariant.priceWithTax,
@@ -289,14 +345,16 @@ export function ProductSection({
                       : "$149.00"}
                   </span>
                 </div>
+              )}
 
-                {/* Desktop: Stacked (original layout) */}
-                <div className="hidden md:block">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    {product?.name || "TOOLY Device"}
-                  </h3>
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-bold text-white">
+              {/* CLASSIC MODE: Title & Price row (mobile) */}
+              {headerLayout === "classic" && (
+                <div className="mb-4 md:mb-6">
+                  <div className="flex md:hidden items-baseline justify-between">
+                    <h3 className="text-xl font-semibold text-white">
+                      {product?.name || "TOOLY"}
+                    </h3>
+                    <span className="text-2xl font-bold text-white">
                       {selectedVariant
                         ? formatPrice(
                             selectedVariant.priceWithTax,
@@ -306,19 +364,46 @@ export function ProductSection({
                     </span>
                   </div>
                 </div>
+              )}
+
+              {/* Desktop: Stacked (original layout - both modes) */}
+              <div className="hidden md:block mb-4 md:mb-6">
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  {product?.name || "TOOLY Device"}
+                </h3>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-bold text-white">
+                    {selectedVariant
+                      ? formatPrice(
+                          selectedVariant.priceWithTax,
+                          selectedVariant.currencyCode,
+                        )
+                      : "$149.00"}
+                  </span>
+                </div>
               </div>
 
               {/* Variant Selector - Only show if more than 1 variant */}
               {hasProduct && product.variants.length > 1 && (
                 <div className="mb-4 md:mb-6">
-                  <label className="block text-sm font-medium text-white/70 mb-2 md:mb-3">
+                  {/* Classic mode: Show label on mobile */}
+                  {headerLayout === "classic" && (
+                    <label className="block md:hidden text-sm font-medium text-white/70 mb-2">
+                      Select Color
+                      {selectedVariant && (
+                        <span className="ml-2 text-white/50">
+                          — {selectionLabel || selectedVariant.name}
+                        </span>
+                      )}
+                    </label>
+                  )}
+
+                  {/* Desktop: Keep original label (both modes) */}
+                  <label className="hidden md:block text-sm font-medium text-white/70 mb-3">
                     Select Color
                     {selectedVariant && (
                       <span className="ml-2 text-white/50">
-                        —{" "}
-                        {selectedVariant.facetValues.find(
-                          (fv) => fv.facet.code === "color",
-                        )?.name || selectedVariant.name}
+                        — {selectionLabel || selectedVariant.name}
                       </span>
                     )}
                   </label>
