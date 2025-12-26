@@ -211,6 +211,20 @@ export type ChannelCustomFields = {
   homeGalleryAssets?: Maybe<Array<Asset>>;
   storefrontDeliveryEstimate?: Maybe<Scalars["String"]["output"]>;
   storefrontDisclaimer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq1Answer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq1Question?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq2Answer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq2Question?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq3Answer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq3Question?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq4Answer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq4Question?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq5Answer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq5Question?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq6Answer?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaq6Question?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaqHeading?: Maybe<Scalars["String"]["output"]>;
+  storefrontFaqSubhead?: Maybe<Scalars["String"]["output"]>;
   storefrontFeature1Body?: Maybe<Scalars["String"]["output"]>;
   storefrontFeature1Title?: Maybe<Scalars["String"]["output"]>;
   storefrontFeature2Body?: Maybe<Scalars["String"]["output"]>;
@@ -236,6 +250,7 @@ export type ChannelCustomFields = {
   storefrontSecondaryCtaLabel?: Maybe<Scalars["String"]["output"]>;
   storefrontShippingBlurb?: Maybe<Scalars["String"]["output"]>;
   storefrontShowAuthLinks?: Maybe<Scalars["Boolean"]["output"]>;
+  storefrontShowFaq?: Maybe<Scalars["Boolean"]["output"]>;
   storefrontShowSearch?: Maybe<Scalars["Boolean"]["output"]>;
   storefrontTrust1Sub?: Maybe<Scalars["String"]["output"]>;
   storefrontTrust1Title?: Maybe<Scalars["String"]["output"]>;
@@ -4462,6 +4477,13 @@ export type GetToolyProductQuery = {
         preview: string;
         source: string;
       } | null;
+      assets: Array<{
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+        name: string;
+      }>;
       facetValues: Array<{
         __typename?: "FacetValue";
         id: string;
@@ -4520,6 +4542,21 @@ export type GetToolyProductQuery = {
       storefrontDisclaimer?: string | null;
       storefrontShowAuthLinks?: boolean | null;
       storefrontShowSearch?: boolean | null;
+      storefrontFaqHeading?: string | null;
+      storefrontFaqSubhead?: string | null;
+      storefrontShowFaq?: boolean | null;
+      storefrontFaq1Question?: string | null;
+      storefrontFaq1Answer?: string | null;
+      storefrontFaq2Question?: string | null;
+      storefrontFaq2Answer?: string | null;
+      storefrontFaq3Question?: string | null;
+      storefrontFaq3Answer?: string | null;
+      storefrontFaq4Question?: string | null;
+      storefrontFaq4Answer?: string | null;
+      storefrontFaq5Question?: string | null;
+      storefrontFaq5Answer?: string | null;
+      storefrontFaq6Question?: string | null;
+      storefrontFaq6Answer?: string | null;
       heroImage?: {
         __typename?: "Asset";
         id: string;
@@ -5871,6 +5908,12 @@ export const GetToolyProductDocument = gql`
           preview
           source
         }
+        assets {
+          id
+          preview
+          source
+          name
+        }
         facetValues {
           id
           code
@@ -5944,6 +5987,21 @@ export const GetToolyProductDocument = gql`
         storefrontDisclaimer
         storefrontShowAuthLinks
         storefrontShowSearch
+        storefrontFaqHeading
+        storefrontFaqSubhead
+        storefrontShowFaq
+        storefrontFaq1Question
+        storefrontFaq1Answer
+        storefrontFaq2Question
+        storefrontFaq2Answer
+        storefrontFaq3Question
+        storefrontFaq3Answer
+        storefrontFaq4Question
+        storefrontFaq4Answer
+        storefrontFaq5Question
+        storefrontFaq5Answer
+        storefrontFaq6Question
+        storefrontFaq6Answer
       }
     }
   }

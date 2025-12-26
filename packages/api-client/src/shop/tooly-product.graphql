@@ -33,6 +33,12 @@ query GetToolyProduct($slug: String!) {
         preview
         source
       }
+      assets {
+        id
+        preview
+        source
+        name
+      }
       facetValues {
         id
         code
@@ -115,6 +121,22 @@ query GetToolyProduct($slug: String!) {
       # Header toggles
       storefrontShowAuthLinks
       storefrontShowSearch
+      # FAQ section
+      storefrontFaqHeading
+      storefrontFaqSubhead
+      storefrontShowFaq
+      storefrontFaq1Question
+      storefrontFaq1Answer
+      storefrontFaq2Question
+      storefrontFaq2Answer
+      storefrontFaq3Question
+      storefrontFaq3Answer
+      storefrontFaq4Question
+      storefrontFaq4Answer
+      storefrontFaq5Question
+      storefrontFaq5Answer
+      storefrontFaq6Question
+      storefrontFaq6Answer
     }
   }
 }

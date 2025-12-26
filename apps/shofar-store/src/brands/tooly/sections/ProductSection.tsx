@@ -1,22 +1,26 @@
 /**
  * ProductSection - Main product display with variant selector
- * WO 3.1 / 3.2 Implementation
+ * WO 3.1 / 3.2 Implementation + WO-ANCHOR-DENSITY-01
  *
  * Features:
  * - Large ProductCard skeleton with variant selector area
  * - Fixed dimensions for zero CLS
  * - Accepts product data with variants from Vendure
  * - Dynamic variant selection with real pricing
+ * - Dual anchors: #product (title) + #product-buy (CTA)
+ * - Short-height density mode via CSS class
  */
 
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ButtonPrimary } from "../components/ui/ButtonPrimary";
 import { ProductCarousel } from "../components/ui/ProductCarousel";
 import { useCart } from "@/contexts/CartContext";
 import type { ShopContent } from "../lib/storefront-content";
+import type { GetToolyProductQuery } from "@shofar/api-client";
 
 interface VariantFacetValue {
   id: string;
@@ -73,6 +77,63 @@ interface ProductSectionProps {
   shopContent?: ShopContent;
 }
 
+// Use codegen types for variant-aware media selection
+type ToolyProduct = NonNullable<GetToolyProductQuery["product"]>;
+type ToolyVariant = ToolyProduct["variants"][number];
+type ToolyAsset = NonNullable<ToolyProduct["featuredAsset"]>;
+
+/**
+ * Get media list for the selected variant
+ * Priority: variant.assets > variant.featuredAsset > product.assets
+ */
+function getVariantMedia(
+  product: ToolyProduct | null | undefined,
+  selectedVariant: ToolyVariant | null,
+): ToolyAsset[] {
+  if (!product) return [];
+
+  // If variant has its own assets, use them
+  if (selectedVariant?.assets && selectedVariant.assets.length > 0) {
+    // Ensure featuredAsset is first if present
+    const assets = [...selectedVariant.assets] as ToolyAsset[];
+    if (selectedVariant.featuredAsset) {
+      const featuredIdx = assets.findIndex(
+        (a) => a.id === selectedVariant.featuredAsset!.id,
+      );
+      if (featuredIdx > 0) {
+        const [featured] = assets.splice(featuredIdx, 1);
+        assets.unshift(featured);
+      } else if (featuredIdx === -1) {
+        // featuredAsset not in assets array, prepend it
+        assets.unshift(selectedVariant.featuredAsset as ToolyAsset);
+      }
+    }
+    return assets;
+  }
+
+  // Fallback to product-level assets
+  if (product.assets && product.assets.length > 0) {
+    const assets = [...product.assets] as ToolyAsset[];
+    if (product.featuredAsset) {
+      const featuredIdx = assets.findIndex(
+        (a) => a.id === product.featuredAsset!.id,
+      );
+      if (featuredIdx > 0) {
+        const [featured] = assets.splice(featuredIdx, 1);
+        assets.unshift(featured);
+      }
+    }
+    return assets;
+  }
+
+  // Last resort: just featuredAsset
+  if (product.featuredAsset) {
+    return [product.featuredAsset];
+  }
+
+  return [];
+}
+
 // Color code to CSS color mapping
 const COLOR_MAP: Record<string, string> = {
   gunmetal: "#4a5568",
@@ -126,6 +187,12 @@ export function ProductSection({
     ? product.variants[selectedVariantIndex]
     : null;
 
+  // Get variant-aware media for carousel (uses codegen types)
+  const carouselMedia = getVariantMedia(
+    product as ToolyProduct | null,
+    selectedVariant as ToolyVariant | null,
+  );
+
   // Handle add to cart
   const handleAddToCart = async () => {
     if (selectedVariant) {
@@ -162,13 +229,15 @@ export function ProductSection({
 
   return (
     <section
-      id="product"
-      className={cn("py-16 md:py-24", className)}
+      className={cn("py-10 md:py-24 tooly-product-section", className)}
       aria-labelledby="product-heading"
     >
       <div className="container mx-auto px-4 md:px-6">
+        {/* Navigation anchor - lands on section title */}
+        <span id="product" className="block" aria-hidden="true" />
+
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6 md:mb-12 tooly-product-heading">
           <h2
             id="product-heading"
             className="text-3xl md:text-4xl font-bold text-white mb-4"
@@ -182,6 +251,9 @@ export function ProductSection({
           </p>
         </div>
 
+        {/* Conversion anchor - lands on product card */}
+        <span id="product-buy" className="block" aria-hidden="true" />
+
         {/* Product Card */}
         <div className="max-w-4xl mx-auto">
           <div
@@ -192,9 +264,10 @@ export function ProductSection({
               "backdrop-blur-sm",
             )}
           >
-            {/* Product Image Carousel */}
+            {/* Product Image Carousel - key forces reset on variant change */}
             <ProductCarousel
-              images={product?.assets || []}
+              key={selectedVariant?.id || "default"}
+              images={carouselMedia}
               altPrefix={product?.name || "TOOLY"}
             />
 
@@ -242,12 +315,18 @@ export function ProductSection({
                           (fv) => fv.facet.code === "color",
                         )?.name || variant.name;
 
+                      // Get swatch image: variant.featuredAsset or first asset
+                      const swatchImage =
+                        variant.featuredAsset?.preview ||
+                        (variant as unknown as ToolyVariant).assets?.[0]
+                          ?.preview;
+
                       return (
                         <button
                           key={variant.id}
                           onClick={() => setSelectedVariantIndex(index)}
                           className={cn(
-                            "group relative w-12 h-12 rounded-full",
+                            "group relative w-12 h-12 rounded-full overflow-hidden",
                             "ring-2 ring-offset-2 ring-offset-[#0b0e14]",
                             "transition-all duration-200",
                             "hover:scale-110 focus-visible:scale-110",
@@ -256,13 +335,26 @@ export function ProductSection({
                               ? "ring-[#02fcef]"
                               : "ring-transparent hover:ring-white/40 focus-visible:ring-white/60",
                           )}
-                          style={{ backgroundColor: colorHex }}
+                          style={
+                            swatchImage
+                              ? undefined
+                              : { backgroundColor: colorHex }
+                          }
                           aria-label={`${colorName}${finishName ? ` ${finishName}` : ""}`}
                           aria-pressed={selectedVariantIndex === index}
                         >
+                          {swatchImage ? (
+                            <Image
+                              src={swatchImage}
+                              alt={colorName}
+                              fill
+                              className="object-cover"
+                              sizes="48px"
+                            />
+                          ) : null}
                           <span
                             className={cn(
-                              "absolute -bottom-8 left-1/2 -translate-x-1/2",
+                              "absolute -bottom-8 left-1/2 -translate-x-1/2 z-10",
                               "px-2 py-1 rounded text-xs whitespace-nowrap",
                               "bg-white/10 text-white/80",
                               "opacity-0 group-hover:opacity-100",
