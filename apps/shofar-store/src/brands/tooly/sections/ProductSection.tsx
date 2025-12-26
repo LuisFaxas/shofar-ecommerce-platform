@@ -313,7 +313,8 @@ export function ProductSection({
         <div className="max-w-4xl mx-auto">
           <div
             className={cn(
-              "grid md:grid-cols-2 gap-8 p-6 md:p-8",
+              // WO 2.0.6b: gap-3 on mobile to match thumb spacing
+              "grid md:grid-cols-2 gap-3 md:gap-8 p-6 md:p-8",
               "rounded-2xl",
               "bg-white/[0.04] border border-white/[0.08]",
               "backdrop-blur-sm",

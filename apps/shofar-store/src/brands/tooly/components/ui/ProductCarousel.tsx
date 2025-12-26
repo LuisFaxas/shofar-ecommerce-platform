@@ -152,7 +152,8 @@ export function ProductCarousel({
             className={cn(
               "flex overflow-x-auto snap-x snap-mandatory",
               "scrollbar-hide scroll-smooth",
-              "rounded-xl bg-white/[0.04] border border-white/[0.08]",
+              // WO 2.0.6b: Softer border/bg to fix corner artifacts
+              "rounded-xl bg-white/[0.02] border border-white/[0.06]",
             )}
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
@@ -220,51 +221,35 @@ export function ProductCarousel({
               </div>
             ))}
           </div>
-
-          {/* Bottom scrim gradient (mobile only) - WO 2.0.5 */}
-          {images.length > 1 && (
-            <div
-              className="absolute inset-x-0 bottom-0 h-24 md:hidden pointer-events-none"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 tooly-media-scrim" />
-            </div>
-          )}
-
-          {/* Floating thumbnails overlay (mobile only) - WO 2.0.5 */}
-          {images.length > 1 && (
-            <div className="absolute left-4 right-4 bottom-4 md:hidden pointer-events-none">
-              <div className="flex gap-2 px-1 overflow-x-auto scrollbar-hide pointer-events-auto">
-                {images.map((img, idx) => (
-                  <button
-                    key={img.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      scrollToIndex(idx);
-                    }}
-                    className={cn(
-                      "relative shrink-0 w-11 h-11 rounded-lg overflow-hidden",
-                      "border-2 transition-all duration-200",
-                      "bg-black/20 backdrop-blur-sm",
-                      idx === currentIndex
-                        ? "border-[#02fcef]"
-                        : "border-white/30 hover:border-white/50",
-                    )}
-                    aria-label={`View image ${idx + 1}`}
-                  >
-                    <Image
-                      src={img.preview}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="44px"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Mobile thumbnails - below image (WO 2.0.6b) */}
+        {images.length > 1 && (
+          <div className="md:hidden flex justify-center gap-2 mt-3">
+            {images.map((img, idx) => (
+              <button
+                key={img.id}
+                onClick={() => scrollToIndex(idx)}
+                className={cn(
+                  "relative shrink-0 w-8 h-8 rounded-md overflow-hidden",
+                  "border transition-all duration-200",
+                  idx === currentIndex
+                    ? "border-[#02fcef]"
+                    : "border-white/15 hover:border-white/30",
+                )}
+                aria-label={`View image ${idx + 1}`}
+              >
+                <Image
+                  src={img.preview}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="32px"
+                />
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Dot Indicators (desktop only) */}
         {images.length > 1 && (
