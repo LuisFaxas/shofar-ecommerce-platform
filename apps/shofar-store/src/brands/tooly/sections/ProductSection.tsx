@@ -273,13 +273,14 @@ export function ProductSection({
 
             {/* Product Info */}
             <div className="flex flex-col">
-              {/* Title & Price */}
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  {product?.name || "TOOLY Device"}
-                </h3>
-                <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-bold text-white">
+              {/* Title & Price - Compact row on mobile, stacked on desktop */}
+              <div className="mb-4 md:mb-6">
+                {/* Mobile: Single row */}
+                <div className="flex md:hidden items-baseline justify-between">
+                  <h3 className="text-xl font-semibold text-white">
+                    {product?.name || "TOOLY"}
+                  </h3>
+                  <span className="text-2xl font-bold text-white">
                     {selectedVariant
                       ? formatPrice(
                           selectedVariant.priceWithTax,
@@ -288,12 +289,29 @@ export function ProductSection({
                       : "$149.00"}
                   </span>
                 </div>
+
+                {/* Desktop: Stacked (original layout) */}
+                <div className="hidden md:block">
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {product?.name || "TOOLY Device"}
+                  </h3>
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-3xl font-bold text-white">
+                      {selectedVariant
+                        ? formatPrice(
+                            selectedVariant.priceWithTax,
+                            selectedVariant.currencyCode,
+                          )
+                        : "$149.00"}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Variant Selector - Only show if more than 1 variant */}
               {hasProduct && product.variants.length > 1 && (
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-white/70 mb-3">
+                <div className="mb-4 md:mb-6">
+                  <label className="block text-sm font-medium text-white/70 mb-2 md:mb-3">
                     Select Color
                     {selectedVariant && (
                       <span className="ml-2 text-white/50">
@@ -371,7 +389,7 @@ export function ProductSection({
               )}
 
               {/* Stock Status */}
-              <div className="flex items-center gap-2 mb-6">
+              <div className="flex items-center gap-2 mb-4 md:mb-6">
                 <span
                   className={cn("w-2 h-2 rounded-full", stockStatus.color)}
                 />
@@ -381,7 +399,7 @@ export function ProductSection({
               </div>
 
               {/* Features List */}
-              <ul className="space-y-2 mb-8 text-sm text-white/70">
+              <ul className="space-y-1.5 md:space-y-2 mb-6 md:mb-8 text-sm text-white/70">
                 <li className="flex items-center gap-2">
                   <svg
                     className="w-4 h-4 text-[#02fcef]"

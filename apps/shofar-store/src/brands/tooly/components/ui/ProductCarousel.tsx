@@ -144,83 +144,126 @@ export function ProductCarousel({
         aria-label="Product image carousel"
         aria-roledescription="carousel"
       >
-        {/* Main Carousel */}
-        <div
-          ref={scrollContainerRef}
-          onScroll={handleScroll}
-          className={cn(
-            "flex overflow-x-auto snap-x snap-mandatory",
-            "scrollbar-hide scroll-smooth",
-            "rounded-xl bg-white/[0.04] border border-white/[0.08]",
-          )}
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {images.map((image, index) => (
-            <div
-              key={image.id}
-              className={cn(
-                "snap-center shrink-0 w-full relative group",
-                "tooly-product-media aspect-[3/4] md:aspect-square",
-              )}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${index + 1} of ${images.length}`}
-            >
-              {/* Clickable image with zoom cursor */}
-              <button
-                onClick={openLightbox}
-                className={cn(
-                  "absolute inset-0 w-full h-full overflow-hidden",
-                  "cursor-zoom-in focus-visible:outline-none",
-                  "focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-inset",
-                )}
-                aria-label={`View ${altPrefix} ${index + 1} fullscreen`}
-              >
-                <Image
-                  src={image.preview}
-                  alt={`${altPrefix} ${index + 1}`}
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority={index === 0}
-                />
-              </button>
-
-              {/* Zoom icon (top-right corner) */}
+        {/* Main Carousel with Glass Dock wrapper */}
+        <div className="relative">
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className={cn(
+              "flex overflow-x-auto snap-x snap-mandatory",
+              "scrollbar-hide scroll-smooth",
+              "rounded-xl bg-white/[0.04] border border-white/[0.08]",
+            )}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {images.map((image, index) => (
               <div
-                className={cn("absolute top-3 right-3", "pointer-events-none")}
+                key={image.id}
+                className={cn(
+                  "snap-center shrink-0 w-full relative group",
+                  "tooly-product-media aspect-[3/4] md:aspect-square",
+                )}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${images.length}`}
               >
+                {/* Clickable image with zoom cursor */}
+                <button
+                  onClick={openLightbox}
+                  className={cn(
+                    "absolute inset-0 w-full h-full overflow-hidden",
+                    "cursor-zoom-in focus-visible:outline-none",
+                    "focus-visible:ring-2 focus-visible:ring-[#02fcef] focus-visible:ring-inset",
+                  )}
+                  aria-label={`View ${altPrefix} ${index + 1} fullscreen`}
+                >
+                  <Image
+                    src={image.preview}
+                    alt={`${altPrefix} ${index + 1}`}
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority={index === 0}
+                  />
+                </button>
+
+                {/* Zoom icon (top-right corner) */}
                 <div
                   className={cn(
-                    "w-8 h-8 md:w-10 md:h-10 rounded-full",
-                    "bg-black/30 md:bg-white/20 backdrop-blur-sm",
-                    "flex items-center justify-center",
-                    "opacity-70 md:opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+                    "absolute top-3 right-3",
+                    "pointer-events-none",
                   )}
                 >
-                  <svg
-                    className="w-4 h-4 md:w-5 md:h-5 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+                  <div
+                    className={cn(
+                      "w-8 h-8 md:w-10 md:h-10 rounded-full",
+                      "bg-black/30 md:bg-white/20 backdrop-blur-sm",
+                      "flex items-center justify-center",
+                      "opacity-70 md:opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+                    )}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
-                    />
-                  </svg>
+                    <svg
+                      className="w-4 h-4 md:w-5 md:h-5 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* Glass dock thumbnails overlay (mobile only) */}
+          {images.length > 1 && (
+            <div
+              className={cn(
+                "absolute left-3 right-3 bottom-3 md:hidden",
+                "bg-black/40 backdrop-blur-md",
+                "border border-white/10 rounded-xl",
+                "p-2 flex gap-2 overflow-x-auto snap-x snap-mandatory scrollbar-hide",
+              )}
+            >
+              {images.map((img, idx) => (
+                <button
+                  key={img.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    scrollToIndex(idx);
+                  }}
+                  className={cn(
+                    "relative shrink-0 w-10 h-10 rounded-lg overflow-hidden snap-start",
+                    "border-2 transition-all duration-200",
+                    idx === currentIndex
+                      ? "border-[#02fcef]"
+                      : "border-white/20 hover:border-white/40",
+                  )}
+                  aria-label={`View image ${idx + 1}`}
+                >
+                  <Image
+                    src={img.preview}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="40px"
+                  />
+                </button>
+              ))}
             </div>
-          ))}
+          )}
         </div>
 
-        {/* Dot Indicators */}
+        {/* Dot Indicators (desktop only) */}
         {images.length > 1 && (
           <div
-            className="flex justify-center gap-2 mt-4"
+            className="hidden md:flex justify-center gap-2 mt-4"
             role="tablist"
             aria-label="Carousel navigation"
           >
@@ -243,13 +286,13 @@ export function ProductCarousel({
           </div>
         )}
 
-        {/* Thumbnail Strip (Mobile: horizontal scroll snap, Desktop: centered) */}
+        {/* Thumbnail Strip (Desktop only) */}
         {images.length > 1 && (
           <div
             className={cn(
-              "flex gap-2 mt-4 overflow-x-auto snap-x snap-mandatory",
-              "md:justify-center md:overflow-visible",
-              "scrollbar-hide pb-1",
+              "hidden md:flex gap-2 mt-4",
+              "justify-center",
+              "pb-1",
             )}
           >
             {images.map((image, index) => (
