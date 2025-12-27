@@ -11,6 +11,19 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
+// Hook to detect prefers-reduced-motion preference
+const usePrefersReducedMotion = () => {
+  const [reduced, setReduced] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+  return reduced;
+};
+
 export interface Review {
   id: string;
   author: string;
@@ -52,6 +65,8 @@ export const ReviewsMarquee: React.FC<ReviewsMarqueeProps> = ({
   gap = "md",
   className,
 }) => {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   const gapClasses = {
     sm: "gap-4",
     md: "gap-6",
@@ -73,10 +88,14 @@ export const ReviewsMarquee: React.FC<ReviewsMarqueeProps> = ({
         className={cn(
           "flex",
           gapClasses[gap],
-          pauseOnHover && "hover:[animation-play-state:paused]",
+          pauseOnHover &&
+            !prefersReducedMotion &&
+            "hover:[animation-play-state:paused]",
         )}
         style={{
-          animation: `marquee-${direction} ${duration}s linear infinite`,
+          animation: prefersReducedMotion
+            ? "none"
+            : `marquee-${direction} ${duration}s linear infinite`,
           width: "max-content",
         }}
       >
