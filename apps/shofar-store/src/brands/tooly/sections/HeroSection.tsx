@@ -91,7 +91,7 @@ export function HeroSection({
             fill
             className="object-cover object-bottom scale-105"
             priority
-            sizes="100vw"
+            sizes="(min-width: 768px) 100vw, 0vw"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#0b0e14] via-[#0d1218] to-[#0b0e14]" />
@@ -101,7 +101,7 @@ export function HeroSection({
       </div>
 
       {/* ================================================================== */}
-      {/* Background Layer - Mobile (relative, image determines height) */}
+      {/* Background Layer - Mobile (no cropping - full image visible) */}
       {/* ================================================================== */}
       <div className="md:hidden absolute inset-0">
         {mobileImage ? (
@@ -109,9 +109,9 @@ export function HeroSection({
             src={mobileImage}
             alt={productName}
             fill
-            className="object-cover object-top"
+            className="object-contain"
             priority
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 0vw"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#0b0e14] via-[#0d1218] to-[#0b0e14]" />
