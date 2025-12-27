@@ -320,6 +320,28 @@ export const config: VendureConfig = {
         ui: { tab: "Marketing" },
       },
       {
+        name: "heroImageMobile",
+        type: "relation",
+        entity: Asset,
+        eager: true,
+        nullable: true,
+        public: true,
+        label: [
+          {
+            languageCode: LanguageCode.en,
+            value: "Hero Background Image (Mobile)",
+          },
+        ],
+        description: [
+          {
+            languageCode: LanguageCode.en,
+            value:
+              "Mobile-optimized hero background (portrait aspect ratio, used on screens < 768px)",
+          },
+        ],
+        ui: { tab: "Marketing" },
+      },
+      {
         name: "homeGalleryAssets",
         type: "relation",
         entity: Asset,
