@@ -79,7 +79,7 @@ function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
       <Navbar cartCount={itemCount} onCartClick={toggleDrawer} />
 
       {/* Main Content */}
-      <main className={debugBanner.show ? "pt-10" : ""}>
+      <main id="main" tabIndex={-1} className={debugBanner.show ? "pt-10" : ""}>
         <HeroSection
           heroImage={effectiveData?.heroImage}
           featuredAsset={effectiveData?.product?.featuredAsset}
@@ -118,7 +118,12 @@ function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
         />
         <AccessoriesSection accessories={effectiveData?.accessories} />
         <ReviewsSection />
-        <FaqSection />
+        <FaqSection
+          content={
+            effectiveData?.storefrontContent?.faq ??
+            getDefaultStorefrontContent().faq
+          }
+        />
       </main>
 
       {/* Footer */}
