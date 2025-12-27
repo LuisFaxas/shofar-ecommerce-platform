@@ -101,7 +101,7 @@ export function HeroSection({
       </div>
 
       {/* ================================================================== */}
-      {/* Background Layer - Mobile (no cropping - full image visible) */}
+      {/* Background Layer - Mobile (anchored to bottom, crops from top) */}
       {/* ================================================================== */}
       <div className="md:hidden absolute inset-0">
         {mobileImage ? (
@@ -109,7 +109,7 @@ export function HeroSection({
             src={mobileImage}
             alt={productName}
             fill
-            className="object-contain"
+            className="object-cover object-bottom"
             priority
             sizes="(max-width: 768px) 100vw, 0vw"
           />
