@@ -1,11 +1,12 @@
 /**
  * FaqSection - Frequently Asked Questions
- * WO 3.1 Implementation
+ * WO 3.1 Implementation + WO-FAQ-01 Vendure Integration
  *
  * Features:
- * - 5 accordion items with glass styling
+ * - Accordion items with glass styling
  * - Keyboard accessible (Enter/Space to toggle)
  * - Smooth expand/collapse animation
+ * - Content from Vendure Channel customFields
  */
 
 "use client";
@@ -13,43 +14,13 @@
 import * as React from "react";
 import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import type { FaqContent } from "../lib/storefront-content";
 
 interface FaqSectionProps {
   className?: string;
+  /** FAQ content from Vendure Channel customFields */
+  content?: FaqContent;
 }
-
-const FAQS = [
-  {
-    id: 1,
-    question: "What materials is TOOLY made from?",
-    answer:
-      "TOOLY is precision CNC-machined from aerospace-grade 6061 aluminum with a medical-grade stainless steel chamber. The heating element uses premium ceramics for optimal heat distribution and purity.",
-  },
-  {
-    id: 2,
-    question: "What is included with my TOOLY?",
-    answer:
-      "Every TOOLY comes with the precision-machined device, a protective carrying case, cleaning brush, spare screens, and a detailed user guide. Everything you need to get started is included in the box.",
-  },
-  {
-    id: 3,
-    question: "What is your warranty policy?",
-    answer:
-      "Every TOOLY device comes with a comprehensive 2-year warranty covering manufacturing defects and component performance. Extended warranty options are available at checkout.",
-  },
-  {
-    id: 4,
-    question: "How do I clean and maintain my TOOLY?",
-    answer:
-      "We recommend cleaning your TOOLY after every 5-10 sessions using the included cleaning kit. The modular design allows easy access to all components. Detailed maintenance guides are available in your account.",
-  },
-  {
-    id: 5,
-    question: "What is your return policy?",
-    answer:
-      "We offer a 30-day satisfaction guarantee. If you're not completely satisfied with your purchase, return it in original condition for a full refund. Shipping is free on all returns.",
-  },
-];
 
 interface FaqItemProps {
   question: string;
@@ -139,12 +110,32 @@ function FaqItem({
   );
 }
 
-export function FaqSection({ className }: FaqSectionProps): React.ReactElement {
+export function FaqSection({
+  className,
+  content,
+}: FaqSectionProps): React.ReactElement {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const handleToggle = useCallback((index: number) => {
     setOpenIndex((current) => (current === index ? null : index));
   }, []);
+
+  // Use content from Vendure or defaults
+  const heading = content?.heading ?? "Frequently Asked Questions";
+  const subhead = content?.subhead ?? "Everything you need to know about TOOLY";
+  const items = content?.items ?? [];
+  const showFaq = content?.showFaq ?? true;
+
+  // If showFaq is false, render empty section with same spacing (layout locked)
+  if (!showFaq) {
+    return (
+      <section
+        id="faq"
+        className={cn("py-16 md:py-24 bg-[#0d1218]", className)}
+        aria-hidden="true"
+      />
+    );
+  }
 
   return (
     <section
@@ -159,18 +150,16 @@ export function FaqSection({ className }: FaqSectionProps): React.ReactElement {
             id="faq-heading"
             className="text-3xl md:text-4xl font-bold text-white mb-4"
           >
-            Frequently Asked Questions
+            {heading}
           </h2>
-          <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            Everything you need to know about TOOLY
-          </p>
+          <p className="text-lg text-white/60 max-w-2xl mx-auto">{subhead}</p>
         </div>
 
         {/* FAQ Items */}
         <div className="max-w-3xl mx-auto space-y-4">
-          {FAQS.map((faq, index) => (
+          {items.map((faq, index) => (
             <FaqItem
-              key={faq.id}
+              key={`faq-${index}`}
               question={faq.question}
               answer={faq.answer}
               isOpen={openIndex === index}
