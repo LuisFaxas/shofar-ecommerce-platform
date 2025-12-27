@@ -82,6 +82,7 @@ function ToolyAppInner({ pageData }: ToolyAppProps): React.ReactElement {
       <main id="main" tabIndex={-1} className={debugBanner.show ? "pt-10" : ""}>
         <HeroSection
           heroImage={effectiveData?.heroImage}
+          heroImageMobile={effectiveData?.heroImageMobile}
           featuredAsset={effectiveData?.product?.featuredAsset}
           productName={effectiveData?.product?.name}
           content={

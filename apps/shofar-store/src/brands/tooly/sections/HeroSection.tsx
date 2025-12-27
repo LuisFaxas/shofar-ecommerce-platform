@@ -27,8 +27,10 @@ interface ProductAsset {
 
 interface HeroSectionProps {
   className?: string;
-  /** Hero background image URL from Channel customFields */
+  /** Hero background image URL from Channel customFields (desktop) */
   heroImage?: string | null;
+  /** Hero background image for mobile (< 768px) */
+  heroImageMobile?: string | null;
   /** Product featured asset as fallback */
   featuredAsset?: ProductAsset | null;
   /** Product name for alt text */
@@ -40,17 +42,21 @@ interface HeroSectionProps {
 export function HeroSection({
   className,
   heroImage,
+  heroImageMobile,
   featuredAsset,
   productName = "TOOLY Device",
   content,
 }: HeroSectionProps): React.ReactElement {
-  // Use heroImage if available, fallback to product featuredAsset
-  const backgroundImage = heroImage || featuredAsset?.preview || null;
+  // Desktop: heroImage, fallback to product featuredAsset
+  const desktopImage = heroImage || featuredAsset?.preview || null;
+  // Mobile: heroImageMobile, fallback to desktop image
+  const mobileImage = heroImageMobile || desktopImage;
 
   const handleShopNow = () => {
-    const productSection = document.getElementById("product");
-    if (productSection) {
-      productSection.scrollIntoView({ behavior: "smooth" });
+    // WO-ANCHOR-DENSITY-01: Scroll to #product-buy (conversion intent)
+    const buySection = document.getElementById("product-buy");
+    if (buySection) {
+      buySection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -65,33 +71,57 @@ export function HeroSection({
     <section
       id="hero"
       className={cn(
-        "relative min-h-[90vh] flex items-center justify-center",
+        "relative flex items-center justify-center",
+        // Mobile: 100svh (stable viewport for iOS Safari, full screen)
+        // Desktop: 90svh (leaves room for nav awareness)
+        "min-h-[100svh] md:min-h-[90svh]",
         "overflow-hidden",
         className,
       )}
       aria-labelledby="hero-heading"
     >
       {/* ================================================================== */}
-      {/* Background Layer */}
+      {/* Background Layer - Desktop (absolute, viewport fill) */}
       {/* ================================================================== */}
-      <div className="absolute inset-0">
-        {backgroundImage ? (
+      <div className="hidden md:block absolute inset-0">
+        {desktopImage ? (
           <Image
-            src={backgroundImage}
+            src={desktopImage}
             alt={productName}
             fill
-            className="object-cover object-center scale-105"
+            className="object-cover object-bottom scale-105"
             priority
             sizes="100vw"
           />
         ) : (
-          /* Gradient fallback when no image */
           <div className="absolute inset-0 bg-gradient-to-br from-[#0b0e14] via-[#0d1218] to-[#0b0e14]" />
         )}
-
-        {/* Frosted Overlay - Creates depth and ensures text readability */}
+        {/* Frosted Overlay */}
         <div className="absolute inset-0 bg-[#0b0e14]/25" aria-hidden="true" />
+      </div>
 
+      {/* ================================================================== */}
+      {/* Background Layer - Mobile (relative, image determines height) */}
+      {/* ================================================================== */}
+      <div className="md:hidden absolute inset-0">
+        {mobileImage ? (
+          <Image
+            src={mobileImage}
+            alt={productName}
+            fill
+            className="object-cover object-top"
+            priority
+            sizes="100vw"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0b0e14] via-[#0d1218] to-[#0b0e14]" />
+        )}
+        {/* Frosted Overlay */}
+        <div className="absolute inset-0 bg-[#0b0e14]/25" aria-hidden="true" />
+      </div>
+
+      {/* Shared overlays for both viewports */}
+      <div className="absolute inset-0 pointer-events-none">
         {/* Gradient Overlays - Top and bottom fade for seamless integration */}
         <div
           className="absolute inset-0 bg-gradient-to-b from-[#0b0e14]/80 via-transparent to-[#0b0e14]/90"

@@ -48,8 +48,10 @@ export interface ToolyPageData {
   product: ToolyProductData | null;
   gallery: GalleryData | null;
   accessories: AccessoriesData | null;
-  /** Hero background image from Channel customFields */
+  /** Hero background image from Channel customFields (desktop) */
   heroImage: string | null;
+  /** Hero background image for mobile (< 768px) */
+  heroImageMobile: string | null;
   /** Marketing gallery images from Channel customFields */
   homeGalleryAssets: HomeGalleryAsset[] | null;
   /** Storefront content from Channel customFields (text, labels, toggles) */
@@ -91,6 +93,7 @@ export function buildAssetUrl(
 interface ProductAndChannelData {
   product: ToolyProductData | null;
   heroImage: string | null;
+  heroImageMobile: string | null;
   homeGalleryAssets: HomeGalleryAsset[] | null;
   storefrontContent: StorefrontContent;
 }
@@ -121,6 +124,7 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
       return {
         product: null,
         heroImage: null,
+        heroImageMobile: null,
         homeGalleryAssets: null,
         storefrontContent: buildStorefrontContent(null),
       };
@@ -131,6 +135,7 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
 
     // Channel customFields parsing - wrap in try-catch for resilience
     let heroImage: string | null = null;
+    let heroImageMobile: string | null = null;
     let homeGalleryAssets: HomeGalleryAsset[] | null = null;
     let storefrontContent: StorefrontContent;
 
@@ -139,13 +144,19 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
       const customFields = data?.activeChannel?.customFields as
         | (ChannelStorefrontFields & {
             heroImage?: { preview?: string };
+            heroImageMobile?: { preview?: string };
             homeGalleryAssets?: HomeGalleryAsset[];
           })
         | null;
 
-      // Extract heroImage from activeChannel customFields
+      // Extract heroImage from activeChannel customFields (desktop)
       const heroImagePreview = customFields?.heroImage?.preview ?? null;
       heroImage = buildAssetUrl(heroImagePreview);
+
+      // Extract heroImageMobile from activeChannel customFields (mobile < 768px)
+      const heroImageMobilePreview =
+        customFields?.heroImageMobile?.preview ?? null;
+      heroImageMobile = buildAssetUrl(heroImageMobilePreview);
 
       // Extract homeGalleryAssets from activeChannel customFields
       homeGalleryAssets = customFields?.homeGalleryAssets ?? null;
@@ -164,6 +175,7 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
     return {
       product,
       heroImage,
+      heroImageMobile,
       homeGalleryAssets,
       storefrontContent,
     };
@@ -173,6 +185,7 @@ export async function fetchToolyProductAndChannel(): Promise<ProductAndChannelDa
     return {
       product: null,
       heroImage: null,
+      heroImageMobile: null,
       homeGalleryAssets: null,
       storefrontContent: buildStorefrontContent(null),
     };
@@ -252,6 +265,7 @@ export async function fetchToolyPageData(): Promise<ToolyPageData> {
     gallery,
     accessories,
     heroImage: productAndChannel.heroImage,
+    heroImageMobile: productAndChannel.heroImageMobile,
     homeGalleryAssets: productAndChannel.homeGalleryAssets,
     storefrontContent: productAndChannel.storefrontContent,
   };

@@ -72,6 +72,11 @@ query GetToolyProduct($slug: String!) {
         preview
         source
       }
+      heroImageMobile {
+        id
+        preview
+        source
+      }
       homeGalleryAssets {
         id
         preview

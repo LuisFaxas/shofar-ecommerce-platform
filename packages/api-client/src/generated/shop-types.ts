@@ -208,7 +208,9 @@ export type Channel = Node & {
 export type ChannelCustomFields = {
   __typename?: "ChannelCustomFields";
   heroImage?: Maybe<Asset>;
+  heroImageMobile?: Maybe<Asset>;
   homeGalleryAssets?: Maybe<Array<Asset>>;
+  storefrontCarouselNavStyle?: Maybe<Scalars["String"]["output"]>;
   storefrontDeliveryEstimate?: Maybe<Scalars["String"]["output"]>;
   storefrontDisclaimer?: Maybe<Scalars["String"]["output"]>;
   storefrontFaq1Answer?: Maybe<Scalars["String"]["output"]>;
@@ -4563,6 +4565,12 @@ export type GetToolyProductQuery = {
         preview: string;
         source: string;
       } | null;
+      heroImageMobile?: {
+        __typename?: "Asset";
+        id: string;
+        preview: string;
+        source: string;
+      } | null;
       homeGalleryAssets?: Array<{
         __typename?: "Asset";
         id: string;
@@ -5941,6 +5949,11 @@ export const GetToolyProductDocument = gql`
       code
       customFields {
         heroImage {
+          id
+          preview
+          source
+        }
+        heroImageMobile {
           id
           preview
           source
