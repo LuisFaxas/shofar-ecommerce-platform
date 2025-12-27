@@ -1,11 +1,12 @@
 /**
  * CredibilitySection - Social proof and trust signals
- * WO 3.1 Implementation
+ * WO 3.1 Implementation + WO-DESIGN-SYSTEM-CAROUSEL-01
  *
  * Features:
  * - Glass cards with star ratings
  * - "Trusted by X+ customers" stats
  * - Fixed dimensions for zero CLS
+ * - Uses HorizontalSnapCarousel for trust badges
  */
 
 "use client";
@@ -59,6 +60,33 @@ function StarRating({ rating = 5 }: { rating?: number }): React.ReactElement {
   );
 }
 
+interface TrustBadgeCardProps {
+  badge: {
+    icon: string;
+    title: string;
+    subtitle: string;
+  };
+}
+
+function TrustBadgeCard({ badge }: TrustBadgeCardProps): React.ReactElement {
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-3 p-4 rounded-lg h-full",
+        "bg-white/[0.02] border border-white/[0.06]",
+      )}
+    >
+      <div className="w-10 h-10 rounded-lg bg-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
+        <TrustIcon type={badge.icon} />
+      </div>
+      <div className="flex flex-col min-w-0">
+        <span className="text-sm font-medium text-white/80">{badge.title}</span>
+        <span className="text-xs text-white/50">{badge.subtitle}</span>
+      </div>
+    </div>
+  );
+}
+
 function TrustIcon({ type }: { type: string }): React.ReactElement {
   const icons: Record<string, React.ReactElement> = {
     shield: (
@@ -101,6 +129,30 @@ function TrustIcon({ type }: { type: string }): React.ReactElement {
     >
       {icons[type] || icons.shield}
     </svg>
+  );
+}
+
+interface TrustBadgeCarouselProps {
+  badges: Array<{ icon: string; title: string; subtitle: string }>;
+}
+
+function TrustBadgeCarousel({
+  badges,
+}: TrustBadgeCarouselProps): React.ReactElement {
+  return (
+    <div className="md:hidden -mx-4">
+      {/* Free-scroll carousel - multiple items visible */}
+      <div
+        className="flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {badges.map((badge, index) => (
+          <div key={index} className="shrink-0" style={{ width: "75%" }}>
+            <TrustBadgeCard badge={badge} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -156,30 +208,16 @@ export function CredibilitySection({
           ))}
         </div>
 
-        {/* Trust Badges */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Trust Badges - Desktop: 4-column grid, Mobile: horizontal carousel */}
+        {/* Desktop Grid */}
+        <div className="hidden md:grid md:grid-cols-4 gap-4">
           {badges.map((badge, index) => (
-            <div
-              key={index}
-              className={cn(
-                "flex items-center gap-3 p-4 rounded-lg",
-                "bg-white/[0.02] border border-white/[0.06]",
-              )}
-            >
-              <div className="w-10 h-10 rounded-lg bg-white/[0.08] flex items-center justify-center text-white/60">
-                <TrustIcon type={badge.icon} />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-white/80 line-clamp-1">
-                  {badge.title}
-                </span>
-                <span className="text-xs text-white/50 line-clamp-1">
-                  {badge.subtitle}
-                </span>
-              </div>
-            </div>
+            <TrustBadgeCard key={index} badge={badge} />
           ))}
         </div>
+
+        {/* Mobile Carousel */}
+        <TrustBadgeCarousel badges={badges} />
       </div>
     </section>
   );
