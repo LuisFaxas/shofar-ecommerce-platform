@@ -105,6 +105,21 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
+      {/* Skip to content link - first focusable element for a11y */}
+      <a
+        href="#main"
+        className={cn(
+          "sr-only focus:not-sr-only",
+          "focus:fixed focus:top-4 focus:left-4 focus:z-[60]",
+          "focus:px-4 focus:py-2 focus:rounded-lg",
+          "focus:bg-white focus:text-black focus:font-medium",
+          "focus:outline-none focus:ring-2 focus:ring-white/50",
+          "transition-opacity",
+        )}
+      >
+        Skip to content
+      </a>
+
       {/* Mobile Menu Backdrop - OUTSIDE nav for proper z-index stacking */}
       {isMobileMenuOpen && (
         <div
