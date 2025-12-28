@@ -1,6 +1,34 @@
+Read `AGENTS.md` first (authoritative).
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## How To Run A WO
+
+Use `docs/work-orders/` as the source of truth. Custom slash commands are not native; treat `.claude/commands/*.md` as workflow playbooks you explicitly invoke.
+
+### Command Path (convention)
+
+```
+/wo-implement WO-<ID>
+/wo-review WO-<ID>
+/wo-fix WO-<ID>
+/checkpoint WO-<ID> done
+```
+
+### Fallback Path (always works)
+
+```
+Use the workflow in .claude/commands/wo-implement.md on docs/work-orders/WO-<ID>.md. Follow it exactly. Do not commit. End with git diff --stat.
+```
+
+### Required Behavior
+
+- Start from a clean worktree/branch when the WO requires it.
+- Builder/verifier flow: implement, then have Codex review before fixes or completion.
+- Use relevant `.claude/agents/` for the task and report which were used.
+- Use the `wo-tracker` agent for checkpoint updates to `CHECKPOINT.md` and `docs/STATE.md`.
 
 ## High-Level Architecture
 
@@ -354,6 +382,33 @@ pnpm build
 pnpm prepare
 chmod +x .husky/*  # Make hooks executable (Unix)
 ```
+
+## Project Agents
+
+This project has specialized Claude Code agents in `.claude/agents/`. Each agent file contains its purpose, tools, and model in the frontmatter.
+
+### Knowledge Center (Token-Saving Pattern)
+
+| Agent            | Model  | Purpose                             |
+| ---------------- | ------ | ----------------------------------- |
+| shofar-librarian | sonnet | Orchestrates knowledge operations   |
+| kb-reader        | haiku  | Retrieves docs + maintains INDEX.md |
+| kb-writer        | sonnet | Creates/updates documentation       |
+
+### Development & Operations
+
+| Agent         | Model  | Purpose                    |
+| ------------- | ------ | -------------------------- |
+| vendure-admin | sonnet | Vendure backend specialist |
+| tooly-ui      | sonnet | TOOLY storefront UI        |
+| graphql-sync  | sonnet | GraphQL schema sync        |
+| deploy-check  | haiku  | Pre-deployment validation  |
+| wo-tracker    | sonnet | CHECKPOINT.md updates      |
+| stripe-debug  | sonnet | Payment troubleshooting    |
+| asset-manager | sonnet | R2/S3 asset pipeline       |
+| mobile-tester | sonnet | Responsive testing         |
+
+**Knowledge Center Location**: `knowledge_center/` with INDEX.md catalog.
 
 ## Agentic Coding Rules
 

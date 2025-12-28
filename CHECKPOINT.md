@@ -7,7 +7,7 @@
 
 ## CURRENT TRUTH (Read This First)
 
-**Last Updated**: 2025-12-26
+**Last Updated**: 2025-12-27
 
 ### Service Status
 
@@ -671,17 +671,137 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 > **Purpose**: Track Design v2.0 work orders for TOOLY storefront polish.
 > **Branch Pattern**: `wo/<wo-id>` (e.g., `wo/agent-guardrails-01`)
 
-| WO ID                        | Title                          | Status      | Commit  | Date       |
-| ---------------------------- | ------------------------------ | ----------- | ------- | ---------- |
-| WO 2.0.1                     | Variant-aware media + swatches | ✅ Complete | 9321ad6 | 2025-12-26 |
-| WO-AGENT-GUARDRAILS-01       | CLAUDE.md + WO workflow        | ✅ Complete | 63aedfe | 2025-12-24 |
-| WO-DESIGN-IMG-01             | Premium image experience       | ✅ Complete | pending | 2025-12-24 |
-| WO-DESIGN-SYSTEM-IMG-01      | Design-system image demos      | ✅ Complete | pending | 2025-12-24 |
-| WO-DESIGN-TRUST-A11Y-01      | Trust badges + skip link       | ✅ Complete | pending | 2025-12-24 |
-| WO-A11Y-SCROLL-01            | Global scroll offset           | ✅ Complete | pending | 2025-12-24 |
-| WO-DESIGN-SYSTEM-CAROUSEL-01 | Design-system carousel         | ✅ Complete | pending | 2025-12-24 |
+| WO ID                        | Title                            | Status      | Commit  | Date       |
+| ---------------------------- | -------------------------------- | ----------- | ------- | ---------- |
+| WO-HERO-VIEWPORT-01          | iOS hero fix + responsive images | ✅ Complete | f1ec3d0 | 2025-12-27 |
+| WO 2.1.2                     | Reviews section (3-row marquee)  | ✅ Complete | 4259c34 | 2025-12-27 |
+| WO 2.1.1                     | Tech section mobile pager        | ✅ Complete | b8caeca | 2025-12-27 |
+| WO 2.0.6c                    | Carousel nav toggle via Vendure  | ✅ Complete | a243c08 | 2025-12-26 |
+| WO 2.0.6b                    | Final carousel polish            | ✅ Complete | b7aa376 | 2025-12-26 |
+| WO 2.0.5                     | Product media dock v2            | ✅ Complete | 880c030 | 2025-12-26 |
+| WO 2.0.4                     | Product header layout toggle     | ✅ Complete | 2c1348a | 2025-12-26 |
+| WO 2.0.3                     | Product widget fit               | ✅ Complete | 71822be | 2025-12-26 |
+| WO 2.0.2                     | Product carousel vertical media  | ✅ Complete | 3dae07a | 2025-12-26 |
+| WO 2.0.1                     | Variant-aware media + swatches   | ✅ Complete | 9321ad6 | 2025-12-26 |
+| WO-AGENT-GUARDRAILS-01       | CLAUDE.md + WO workflow          | ✅ Complete | 63aedfe | 2025-12-24 |
+| WO-DESIGN-IMG-01             | Premium image experience         | ✅ Complete | c43918c | 2025-12-24 |
+| WO-DESIGN-SYSTEM-IMG-01      | Design-system image demos        | ✅ Complete | c43918c | 2025-12-24 |
+| WO-DESIGN-TRUST-A11Y-01      | Trust badges + skip link         | ✅ Complete | c43918c | 2025-12-24 |
+| WO-A11Y-SCROLL-01            | Global scroll offset             | ✅ Complete | c43918c | 2025-12-24 |
+| WO-DESIGN-SYSTEM-CAROUSEL-01 | Design-system carousel           | ✅ Complete | c43918c | 2025-12-24 |
 
 ### WO Log
+
+#### WO-HERO-VIEWPORT-01 (2025-12-27)
+
+- **Goal**: Fix iOS Safari hero bottom crop + add responsive hero images
+- **Problem**: On iPhone Safari, 100vh includes browser chrome, cropping hero bottom
+- **Files Changed**:
+  - `apps/vendure/src/vendure-config.ts` - Added `heroImageMobile` Channel custom field
+  - `packages/api-client/src/shop/tooly-product.graphql` - Query heroImageMobile
+  - `packages/api-client/src/generated/shop-types.ts` - Regenerated
+  - `apps/shofar-store/src/brands/tooly/lib/fetchers.ts` - Extract heroImageMobile
+  - `apps/shofar-store/src/brands/tooly/sections/HeroSection.tsx` - Responsive images + 100svh
+  - `apps/shofar-store/src/brands/tooly/index.tsx` - Pass heroImageMobile prop
+- **Features**:
+  - `heroImageMobile` Channel custom field for mobile-specific hero image (< 768px)
+  - Uses `100svh` (stable viewport height) instead of `100vh` for iOS Safari
+  - Mobile: `object-cover object-bottom` (anchors to bottom, crops from top)
+  - Desktop: `object-cover object-bottom` with `scale-105` for premium feel
+  - Automatic image switching at 768px breakpoint
+- **Deployment**: Vendure deployed to Railway, frontend to Vercel
+- **Commits**: `21f5249`, `2e90bc5`, `75712ef`, `f1ec3d0`
+
+#### WO 2.1.2 (2025-12-27)
+
+- **Goal**: Reviews section with 3-row horizontal marquee
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/sections/ReviewsSection.tsx` - Complete rewrite
+- **Features**:
+  - 3-row marquee with alternating scroll directions
+  - Mock review data (placeholder until Vendure review system)
+  - Glass card styling matching design system
+  - Infinite scroll animation with CSS
+- **Commit**: `4259c34`
+
+#### WO 2.1.1 (2025-12-27)
+
+- **Goal**: Tech section mobile pager (3 cards per page)
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/sections/TechnologySection.tsx`
+- **Features**:
+  - Mobile: 3-card pages with dot pagination
+  - Swipe navigation between pages
+  - Desktop: 6-column grid unchanged
+- **Commit**: `b8caeca`
+
+#### WO 2.0.6c (2025-12-26)
+
+- **Goal**: Carousel nav toggle via Vendure Channel custom field
+- **Files Changed**:
+  - `apps/vendure/src/vendure-config.ts` - Added storefrontCarouselNavStyle field
+  - `apps/shofar-store/src/brands/tooly/sections/ProductSection.tsx`
+- **Features**:
+  - Admin can toggle between "thumbs" and "dots" navigation
+  - Setting stored in Vendure Channel customFields
+  - Default: thumbs
+- **Commit**: `a243c08`
+
+#### WO 2.0.6b (2025-12-26)
+
+- **Goal**: Final carousel polish - thumbs below image
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/components/ui/ProductCarousel.tsx`
+- **Features**:
+  - Thumbnails positioned below main image
+  - Better visual hierarchy
+  - Improved touch targets
+- **Commit**: `b7aa376`
+
+#### WO 2.0.5 (2025-12-26)
+
+- **Goal**: Product media dock v2 + purchase line polish
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/sections/ProductSection.tsx`
+- **Features**:
+  - Glass dock for thumbnails
+  - Purchase line (price + add to cart) polish
+  - Compact spacing
+- **Commit**: `880c030`
+
+#### WO 2.0.4 (2025-12-26)
+
+- **Goal**: Product header layout toggle
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/sections/ProductSection.tsx`
+- **Features**:
+  - Inline purchase line option
+  - Header layout flexibility
+- **Commit**: `2c1348a`
+
+#### WO 2.0.3 (2025-12-26)
+
+- **Goal**: Product widget fit (glass dock thumbs + compact header)
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/sections/ProductSection.tsx`
+- **Features**:
+  - Glass dock for thumbnails
+  - Compact header styling
+  - Better mobile fit
+- **Commit**: `71822be`
+
+#### WO 2.0.2 (2025-12-26)
+
+- **Goal**: Product carousel vertical media + thumbs + zoom
+- **Files Changed**:
+  - `apps/shofar-store/src/brands/tooly/components/ui/ProductCarousel.tsx`
+  - `apps/shofar-store/src/brands/tooly/sections/ProductSection.tsx`
+- **Features**:
+  - Vertical thumbnail strip on desktop
+  - Zoom on hover
+  - Pinch-to-zoom on mobile
+  - Smooth transitions
+- **Commit**: `3dae07a`
 
 #### WO 2.0.1 (2025-12-26)
 
@@ -722,7 +842,7 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
   - 150ms debounce scroll settle detection
   - Respects `prefers-reduced-motion`
 - **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
-- **Commit**: pending
+- **Commit**: `c43918c`
 
 #### WO-DESIGN-SYSTEM-IMG-01 (2025-12-24)
 
@@ -735,7 +855,7 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
   - Fullscreen Lightbox demo (image grid with Lightbox)
   - Uses same production components (no code duplication)
 - **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
-- **Commit**: pending
+- **Commit**: `c43918c`
 
 #### WO-DESIGN-TRUST-A11Y-01 (2025-12-24)
 
@@ -749,7 +869,7 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
   - Skip link: first focusable element, links to #main
   - Main element: id="main", tabIndex={-1}, scroll-mt-24 for proper focus
 - **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
-- **Commit**: pending
+- **Commit**: `c43918c`
 
 #### WO-A11Y-SCROLL-01 (2025-12-24)
 
@@ -767,7 +887,7 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
   - `pnpm --filter @shofar/shofar-store build` PASS
   - Puppeteer: #product, #technology, skip link (#main) all land correctly
   - Mobile (430px) and desktop (1440px) both tested
-- **Commit**: pending
+- **Commit**: `c43918c`
 
 #### WO-DESIGN-SYSTEM-CAROUSEL-01 (2025-12-24)
 
@@ -786,7 +906,7 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
   - No duplicated logic - CredibilitySection uses the shared component
   - Design-system demos: trust badges, product cards, configuration options
 - **Verification**: `pnpm --filter @shofar/shofar-store build` PASS
-- **Commit**: pending
+- **Commit**: `c43918c`
 
 ---
 
