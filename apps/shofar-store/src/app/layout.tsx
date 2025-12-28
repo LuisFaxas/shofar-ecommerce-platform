@@ -19,11 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: brand.seo.title,
       description: brand.seo.description,
-      type: 'website',
+      type: "website",
       siteName: brand.displayName,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: brand.seo.title,
       description: brand.seo.description,
       creator: brand.seo.twitterHandle,
@@ -44,9 +44,7 @@ export default async function RootLayout({
         className={`${inter.variable} font-sans antialiased`}
         style={themeVars as React.CSSProperties}
       >
-        <ErrorBoundary>
-          {children}
-        </ErrorBoundary>
+        <ErrorBoundary>{children}</ErrorBoundary>
       </body>
     </html>
   );

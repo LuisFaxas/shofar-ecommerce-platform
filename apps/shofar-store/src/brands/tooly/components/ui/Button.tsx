@@ -6,13 +6,13 @@
  * Optimized for dark gunmetal surfaces
  */
 
-import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
+import { ButtonHTMLAttributes, forwardRef, ReactNode } from "react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Visual style variant */
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'glass';
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "glass";
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -36,18 +36,18 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      variant = 'primary',
-      size = 'md',
+      variant = "primary",
+      size = "md",
       fullWidth = false,
       loading = false,
       leftIcon,
       rightIcon,
-      className = '',
+      className = "",
       children,
       disabled,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Base classes that apply to all buttons - industrial precision
     const baseClasses = `
@@ -95,18 +95,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         hover:text-white hover:bg-white/10
         focus:ring-white/20
         border border-white/20
-      `
+      `,
     };
 
     // Size-specific styles - consistent industrial feel
     const sizes = {
-      sm: 'px-3 py-1.5 text-sm gap-1.5',
-      md: 'px-4 py-2 text-base gap-2',
-      lg: 'px-6 py-3 text-lg gap-2.5'
+      sm: "px-3 py-1.5 text-sm gap-1.5",
+      md: "px-4 py-2 text-base gap-2",
+      lg: "px-6 py-3 text-lg gap-2.5",
     };
 
     // Width modifier
-    const widthClass = fullWidth ? 'w-full' : '';
+    const widthClass = fullWidth ? "w-full" : "";
 
     // Loading spinner (using CSS animation)
     const loadingSpinner = loading ? (
@@ -119,7 +119,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ) : null;
 
     // Content visibility when loading
-    const contentClass = loading ? 'opacity-0' : '';
+    const contentClass = loading ? "opacity-0" : "";
 
     return (
       <button
@@ -130,7 +130,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ${sizes[size]}
           ${widthClass}
           ${className}
-        `.replace(/\s+/g, ' ').trim()}
+        `
+          .replace(/\s+/g, " ")
+          .trim()}
         disabled={disabled || loading}
         aria-busy={loading}
         {...props}
@@ -143,10 +145,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         </span>
       </button>
     );
-  }
+  },
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 /**
  * Button Group component for grouping related buttons
@@ -154,7 +156,7 @@ Button.displayName = 'Button';
 export interface ButtonGroupProps {
   children: ReactNode;
   /** Orientation of the button group */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Whether buttons should be attached */
   attached?: boolean;
   className?: string;
@@ -162,18 +164,18 @@ export interface ButtonGroupProps {
 
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   children,
-  orientation = 'horizontal',
+  orientation = "horizontal",
   attached = false,
-  className = ''
+  className = "",
 }) => {
-  const orientationClass = orientation === 'vertical' ? 'flex-col' : 'flex-row';
+  const orientationClass = orientation === "vertical" ? "flex-col" : "flex-row";
   const attachedClass = attached
-    ? orientation === 'vertical'
-      ? '[&>button]:rounded-none [&>button:first-child]:rounded-t-lg [&>button:last-child]:rounded-b-lg [&>button:not(:first-child)]:-mt-[1px]'
-      : '[&>button]:rounded-none [&>button:first-child]:rounded-l-lg [&>button:last-child]:rounded-r-lg [&>button:not(:first-child)]:-ml-[1px]'
-    : orientation === 'vertical'
-      ? 'gap-2'
-      : 'gap-2';
+    ? orientation === "vertical"
+      ? "[&>button]:rounded-none [&>button:first-child]:rounded-t-lg [&>button:last-child]:rounded-b-lg [&>button:not(:first-child)]:-mt-[1px]"
+      : "[&>button]:rounded-none [&>button:first-child]:rounded-l-lg [&>button:last-child]:rounded-r-lg [&>button:not(:first-child)]:-ml-[1px]"
+    : orientation === "vertical"
+      ? "gap-2"
+      : "gap-2";
 
   return (
     <div
@@ -185,4 +187,4 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   );
 };
 
-ButtonGroup.displayName = 'ButtonGroup';
+ButtonGroup.displayName = "ButtonGroup";

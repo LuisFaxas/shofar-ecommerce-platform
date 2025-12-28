@@ -8,14 +8,29 @@
  */
 
 // Marketing Primary - Rainbow gradient border (former ButtonPrimary)
-export { ButtonMarketingPrimary, type ButtonMarketingPrimaryProps } from './ButtonMarketingPrimary';
+export {
+  ButtonMarketingPrimary,
+  type ButtonMarketingPrimaryProps,
+} from "./ButtonMarketingPrimary";
 
 // Animated gradient buttons
-export { ButtonRotatingWhite, type ButtonRotatingWhiteProps } from './ButtonRotatingWhite';
-export { ButtonRotatingPurple, type ButtonRotatingPurpleProps } from './ButtonRotatingPurple';
-export { ButtonConicShine, type ButtonConicShineProps } from './ButtonConicShine';
-export { ButtonGlowUp, type ButtonGlowUpProps } from './ButtonGlowUp';
-export { ButtonRainbowShine, type ButtonRainbowShineProps } from './ButtonRainbowShine';
+export {
+  ButtonRotatingWhite,
+  type ButtonRotatingWhiteProps,
+} from "./ButtonRotatingWhite";
+export {
+  ButtonRotatingPurple,
+  type ButtonRotatingPurpleProps,
+} from "./ButtonRotatingPurple";
+export {
+  ButtonConicShine,
+  type ButtonConicShineProps,
+} from "./ButtonConicShine";
+export { ButtonGlowUp, type ButtonGlowUpProps } from "./ButtonGlowUp";
+export {
+  ButtonRainbowShine,
+  type ButtonRainbowShineProps,
+} from "./ButtonRainbowShine";
 
 /**
  * Usage Guidelines:

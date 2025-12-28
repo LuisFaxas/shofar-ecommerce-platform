@@ -1,5 +1,5 @@
-import { get } from '@vercel/edge-config';
-import type { FeatureFlagAdapter } from '../types';
+import { get } from "@vercel/edge-config";
+import type { FeatureFlagAdapter } from "../types";
 
 export class EdgeConfigAdapter implements FeatureFlagAdapter {
   constructor(private readonly configId?: string) {}
@@ -14,12 +14,18 @@ export class EdgeConfigAdapter implements FeatureFlagAdapter {
     }
   }
 
-  async getVariant(flagKey: string, defaultValue?: string): Promise<string | null> {
+  async getVariant(
+    flagKey: string,
+    defaultValue?: string,
+  ): Promise<string | null> {
     try {
       const value = await get<string>(flagKey);
       return value ?? defaultValue ?? null;
     } catch (error) {
-      console.error(`Error fetching variant ${flagKey} from Edge Config:`, error);
+      console.error(
+        `Error fetching variant ${flagKey} from Edge Config:`,
+        error,
+      );
       return defaultValue ?? null;
     }
   }
@@ -31,7 +37,7 @@ export class EdgeConfigAdapter implements FeatureFlagAdapter {
 
       if (all) {
         Object.entries(all).forEach(([key, value]) => {
-          if (typeof value === 'boolean') {
+          if (typeof value === "boolean") {
             flags[key] = value;
           }
         });
@@ -39,7 +45,7 @@ export class EdgeConfigAdapter implements FeatureFlagAdapter {
 
       return flags;
     } catch (error) {
-      console.error('Error fetching all flags from Edge Config:', error);
+      console.error("Error fetching all flags from Edge Config:", error);
       return {};
     }
   }

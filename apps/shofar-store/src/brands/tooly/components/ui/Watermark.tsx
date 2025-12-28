@@ -6,10 +6,10 @@
  * Provides subtle branding in the background
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 export interface WatermarkProps {
   /** Text to display as watermark */
@@ -21,7 +21,7 @@ export interface WatermarkProps {
   /** Opacity level */
   opacity?: number;
   /** Position variant */
-  position?: 'center' | 'top-right' | 'bottom-left' | 'custom';
+  position?: "center" | "top-right" | "bottom-left" | "custom";
   /** Custom position (when position="custom") */
   customPosition?: {
     top?: string;
@@ -30,7 +30,7 @@ export interface WatermarkProps {
     bottom?: string;
   };
   /** Size variant */
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'fill';
+  size?: "sm" | "md" | "lg" | "xl" | "fill";
   /** Custom className */
   className?: string;
 }
@@ -40,71 +40,73 @@ export interface WatermarkProps {
  * Can include spotlight tracking for interactive effect
  */
 export const Watermark: React.FC<WatermarkProps> = ({
-  text = 'TOOLY',
+  text = "TOOLY",
   spotlight = true,
   rotate = -15,
   opacity = 0.03,
-  position = 'center',
+  position = "center",
   customPosition,
-  size = 'lg',
-  className
+  size = "lg",
+  className,
 }) => {
   const sizeClasses = {
-    sm: 'text-[6rem]',
-    md: 'text-[10rem]',
-    lg: 'text-[clamp(10rem,30vw,20rem)]',
-    xl: 'text-[clamp(15rem,40vw,30rem)]',
-    fill: 'text-[clamp(20rem,50vw,40rem)]'
+    sm: "text-[6rem]",
+    md: "text-[10rem]",
+    lg: "text-[clamp(10rem,30vw,20rem)]",
+    xl: "text-[clamp(15rem,40vw,30rem)]",
+    fill: "text-[clamp(20rem,50vw,40rem)]",
   };
 
   const positionStyles = {
     center: {
-      top: '50%',
-      left: '50%',
-      transform: `translate(-50%, -50%) rotate(${rotate}deg)`
+      top: "50%",
+      left: "50%",
+      transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
     },
-    'top-right': {
-      top: '10%',
-      right: '-10%',
-      transform: `rotate(${rotate}deg)`
+    "top-right": {
+      top: "10%",
+      right: "-10%",
+      transform: `rotate(${rotate}deg)`,
     },
-    'bottom-left': {
-      bottom: '10%',
-      left: '-10%',
-      transform: `rotate(${rotate}deg)`
+    "bottom-left": {
+      bottom: "10%",
+      left: "-10%",
+      transform: `rotate(${rotate}deg)`,
     },
     custom: {
       ...customPosition,
-      transform: `rotate(${rotate}deg)`
-    }
+      transform: `rotate(${rotate}deg)`,
+    },
   };
 
   return (
     <div
       className={cn(
-        'watermark-backdrop',
-        'fixed inset-0 pointer-events-none z-0 overflow-hidden',
-        spotlight && 'spotlight',
-        className
+        "watermark-backdrop",
+        "fixed inset-0 pointer-events-none z-0 overflow-hidden",
+        spotlight && "spotlight",
+        className,
       )}
-      style={{
-        '--watermark-opacity': opacity
-      } as React.CSSProperties}
+      style={
+        {
+          "--watermark-opacity": opacity,
+        } as React.CSSProperties
+      }
     >
       {/* Main watermark text */}
       <div
         className={cn(
-          'absolute whitespace-nowrap',
+          "absolute whitespace-nowrap",
           sizeClasses[size],
-          'font-black uppercase',
-          'text-[var(--color-gm-900)]',
-          'select-none',
-          'transition-opacity duration-1000'
+          "font-black uppercase",
+          "text-[var(--color-gm-900)]",
+          "select-none",
+          "transition-opacity duration-1000",
         )}
         style={{
           ...positionStyles[position],
           opacity: `var(--watermark-opacity, ${opacity})`,
-          letterSpacing: '-0.05em'
+          letterSpacing: "-0.05em",
         }}
         aria-hidden="true"
       >
@@ -121,8 +123,8 @@ export const Watermark: React.FC<WatermarkProps> = ({
               rgba(255, 255, 255, 0.03) 0%,
               transparent 70%
             )`,
-            mixBlendMode: 'soft-light',
-            transition: 'background 0.3s ease-out'
+            mixBlendMode: "soft-light",
+            transition: "background 0.3s ease-out",
           }}
         />
       )}
@@ -140,8 +142,8 @@ export const Watermark: React.FC<WatermarkProps> = ({
               transparent 52%,
               transparent 100%
             )`,
-            backgroundSize: '100% 200%',
-            animation: 'scan 8s linear infinite'
+            backgroundSize: "100% 200%",
+            animation: "scan 8s linear infinite",
           }}
         />
       )}
@@ -152,44 +154,39 @@ export const Watermark: React.FC<WatermarkProps> = ({
 // Grid pattern watermark variant
 export const WatermarkGrid: React.FC<{
   text?: string;
-  spacing?: 'sm' | 'md' | 'lg';
+  spacing?: "sm" | "md" | "lg";
   opacity?: number;
   className?: string;
-}> = ({
-  text = 'TOOLY',
-  spacing = 'md',
-  opacity = 0.02,
-  className
-}) => {
+}> = ({ text = "TOOLY", spacing = "md", opacity = 0.02, className }) => {
   const spacingClasses = {
-    sm: 'gap-8',
-    md: 'gap-16',
-    lg: 'gap-24'
+    sm: "gap-8",
+    md: "gap-16",
+    lg: "gap-24",
   };
 
   return (
     <div
       className={cn(
-        'fixed inset-0 pointer-events-none z-0 overflow-hidden',
-        className
+        "fixed inset-0 pointer-events-none z-0 overflow-hidden",
+        className,
       )}
       style={{
-        opacity
+        opacity,
       }}
     >
       <div
         className={cn(
-          'absolute inset-[-50%]',
-          'grid grid-cols-4',
+          "absolute inset-[-50%]",
+          "grid grid-cols-4",
           spacingClasses[spacing],
-          'rotate-[-15deg]'
+          "rotate-[-15deg]",
         )}
       >
         {Array.from({ length: 16 }).map((_, i) => (
           <span
             key={i}
             className="text-[3rem] font-black uppercase text-[var(--color-gm-900)] select-none"
-            style={{ letterSpacing: '-0.05em' }}
+            style={{ letterSpacing: "-0.05em" }}
             aria-hidden="true"
           >
             {text}
@@ -207,10 +204,10 @@ export const WatermarkAnimated: React.FC<{
   opacity?: number;
   className?: string;
 }> = ({
-  words = ['TOOLY', 'INDUSTRIAL', 'GRADE', 'TOOLS'],
+  words = ["TOOLY", "INDUSTRIAL", "GRADE", "TOOLS"],
   duration = 4000,
   opacity = 0.03,
-  className
+  className,
 }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
@@ -226,7 +223,7 @@ export const WatermarkAnimated: React.FC<{
     <Watermark
       text={words[currentIndex]}
       opacity={opacity}
-      className={cn('transition-all duration-500', className)}
+      className={cn("transition-all duration-500", className)}
     />
   );
 };
@@ -244,15 +241,18 @@ const scanKeyframes = `
 `;
 
 // Inject keyframes on component mount
-if (typeof window !== 'undefined' && !document.querySelector('#watermark-keyframes')) {
-  const style = document.createElement('style');
-  style.id = 'watermark-keyframes';
+if (
+  typeof window !== "undefined" &&
+  !document.querySelector("#watermark-keyframes")
+) {
+  const style = document.createElement("style");
+  style.id = "watermark-keyframes";
   style.textContent = scanKeyframes;
   document.head.appendChild(style);
 }
 
-Watermark.displayName = 'Watermark';
-WatermarkGrid.displayName = 'WatermarkGrid';
-WatermarkAnimated.displayName = 'WatermarkAnimated';
+Watermark.displayName = "Watermark";
+WatermarkGrid.displayName = "WatermarkGrid";
+WatermarkAnimated.displayName = "WatermarkAnimated";
 
 export default Watermark;

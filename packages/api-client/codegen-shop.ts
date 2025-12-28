@@ -1,21 +1,21 @@
-import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: {
-    'http://localhost:3001/shop-api': {
+    "http://localhost:3001/shop-api": {
       headers: {
-        'vendure-token': 'tooly',
+        "vendure-token": "tooly",
       },
     },
   },
-  documents: 'src/shop/**/*.graphql',
+  documents: "src/shop/**/*.graphql",
   generates: {
-    'src/generated/shop-types.ts': {
+    "src/generated/shop-types.ts": {
       plugins: [
-        'typescript',
-        'typescript-operations',
-        'typescript-react-apollo',
+        "typescript",
+        "typescript-operations",
+        "typescript-react-apollo",
       ],
       config: {
         withHooks: true,
@@ -23,19 +23,19 @@ const config: CodegenConfig = {
         withHOC: false,
         strictScalars: true,
         scalars: {
-          DateTime: 'string',
-          JSON: 'Record<string, any>',
-          Money: 'number',
-          Upload: 'File',
+          DateTime: "string",
+          JSON: "Record<string, any>",
+          Money: "number",
+          Upload: "File",
         },
       },
     },
-    'src/generated/shop-introspection.json': {
-      plugins: ['introspection'],
+    "src/generated/shop-introspection.json": {
+      plugins: ["introspection"],
     },
   },
   hooks: {
-    afterAllFileWrite: ['prettier --write'],
+    afterAllFileWrite: ["prettier --write"],
   },
 };
 

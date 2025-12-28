@@ -1,6 +1,6 @@
-import { bootstrap, runMigrations } from '@vendure/core';
-import { config } from './vendure-config';
-import * as dotenv from 'dotenv';
+import { bootstrap, runMigrations } from "@vendure/core";
+import { config } from "./vendure-config";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 

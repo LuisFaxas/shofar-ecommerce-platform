@@ -10,12 +10,12 @@
  */
 
 // Production guard - NEVER run in production
-if (process.env.NODE_ENV === 'production') {
-  throw new Error('Do not run seed scripts in production!');
+if (process.env.NODE_ENV === "production") {
+  throw new Error("Do not run seed scripts in production!");
 }
 
-import { bootstrap } from '@vendure/core';
-import { config } from '../vendure-config';
+import { bootstrap } from "@vendure/core";
+import { config } from "../vendure-config";
 import {
   ChannelService,
   RequestContext,
@@ -30,7 +30,7 @@ import {
   FacetValue,
   Product,
   ID,
-} from '@vendure/core';
+} from "@vendure/core";
 
 // ============================================================================
 // PRODUCT DATA
@@ -38,105 +38,107 @@ import {
 
 const TOOLY_VARIANTS = [
   {
-    name: 'TOOLY - DLC Gunmetal',
-    sku: 'TOOLY-DLC-GM',
+    name: "TOOLY - DLC Gunmetal",
+    sku: "TOOLY-DLC-GM",
     price: 14900, // $149.00
-    color: 'gunmetal',
-    finish: 'dlc',
+    color: "gunmetal",
+    finish: "dlc",
     stock: 100,
   },
   {
-    name: 'TOOLY - Cerakote Midnight',
-    sku: 'TOOLY-CK-MID',
+    name: "TOOLY - Cerakote Midnight",
+    sku: "TOOLY-CK-MID",
     price: 16900, // $169.00
-    color: 'black',
-    finish: 'cerakote',
+    color: "black",
+    finish: "cerakote",
     stock: 75,
   },
   {
-    name: 'TOOLY - Cerakote Arctic',
-    sku: 'TOOLY-CK-ARC',
+    name: "TOOLY - Cerakote Arctic",
+    sku: "TOOLY-CK-ARC",
     price: 16900,
-    color: 'white',
-    finish: 'cerakote',
+    color: "white",
+    finish: "cerakote",
     stock: 50,
   },
   {
-    name: 'TOOLY - Cerakote Ember',
-    sku: 'TOOLY-CK-EMB',
+    name: "TOOLY - Cerakote Ember",
+    sku: "TOOLY-CK-EMB",
     price: 16900,
-    color: 'orange',
-    finish: 'cerakote',
+    color: "orange",
+    finish: "cerakote",
     stock: 50,
   },
   {
-    name: 'TOOLY - Cerakote Cobalt',
-    sku: 'TOOLY-CK-COB',
+    name: "TOOLY - Cerakote Cobalt",
+    sku: "TOOLY-CK-COB",
     price: 16900,
-    color: 'blue',
-    finish: 'cerakote',
+    color: "blue",
+    finish: "cerakote",
     stock: 50,
   },
   {
-    name: 'TOOLY - Cerakote Titanium',
-    sku: 'TOOLY-CK-TIT',
+    name: "TOOLY - Cerakote Titanium",
+    sku: "TOOLY-CK-TIT",
     price: 18900, // $189.00 - premium
-    color: 'silver',
-    finish: 'cerakote',
+    color: "silver",
+    finish: "cerakote",
     stock: 25,
   },
 ];
 
 const ACCESSORIES = [
   {
-    name: 'Silicone Case + Glass Vial',
-    slug: 'silicone-case-glass-vial',
-    sku: 'ACC-CASE-VIAL',
+    name: "Silicone Case + Glass Vial",
+    slug: "silicone-case-glass-vial",
+    sku: "ACC-CASE-VIAL",
     price: 2499, // $24.99
-    description: 'Premium silicone protective case with integrated borosilicate glass vial.',
+    description:
+      "Premium silicone protective case with integrated borosilicate glass vial.",
     stock: 200,
   },
   {
-    name: 'Carry Chain - Gold',
-    slug: 'carry-chain-gold',
-    sku: 'ACC-CHAIN-GLD',
+    name: "Carry Chain - Gold",
+    slug: "carry-chain-gold",
+    sku: "ACC-CHAIN-GLD",
     price: 1999, // $19.99
-    description: '18K gold-plated stainless steel chain for discreet carry.',
+    description: "18K gold-plated stainless steel chain for discreet carry.",
     stock: 150,
   },
   {
-    name: 'Carry Chain - Silver',
-    slug: 'carry-chain-silver',
-    sku: 'ACC-CHAIN-SLV',
+    name: "Carry Chain - Silver",
+    slug: "carry-chain-silver",
+    sku: "ACC-CHAIN-SLV",
     price: 1999,
-    description: 'Brushed stainless steel chain for discreet carry.',
+    description: "Brushed stainless steel chain for discreet carry.",
     stock: 150,
   },
   {
-    name: 'Cleaning Kit',
-    slug: 'cleaning-kit',
-    sku: 'ACC-CLEAN-KIT',
+    name: "Cleaning Kit",
+    slug: "cleaning-kit",
+    sku: "ACC-CLEAN-KIT",
     price: 999, // $9.99
-    description: 'Complete cleaning kit with precision brushes and cleaning solution.',
+    description:
+      "Complete cleaning kit with precision brushes and cleaning solution.",
     stock: 300,
   },
 ];
 
 // Facet definitions
 const FINISH_FACET = {
-  code: 'finish',
-  name: 'Finish',
+  code: "finish",
+  name: "Finish",
   values: [
-    { code: 'dlc', name: 'DLC (Diamond-Like Coating)' },
-    { code: 'cerakote', name: 'Cerakote' },
+    { code: "dlc", name: "DLC (Diamond-Like Coating)" },
+    { code: "cerakote", name: "Cerakote" },
   ],
 };
 
 const COLOR_EXTENSIONS = [
-  { code: 'gunmetal', name: 'Gunmetal' },
-  { code: 'white', name: 'Arctic White' },
-  { code: 'orange', name: 'Ember Orange' },
-  { code: 'blue', name: 'Cobalt Blue' },
+  { code: "gunmetal", name: "Gunmetal" },
+  { code: "white", name: "Arctic White" },
+  { code: "orange", name: "Ember Orange" },
+  { code: "blue", name: "Cobalt Blue" },
 ];
 
 // ============================================================================
@@ -173,8 +175,14 @@ async function getOrCreateFacetValue(
   name: string,
 ): Promise<FacetValue> {
   // Reload facet to get latest values
-  const updatedFacet = await facetService.findByCode(ctx, facet.code, LanguageCode.en);
-  const existing = updatedFacet?.values?.find((v: FacetValue) => v.code === code);
+  const updatedFacet = await facetService.findByCode(
+    ctx,
+    facet.code,
+    LanguageCode.en,
+  );
+  const existing = updatedFacet?.values?.find(
+    (v: FacetValue) => v.code === code,
+  );
   if (existing) {
     console.log(`    Found existing facet value: ${code}`);
     return existing;
@@ -216,9 +224,9 @@ async function findVariantBySku(
 // ============================================================================
 
 async function seedToolyFull() {
-  console.log('\n========================================');
-  console.log('TOOLY Full Seed Script');
-  console.log('========================================\n');
+  console.log("\n========================================");
+  console.log("TOOLY Full Seed Script");
+  console.log("========================================\n");
 
   const app = await bootstrap(config);
 
@@ -233,7 +241,7 @@ async function seedToolyFull() {
     // ========================================================================
     // 1. Get tooly channel
     // ========================================================================
-    console.log('1. Finding tooly channel...');
+    console.log("1. Finding tooly channel...");
 
     // First get default channel to create initial context
     const defaultChannel = await channelService.getDefaultChannel();
@@ -242,14 +250,18 @@ async function seedToolyFull() {
       languageCode: LanguageCode.en,
       isAuthorized: true,
       authorizedAsOwnerOnly: false,
-      apiType: 'admin',
+      apiType: "admin",
     });
 
     const channels = await channelService.findAll(initialCtx);
-    const toolyChannel = channels.items.find((c: Channel) => c.code === 'tooly');
+    const toolyChannel = channels.items.find(
+      (c: Channel) => c.code === "tooly",
+    );
 
     if (!toolyChannel) {
-      throw new Error('tooly channel not found! Run setup first: pnpm --filter @shofar/vendure run setup');
+      throw new Error(
+        "tooly channel not found! Run setup first: pnpm --filter @shofar/vendure run setup",
+      );
     }
 
     // Create context scoped to tooly channel
@@ -258,7 +270,7 @@ async function seedToolyFull() {
       languageCode: LanguageCode.en,
       isAuthorized: true,
       authorizedAsOwnerOnly: false,
-      apiType: 'admin',
+      apiType: "admin",
     });
 
     console.log(`   Channel: ${toolyChannel.code} (ID: ${toolyChannel.id})`);
@@ -266,23 +278,42 @@ async function seedToolyFull() {
     // ========================================================================
     // 2. Create/update facets
     // ========================================================================
-    console.log('\n2. Setting up facets...');
+    console.log("\n2. Setting up facets...");
 
     // Create finish facet
-    const finishFacet = await getOrCreateFacet(ctx, facetService, FINISH_FACET.code, FINISH_FACET.name);
+    const finishFacet = await getOrCreateFacet(
+      ctx,
+      facetService,
+      FINISH_FACET.code,
+      FINISH_FACET.name,
+    );
     const finishValues: Record<string, FacetValue> = {};
     for (const val of FINISH_FACET.values) {
       finishValues[val.code] = await getOrCreateFacetValue(
-        ctx, facetService, facetValueService, finishFacet, val.code, val.name
+        ctx,
+        facetService,
+        facetValueService,
+        finishFacet,
+        val.code,
+        val.name,
       );
     }
 
     // Get or create color facet and extend with new values
-    const colorFacet = await getOrCreateFacet(ctx, facetService, 'color', 'Color');
+    const colorFacet = await getOrCreateFacet(
+      ctx,
+      facetService,
+      "color",
+      "Color",
+    );
     const colorValues: Record<string, FacetValue> = {};
 
     // First, load existing color values
-    const existingColorFacet = await facetService.findByCode(ctx, 'color', LanguageCode.en);
+    const existingColorFacet = await facetService.findByCode(
+      ctx,
+      "color",
+      LanguageCode.en,
+    );
     if (existingColorFacet?.values) {
       for (const v of existingColorFacet.values) {
         colorValues[v.code] = v;
@@ -293,46 +324,66 @@ async function seedToolyFull() {
     for (const val of COLOR_EXTENSIONS) {
       if (!colorValues[val.code]) {
         colorValues[val.code] = await getOrCreateFacetValue(
-          ctx, facetService, facetValueService, colorFacet, val.code, val.name
+          ctx,
+          facetService,
+          facetValueService,
+          colorFacet,
+          val.code,
+          val.name,
         );
       }
     }
 
     // Also ensure standard colors exist
     const standardColors = [
-      { code: 'black', name: 'Black' },
-      { code: 'silver', name: 'Silver' },
+      { code: "black", name: "Black" },
+      { code: "silver", name: "Silver" },
     ];
     for (const val of standardColors) {
       if (!colorValues[val.code]) {
         colorValues[val.code] = await getOrCreateFacetValue(
-          ctx, facetService, facetValueService, colorFacet, val.code, val.name
+          ctx,
+          facetService,
+          facetValueService,
+          colorFacet,
+          val.code,
+          val.name,
         );
       }
     }
 
     // Get or create category facet
-    const categoryFacet = await getOrCreateFacet(ctx, facetService, 'category', 'Category');
+    const categoryFacet = await getOrCreateFacet(
+      ctx,
+      facetService,
+      "category",
+      "Category",
+    );
     const categoryValues: Record<string, FacetValue> = {};
     const categories = [
-      { code: 'main-product', name: 'Main Product' },
-      { code: 'accessory', name: 'Accessory' },
+      { code: "main-product", name: "Main Product" },
+      { code: "accessory", name: "Accessory" },
     ];
     for (const val of categories) {
       categoryValues[val.code] = await getOrCreateFacetValue(
-        ctx, facetService, facetValueService, categoryFacet, val.code, val.name
+        ctx,
+        facetService,
+        facetValueService,
+        categoryFacet,
+        val.code,
+        val.name,
       );
     }
 
-    console.log('   Facets ready: finish, color, category');
+    console.log("   Facets ready: finish, color, category");
 
     // ========================================================================
     // 3. Upsert TOOLY product
     // ========================================================================
-    console.log('\n3. Upserting TOOLY product...');
+    console.log("\n3. Upserting TOOLY product...");
 
-    let toolyProduct = await findProductBySlug(ctx, productService, 'tooly');
-    const mainProductFacetId = categoryValues['main-product']?.id;
+    let toolyProduct = await findProductBySlug(ctx, productService, "tooly");
+    const mainProductFacetId = categoryValues["main-product"]?.id;
 
     if (toolyProduct) {
       console.log(`   Found existing TOOLY product (ID: ${toolyProduct.id})`);
@@ -343,15 +394,16 @@ async function seedToolyFull() {
         facetValueIds: mainProductFacetId ? [mainProductFacetId] : [],
       });
     } else {
-      console.log('   Creating new TOOLY product...');
+      console.log("   Creating new TOOLY product...");
       toolyProduct = await productService.create(ctx, {
         enabled: true,
         translations: [
           {
             languageCode: LanguageCode.en,
-            name: 'TOOLY',
-            slug: 'tooly',
-            description: 'Premium nostril delivery device. Precision-machined 316 stainless steel with DLC or Cerakote finish. Hexagonal cross-section for secure grip.',
+            name: "TOOLY",
+            slug: "tooly",
+            description:
+              "Premium nostril delivery device. Precision-machined 316 stainless steel with DLC or Cerakote finish. Hexagonal cross-section for secure grip.",
           },
         ],
         facetValueIds: mainProductFacetId ? [mainProductFacetId] : [],
@@ -362,10 +414,14 @@ async function seedToolyFull() {
     // ========================================================================
     // 4. Upsert TOOLY variants
     // ========================================================================
-    console.log('\n4. Upserting TOOLY variants...');
+    console.log("\n4. Upserting TOOLY variants...");
 
     for (const variantData of TOOLY_VARIANTS) {
-      const existingVariant = await findVariantBySku(ctx, variantService, variantData.sku);
+      const existingVariant = await findVariantBySku(
+        ctx,
+        variantService,
+        variantData.sku,
+      );
 
       const facetValueIds: ID[] = [];
       const colorVal = colorValues[variantData.color];
@@ -385,7 +441,9 @@ async function seedToolyFull() {
             price: variantData.price,
             stockOnHand: variantData.stock,
             facetValueIds,
-            translations: [{ languageCode: LanguageCode.en, name: variantData.name }],
+            translations: [
+              { languageCode: LanguageCode.en, name: variantData.name },
+            ],
           },
         ]);
       } else {
@@ -399,12 +457,19 @@ async function seedToolyFull() {
               stockOnHand: variantData.stock,
               trackInventory: true as any,
               facetValueIds,
-              translations: [{ languageCode: LanguageCode.en, name: variantData.name }],
+              translations: [
+                { languageCode: LanguageCode.en, name: variantData.name },
+              ],
             },
           ]);
         } catch (err: any) {
-          if (err?.message?.includes('already-exists') || err?.code === 'USER_INPUT_ERROR') {
-            console.log(`   ⚠️ Variant ${variantData.sku} already exists (skipping)`);
+          if (
+            err?.message?.includes("already-exists") ||
+            err?.code === "USER_INPUT_ERROR"
+          ) {
+            console.log(
+              `   ⚠️ Variant ${variantData.sku} already exists (skipping)`,
+            );
           } else {
             throw err;
           }
@@ -417,12 +482,16 @@ async function seedToolyFull() {
     // ========================================================================
     // 5. Upsert accessory products
     // ========================================================================
-    console.log('\n5. Upserting accessory products...');
+    console.log("\n5. Upserting accessory products...");
 
-    const accessoryFacetId = categoryValues['accessory']?.id;
+    const accessoryFacetId = categoryValues["accessory"]?.id;
 
     for (const accessoryData of ACCESSORIES) {
-      let accessoryProduct = await findProductBySlug(ctx, productService, accessoryData.slug);
+      let accessoryProduct = await findProductBySlug(
+        ctx,
+        productService,
+        accessoryData.slug,
+      );
 
       if (accessoryProduct) {
         console.log(`   Found existing accessory: ${accessoryData.slug}`);
@@ -448,7 +517,11 @@ async function seedToolyFull() {
       }
 
       // Upsert variant
-      const existingVariant = await findVariantBySku(ctx, variantService, accessoryData.sku);
+      const existingVariant = await findVariantBySku(
+        ctx,
+        variantService,
+        accessoryData.sku,
+      );
 
       if (existingVariant) {
         await variantService.update(ctx, [
@@ -456,7 +529,9 @@ async function seedToolyFull() {
             id: existingVariant.id,
             price: accessoryData.price,
             stockOnHand: accessoryData.stock,
-            translations: [{ languageCode: LanguageCode.en, name: accessoryData.name }],
+            translations: [
+              { languageCode: LanguageCode.en, name: accessoryData.name },
+            ],
           },
         ]);
       } else {
@@ -468,12 +543,19 @@ async function seedToolyFull() {
               price: accessoryData.price,
               stockOnHand: accessoryData.stock,
               trackInventory: true as any,
-              translations: [{ languageCode: LanguageCode.en, name: accessoryData.name }],
+              translations: [
+                { languageCode: LanguageCode.en, name: accessoryData.name },
+              ],
             },
           ]);
         } catch (err: any) {
-          if (err?.message?.includes('already-exists') || err?.code === 'USER_INPUT_ERROR') {
-            console.log(`   ⚠️ Accessory variant ${accessoryData.sku} already exists (skipping)`);
+          if (
+            err?.message?.includes("already-exists") ||
+            err?.code === "USER_INPUT_ERROR"
+          ) {
+            console.log(
+              `   ⚠️ Accessory variant ${accessoryData.sku} already exists (skipping)`,
+            );
           } else {
             throw err;
           }
@@ -486,70 +568,81 @@ async function seedToolyFull() {
     // ========================================================================
     // 6. Upsert Accessories collection
     // ========================================================================
-    console.log('\n6. Upserting Accessories collection...');
+    console.log("\n6. Upserting Accessories collection...");
 
     const existingCollections = await collectionService.findAll(ctx, {
-      filter: { slug: { eq: 'accessories' } },
+      filter: { slug: { eq: "accessories" } },
       take: 1,
     });
 
     if (existingCollections.items.length > 0 && existingCollections.items[0]) {
       const existingCollection = existingCollections.items[0];
-      console.log(`   Found existing Accessories collection (ID: ${existingCollection.id})`);
+      console.log(
+        `   Found existing Accessories collection (ID: ${existingCollection.id})`,
+      );
       // Update collection filters to use accessory facet value
       if (accessoryFacetId) {
         await collectionService.update(ctx, {
           id: existingCollection.id,
           filters: [
             {
-              code: 'facet-value-filter',
+              code: "facet-value-filter",
               arguments: [
-                { name: 'facetValueIds', value: JSON.stringify([accessoryFacetId]) },
-                { name: 'containsAny', value: 'false' },
+                {
+                  name: "facetValueIds",
+                  value: JSON.stringify([accessoryFacetId]),
+                },
+                { name: "containsAny", value: "false" },
               ],
             },
           ],
         });
       }
     } else {
-      console.log('   Creating Accessories collection...');
+      console.log("   Creating Accessories collection...");
       await collectionService.create(ctx, {
         isPrivate: false,
         translations: [
           {
             languageCode: LanguageCode.en,
-            name: 'Accessories',
-            slug: 'accessories',
-            description: 'Essential accessories for TOOLY',
+            name: "Accessories",
+            slug: "accessories",
+            description: "Essential accessories for TOOLY",
           },
         ],
-        filters: accessoryFacetId ? [
-          {
-            code: 'facet-value-filter',
-            arguments: [
-              { name: 'facetValueIds', value: JSON.stringify([accessoryFacetId]) },
-              { name: 'containsAny', value: 'false' },
-            ],
-          },
-        ] : [],
+        filters: accessoryFacetId
+          ? [
+              {
+                code: "facet-value-filter",
+                arguments: [
+                  {
+                    name: "facetValueIds",
+                    value: JSON.stringify([accessoryFacetId]),
+                  },
+                  { name: "containsAny", value: "false" },
+                ],
+              },
+            ]
+          : [],
       });
     }
 
     // ========================================================================
     // Summary
     // ========================================================================
-    console.log('\n========================================');
-    console.log('SEED COMPLETE');
-    console.log('========================================');
+    console.log("\n========================================");
+    console.log("SEED COMPLETE");
+    console.log("========================================");
     console.log(`Channel: tooly`);
     console.log(`TOOLY variants: ${TOOLY_VARIANTS.length}`);
     console.log(`Accessories: ${ACCESSORIES.length}`);
-    console.log(`Facets: finish (${FINISH_FACET.values.length}), color extended, category`);
-    console.log('Collection: accessories');
-    console.log('========================================\n');
-
+    console.log(
+      `Facets: finish (${FINISH_FACET.values.length}), color extended, category`,
+    );
+    console.log("Collection: accessories");
+    console.log("========================================\n");
   } catch (error: any) {
-    console.error('\nSEED ERROR:', error?.message || error);
+    console.error("\nSEED ERROR:", error?.message || error);
     throw error;
   } finally {
     await app.close();
@@ -559,10 +652,10 @@ async function seedToolyFull() {
 // Run the seed
 seedToolyFull()
   .then(() => {
-    console.log('Seed script completed successfully.');
+    console.log("Seed script completed successfully.");
     process.exit(0);
   })
   .catch((error) => {
-    console.error('Seed script failed:', error);
+    console.error("Seed script failed:", error);
     process.exit(1);
   });

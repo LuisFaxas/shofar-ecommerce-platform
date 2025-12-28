@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
+import React, { Component, ReactNode, ErrorInfo } from "react";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -14,13 +14,16 @@ interface ErrorBoundaryState {
   errorInfo: ErrorInfo | null;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     };
   }
 
@@ -29,8 +32,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[SHOFAR Store] ErrorBoundary caught:', error, errorInfo);
+    if (process.env.NODE_ENV === "development") {
+      console.error("[SHOFAR Store] ErrorBoundary caught:", error, errorInfo);
     }
 
     if (this.props.onError) {
@@ -50,17 +53,32 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <div className="flex min-h-[400px] w-full items-center justify-center p-8">
           <div className="text-center">
             <div className="mb-4 flex justify-center">
-              <svg className="h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              <svg
+                className="h-12 w-12 text-red-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
               </svg>
             </div>
-            <h2 className="mb-2 text-2xl font-semibold">Something went wrong</h2>
+            <h2 className="mb-2 text-2xl font-semibold">
+              Something went wrong
+            </h2>
             <p className="mb-4 text-gray-600">
-              We apologize for the inconvenience. Please try refreshing the page.
+              We apologize for the inconvenience. Please try refreshing the
+              page.
             </p>
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env.NODE_ENV === "development" && this.state.error && (
               <details className="mt-4 rounded-lg border bg-gray-50 p-4 text-left">
-                <summary className="cursor-pointer font-medium">Error details (dev only)</summary>
+                <summary className="cursor-pointer font-medium">
+                  Error details (dev only)
+                </summary>
                 <pre className="mt-2 overflow-auto text-xs">
                   {this.state.error.toString()}
                   {this.state.errorInfo && this.state.errorInfo.componentStack}
@@ -82,10 +100,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 }
 
-export function useErrorHandler(): (error: Error, errorInfo?: ErrorInfo) => void {
+export function useErrorHandler(): (
+  error: Error,
+  errorInfo?: ErrorInfo,
+) => void {
   return (error: Error, errorInfo?: ErrorInfo) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[SHOFAR Store] Error handled:', error, errorInfo);
+    if (process.env.NODE_ENV === "development") {
+      console.error("[SHOFAR Store] Error handled:", error, errorInfo);
     }
     // Send to error tracking service in production
   };

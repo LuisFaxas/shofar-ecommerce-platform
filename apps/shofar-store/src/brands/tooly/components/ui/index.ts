@@ -10,25 +10,32 @@
 // ============================================
 
 // Primary button (Rainbow gradient border for main CTAs)
-export { ButtonPrimary, type ButtonPrimaryProps } from './ButtonPrimary';
+export { ButtonPrimary, type ButtonPrimaryProps } from "./ButtonPrimary";
 
 // Brand button (Orange background for brand CTAs)
-export { ButtonBrand, type ButtonBrandProps } from './ButtonBrand';
+export { ButtonBrand, type ButtonBrandProps } from "./ButtonBrand";
 
 // Secondary button (Glass style for supporting actions)
-export { ButtonSecondary, type ButtonSecondaryProps } from './ButtonSecondary';
+export { ButtonSecondary, type ButtonSecondaryProps } from "./ButtonSecondary";
 
 // Tertiary button (Ghost style for low-priority actions)
-export { ButtonTertiary, type ButtonTertiaryProps } from './ButtonTertiary';
+export { ButtonTertiary, type ButtonTertiaryProps } from "./ButtonTertiary";
 
 // Destructive button (Red for dangerous actions)
-export { ButtonDestructive, type ButtonDestructiveProps } from './ButtonDestructive';
+export {
+  ButtonDestructive,
+  type ButtonDestructiveProps,
+} from "./ButtonDestructive";
 
 // Link button (Text link style for inline navigation)
-export { ButtonLink, type ButtonLinkProps } from './ButtonLink';
+export { ButtonLink, type ButtonLinkProps } from "./ButtonLink";
 
 // Pill button (Compact rounded buttons)
-export { ButtonPill, ButtonPillGroup, type ButtonPillProps } from './ButtonPill';
+export {
+  ButtonPill,
+  ButtonPillGroup,
+  type ButtonPillProps,
+} from "./ButtonPill";
 
 // Note: Experimental buttons (rainbow gradients, rotating effects) are available
 // in ./experiments/ but not exported by default to maintain design consistency
@@ -46,8 +53,8 @@ export {
   type CardBodyProps,
   type CardFooterProps,
   type CardGridProps,
-  type FeatureCardProps
-} from './Card';
+  type FeatureCardProps,
+} from "./Card";
 
 // Section components
 export {
@@ -59,14 +66,18 @@ export {
   type SectionProps,
   type HeroSectionProps,
   type FeatureSectionProps,
-  type CTASectionProps
-} from './Section';
+  type CTASectionProps,
+} from "./Section";
 
 // E-commerce Components
-export { Navbar, type NavbarProps } from './Navbar';
-export { ProductCard, type ProductCardProps } from './ProductCard';
-export { SearchBar, type SearchBarProps, type SearchSuggestion } from './SearchBar';
-export { Input, type InputProps } from './Input';
+export { Navbar, type NavbarProps } from "./Navbar";
+export { ProductCard, type ProductCardProps } from "./ProductCard";
+export {
+  SearchBar,
+  type SearchBarProps,
+  type SearchSuggestion,
+} from "./SearchBar";
+export { Input, type InputProps } from "./Input";
 
 // Notification System
 export {
@@ -75,18 +86,28 @@ export {
   toast,
   type ToastProps,
   type ToastVariant,
-  type ToastPosition
-} from './Toast';
+  type ToastPosition,
+} from "./Toast";
 
 // ============================================
 // Checkout Primitives
 // ============================================
 
 // Dialog/Modal with focus trap and accessibility
-export { Dialog, type DialogProps } from './Dialog';
+export { Dialog, type DialogProps } from "./Dialog";
 
 // Popover/Dropdown for menus and selectors
-export { Popover, type PopoverProps } from './Popover';
+export { Popover, type PopoverProps } from "./Popover";
 
 // Quantity stepper for cart/checkout
-export { QuantityStepper, type QuantityStepperProps } from './QuantityStepper';
+export { QuantityStepper, type QuantityStepperProps } from "./QuantityStepper";
+
+// ============================================
+// Layout Components
+// ============================================
+
+// Horizontal snap carousel for mobile scroll / desktop grid
+export {
+  HorizontalSnapCarousel,
+  type HorizontalSnapCarouselProps,
+} from "./HorizontalSnapCarousel";

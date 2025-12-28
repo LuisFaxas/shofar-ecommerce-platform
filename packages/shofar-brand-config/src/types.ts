@@ -2,7 +2,7 @@
  * Brand keys enum - defines all available brands for SHOFAR store (tools & hardware)
  */
 export enum BrandKey {
-  TOOLY = 'tooly',
+  TOOLY = "tooly",
   // Future tool brands can be added here
 }
 
@@ -15,7 +15,7 @@ export interface BrandTheme {
   accentColor: string;
   backgroundColor: string;
   foregroundColor: string;
-  borderRadius: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  borderRadius: "none" | "sm" | "md" | "lg" | "xl";
   fontFamily: {
     sans: string;
     mono: string;
@@ -99,6 +99,6 @@ export interface BrandConfig {
  */
 export interface BrandResolution {
   brand: BrandConfig;
-  source: 'env' | 'host' | 'cookie' | 'fallback';
+  source: "env" | "host" | "cookie" | "fallback";
   timestamp: number;
 }

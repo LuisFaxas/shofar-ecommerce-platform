@@ -4,7 +4,7 @@ import {
   createHttpLink,
   ApolloLink,
   NormalizedCacheObject,
-} from '@apollo/client';
+} from "@apollo/client";
 
 export interface ShopClientConfig {
   apiUrl?: string;
@@ -15,9 +15,12 @@ export interface ShopClientConfig {
 /**
  * Creates a typed Apollo Client for the Vendure Shop API
  */
-export function createShopClient(config: ShopClientConfig = {}): ApolloClient<NormalizedCacheObject> {
+export function createShopClient(
+  config: ShopClientConfig = {},
+): ApolloClient<NormalizedCacheObject> {
   const {
-    apiUrl = process.env.NEXT_PUBLIC_VENDURE_SHOP_API_URL || 'http://localhost:3001/shop-api',
+    apiUrl = process.env.NEXT_PUBLIC_VENDURE_SHOP_API_URL ||
+      "http://localhost:3001/shop-api",
     channelToken,
     withCredentials = true,
   } = config;
@@ -25,7 +28,7 @@ export function createShopClient(config: ShopClientConfig = {}): ApolloClient<No
   // Create the HTTP link
   const httpLink = createHttpLink({
     uri: apiUrl,
-    credentials: withCredentials ? 'include' : 'same-origin',
+    credentials: withCredentials ? "include" : "same-origin",
   });
 
   // Create middleware to add channel token if provided
@@ -34,7 +37,7 @@ export function createShopClient(config: ShopClientConfig = {}): ApolloClient<No
       operation.setContext(({ headers = {} }) => ({
         headers: {
           ...headers,
-          'vendure-token': channelToken,
+          "vendure-token": channelToken,
         },
       }));
     }
@@ -49,28 +52,28 @@ export function createShopClient(config: ShopClientConfig = {}): ApolloClient<No
     cache: new InMemoryCache({
       typePolicies: {
         Product: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         ProductVariant: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         Order: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
         OrderLine: {
-          keyFields: ['id'],
+          keyFields: ["id"],
         },
       },
     }),
     defaultOptions: {
       watchQuery: {
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: "cache-and-network",
       },
     },
   });
 }
 
 // Default shop client instances for each channel
-export const toolyShopClient = createShopClient({ channelToken: 'tooly' });
-export const futureShopClient = createShopClient({ channelToken: 'future' });
+export const toolyShopClient = createShopClient({ channelToken: "tooly" });
+export const futureShopClient = createShopClient({ channelToken: "future" });
 export const defaultShopClient = createShopClient(); // Uses default channel

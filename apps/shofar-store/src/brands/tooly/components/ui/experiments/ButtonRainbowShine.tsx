@@ -3,14 +3,15 @@
  * Full rainbow conic gradient with shine animation
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonRainbowShineProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonRainbowShineProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -21,50 +22,55 @@ export interface ButtonRainbowShineProps extends React.ButtonHTMLAttributes<HTML
  * Button with full rainbow conic gradient and shine animation
  * Vibrant and eye-catching for special CTAs
  */
-export const ButtonRainbowShine = forwardRef<HTMLButtonElement, ButtonRainbowShineProps>(
+export const ButtonRainbowShine = forwardRef<
+  HTMLButtonElement,
+  ButtonRainbowShineProps
+>(
   (
     {
       className,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizeClasses = {
-      sm: 'px-6 py-2 text-sm',
-      md: 'px-8 py-2.5 text-sm',
-      lg: 'px-10 py-3 text-base'
+      sm: "px-6 py-2 text-sm",
+      md: "px-8 py-2.5 text-sm",
+      lg: "px-10 py-3 text-base",
     };
 
     return (
       <div
         className={cn(
-          'rainbow-shine-gradient rounded-full p-0.5',
-          'hover:scale-105 transition duration-300 active:scale-100',
-          fullWidth && 'w-full',
-          disabled && 'opacity-50 cursor-not-allowed',
-          className
+          "rainbow-shine-gradient rounded-full p-0.5",
+          "hover:scale-105 transition duration-300 active:scale-100",
+          fullWidth && "w-full",
+          disabled && "opacity-50 cursor-not-allowed",
+          className,
         )}
       >
         <button
           ref={ref}
           className={cn(
             sizeClasses[size],
-            'text-white rounded-full font-medium bg-gray-800',
-            fullWidth && 'w-full',
-            loading && 'cursor-wait'
+            "text-white rounded-full font-medium bg-gray-800",
+            fullWidth && "w-full",
+            loading && "cursor-wait",
           )}
           disabled={disabled || loading}
           {...props}
         >
-          <span className={cn(
-            'flex items-center justify-center gap-2',
-            loading && 'opacity-0'
-          )}>
+          <span
+            className={cn(
+              "flex items-center justify-center gap-2",
+              loading && "opacity-0",
+            )}
+          >
             {children}
           </span>
 
@@ -111,12 +117,12 @@ export const ButtonRainbowShine = forwardRef<HTMLButtonElement, ButtonRainbowShi
           .rainbow-shine-gradient {
             background: conic-gradient(
               from 0deg,
-              #00F5FF,
-              #FF00C7,
-              #FFD700,
-              #00FF85,
-              #8A2BE2,
-              #00F5FF
+              #00f5ff,
+              #ff00c7,
+              #ffd700,
+              #00ff85,
+              #8a2be2,
+              #00f5ff
             );
             background-size: 300% 300%;
             animation: shine 4s ease-out infinite;
@@ -124,9 +130,9 @@ export const ButtonRainbowShine = forwardRef<HTMLButtonElement, ButtonRainbowShi
         `}</style>
       </div>
     );
-  }
+  },
 );
 
-ButtonRainbowShine.displayName = 'ButtonRainbowShine';
+ButtonRainbowShine.displayName = "ButtonRainbowShine";
 
 export default ButtonRainbowShine;

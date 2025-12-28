@@ -9,10 +9,10 @@
  * - Footer
  */
 
-import type { ReactNode } from 'react';
-import { Header } from './Header';
-import { Footer } from './Footer';
-import { ResearchDisclaimer } from '../compliance/ResearchDisclaimer';
+import type { ReactNode } from "react";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { ResearchDisclaimer } from "../compliance/ResearchDisclaimer";
 
 interface PageShellProps {
   children: ReactNode;
@@ -31,7 +31,7 @@ export function PageShell({
   hideDisclaimer = false,
   hideHeader = false,
   hideFooter = false,
-  className = '',
+  className = "",
 }: PageShellProps): JSX.Element {
   return (
     <div className="min-h-screen flex flex-col">
@@ -47,11 +47,7 @@ export function PageShell({
       {!hideHeader && <Header />}
 
       {/* Main content */}
-      <main
-        id="main-content"
-        className={`flex-1 ${className}`}
-        tabIndex={-1}
-      >
+      <main id="main-content" className={`flex-1 ${className}`} tabIndex={-1}>
         {children}
       </main>
 
@@ -73,14 +69,14 @@ interface PageContainerProps {
 
 export function PageContainer({
   children,
-  className = '',
+  className = "",
   narrow = false,
 }: PageContainerProps): JSX.Element {
   return (
     <div
       className={`
         mx-auto px-4 sm:px-6 lg:px-8 py-8
-        ${narrow ? 'max-w-4xl' : 'max-w-7xl'}
+        ${narrow ? "max-w-4xl" : "max-w-7xl"}
         ${className}
       `}
     >
@@ -103,7 +99,7 @@ interface SectionProps {
 
 export function Section({
   children,
-  className = '',
+  className = "",
   title,
   description,
 }: SectionProps): JSX.Element {

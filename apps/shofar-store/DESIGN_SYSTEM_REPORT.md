@@ -8,6 +8,7 @@
 ---
 
 ## CRITICAL UPDATE - Rainbow Button Restoration
+
 **⚠️ Version 2.5.2-RESTORED successfully restores the principal rainbow gradient ButtonPrimary that was accidentally replaced in Work Order 2.5.2. The rainbow gradient button that we spent significant time perfecting is now properly restored as the primary CTA component.**
 
 ## Executive Summary
@@ -15,6 +16,7 @@
 The TOOLY Design System represents an industry-leading collection of 30+ meticulously crafted components built with React, TypeScript, and Tailwind CSS. This comprehensive design system implements a sophisticated glass morphism aesthetic layered over a dark gunmetal palette, punctuated by strategic rainbow gradient accents. The system prioritizes performance, accessibility, and developer experience while maintaining a cohesive visual language throughout.
 
 ### Key Achievements
+
 - ✅ **30+ Production-Ready Components** across 5 categories
 - ✅ **Rainbow ButtonPrimary Restored** - The principal CTA with static gradient and blur glow
 - ✅ **Complete Button Hierarchy** - Primary (Rainbow), Brand (Orange), Secondary, Tertiary, Destructive, Link
@@ -55,30 +57,35 @@ Disabled States    → 50% opacity with cursor-not-allowed
 
 The foundation of our design system built on cool blue-gray metallic tones:
 
-| Shade | Hex Value | CSS Variable | Usage |
-|-------|-----------|--------------|-------|
-| GM-950 | `#0b0f14` | `--gm-950` | Primary background |
-| GM-900 | `#0d1218` | `--gm-900` | Card backgrounds |
-| GM-800 | `#121822` | `--gm-800` | Elevated surfaces |
-| GM-700 | `#17202a` | `--gm-700` | Hover states |
-| GM-600 | `#1d2631` | `--gm-600` | Active states |
-| GM-500 | `#243040` | `--gm-500` | Borders |
-| GM-400 | `#2d3a4c` | `--gm-400` | Subtle borders |
-| GM-300 | `#374659` | `--gm-300` | Disabled text |
-| GM-200 | `#425367` | `--gm-200` | Secondary text |
-| GM-100 | `#516176` | `--gm-100` | Primary text |
-| GM-50  | `#637389` | `--gm-50`  | Headings |
+| Shade  | Hex Value | CSS Variable | Usage              |
+| ------ | --------- | ------------ | ------------------ |
+| GM-950 | `#0b0f14` | `--gm-950`   | Primary background |
+| GM-900 | `#0d1218` | `--gm-900`   | Card backgrounds   |
+| GM-800 | `#121822` | `--gm-800`   | Elevated surfaces  |
+| GM-700 | `#17202a` | `--gm-700`   | Hover states       |
+| GM-600 | `#1d2631` | `--gm-600`   | Active states      |
+| GM-500 | `#243040` | `--gm-500`   | Borders            |
+| GM-400 | `#2d3a4c` | `--gm-400`   | Subtle borders     |
+| GM-300 | `#374659` | `--gm-300`   | Disabled text      |
+| GM-200 | `#425367` | `--gm-200`   | Secondary text     |
+| GM-100 | `#516176` | `--gm-100`   | Primary text       |
+| GM-50  | `#637389` | `--gm-50`    | Headings           |
 
 ### Brand Colors
 
 ```css
 /* Rainbow Gradient - Primary CTAs */
---gradient-rainbow: linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%);
+--gradient-rainbow: linear-gradient(
+  90deg,
+  #02fcef 0%,
+  #ffb52b 50%,
+  #a02bfe 100%
+);
 
 /* Brand Accent Colors */
---brand-orange: #FF6B35;
---brand-blue: #0B4E8B;
---brand-yellow: #FFC107;
+--brand-orange: #ff6b35;
+--brand-blue: #0b4e8b;
+--brand-yellow: #ffc107;
 
 /* Semantic Colors */
 --success: #10b981;
@@ -112,12 +119,13 @@ The foundation of our design system built on cool blue-gray metallic tones:
 ### Button Components (16 Total)
 
 #### 1. **ButtonPrimary** 🌈 THE PRINCIPAL RAINBOW BUTTON
+
 **Purpose:** Primary CTAs requiring maximum visual prominence - THE MAIN BUTTON WE PERFECTED
 **Design:** Uiverse-inspired with static rainbow gradient border - RESTORED after accidental removal
 
 ```typescript
 interface ButtonPrimaryProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   loading?: boolean;
   disabled?: boolean;
@@ -126,6 +134,7 @@ interface ButtonPrimaryProps {
 ```
 
 **Key Features:**
+
 - **RAINBOW GRADIENT BORDER** (2px): `linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%)`
 - Blur glow effect on hover (1.2em blur)
 - NO SPINNING/ROTATING ANIMATIONS (as originally requested)
@@ -133,6 +142,7 @@ interface ButtonPrimaryProps {
 - Dark gunmetal center (#0b0e14)
 
 **Implementation:**
+
 ```jsx
 <ButtonPrimary size="lg" showArrow>
   Shop Now
@@ -144,12 +154,13 @@ interface ButtonPrimaryProps {
 ---
 
 #### 2. **ButtonBrand** (NEW - WO 2.5.2)
+
 **Purpose:** Brand-colored CTAs using TOOLY orange
 **Design:** Solid orange background for brand-specific actions
 
 ```typescript
 interface ButtonBrandProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   loading?: boolean;
   iconLeft?: React.ReactNode;
@@ -158,6 +169,7 @@ interface ButtonBrandProps {
 ```
 
 **Key Features:**
+
 - Brand orange background (#FF6B35)
 - Hover state with darker orange (#FF5722)
 - Active state with pressed effect
@@ -165,6 +177,7 @@ interface ButtonBrandProps {
 - Icon support (left/right)
 
 **Implementation:**
+
 ```jsx
 <ButtonBrand size="md" iconRight={<ArrowIcon />}>
   Brand Action
@@ -174,13 +187,14 @@ interface ButtonBrandProps {
 ---
 
 #### 3. **ButtonSecondary**
+
 **Purpose:** Supporting actions without competing with primary CTAs
 **Design:** Glass morphism with subtle white borders
 
 ```typescript
 interface ButtonSecondaryProps {
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'outline' | 'ghost';
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "outline" | "ghost";
   fullWidth?: boolean;
   loading?: boolean;
   showArrow?: boolean;
@@ -188,6 +202,7 @@ interface ButtonSecondaryProps {
 ```
 
 **Variants:**
+
 - **Default:** `bg-white/[0.08]` with backdrop blur
 - **Outline:** Transparent with border
 - **Ghost:** No background, hover reveals glass
@@ -195,18 +210,20 @@ interface ButtonSecondaryProps {
 ---
 
 #### 4. **ButtonTertiary** (NEW - WO 2.5.2)
+
 **Purpose:** Low-priority actions with minimal visual weight
 **Design:** Ghost style with transparent background
 
 ```typescript
 interface ButtonTertiaryProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   loading?: boolean;
 }
 ```
 
 **Key Features:**
+
 - Transparent background
 - White text and border
 - Subtle hover state with glass effect
@@ -215,18 +232,21 @@ interface ButtonTertiaryProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 ---
 
 #### 5. **ButtonDestructive** (NEW - WO 2.5.2)
+
 **Purpose:** Dangerous actions requiring caution
 **Design:** Red color scheme for deletion/removal actions
 
 ```typescript
-interface ButtonDestructiveProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: 'sm' | 'md' | 'lg';
+interface ButtonDestructiveProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   loading?: boolean;
 }
 ```
 
 **Key Features:**
+
 - Red background (#ef4444)
 - High contrast warning color
 - Hover state intensifies red
@@ -235,17 +255,19 @@ interface ButtonDestructiveProps extends ButtonHTMLAttributes<HTMLButtonElement>
 ---
 
 #### 6. **ButtonLink** (NEW - WO 2.5.2)
+
 **Purpose:** Inline text links styled as buttons
 **Design:** Minimal text-link appearance
 
 ```typescript
 interface ButtonLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   underline?: boolean;
 }
 ```
 
 **Key Features:**
+
 - No background or border
 - Underline on hover
 - Inline with text flow
@@ -254,13 +276,14 @@ interface ButtonLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 ---
 
 #### 7. **ButtonPill**
+
 **Purpose:** Compact CTAs and toggle groups
 **Design:** Resend-inspired with rounded-full borders
 
 ```typescript
 interface ButtonPillProps {
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
   active?: boolean;
 }
 ```
@@ -270,10 +293,12 @@ interface ButtonPillProps {
 ---
 
 #### 4. **ButtonGraphite**
+
 **Purpose:** Professional actions with subtle energy
 **Design:** Dark surface with rainbow border on hover
 
 **Key Features:**
+
 - Gunmetal background
 - Static rainbow border appears on hover
 - No animations, pure CSS transitions
@@ -281,6 +306,7 @@ interface ButtonPillProps {
 ---
 
 #### 5-11. **Experimental Buttons**
+
 Collection of premium animated buttons for special use cases:
 
 - **ButtonRotatingWhite:** Rotating white gradient effect
@@ -295,6 +321,7 @@ Collection of premium animated buttons for special use cases:
 ### E-Commerce Components (6 Total)
 
 #### 1. **Navbar**
+
 **Purpose:** Primary navigation with e-commerce features
 **Design:** Glass header with integrated search and cart
 
@@ -317,6 +344,7 @@ interface NavbarProps {
 ```
 
 **Key Features:**
+
 - Sticky positioning with backdrop blur
 - Cart badge with gradient background
 - Mobile hamburger menu
@@ -324,6 +352,7 @@ interface NavbarProps {
 - User authentication states
 
 **Styling:**
+
 ```css
 background: rgba(11, 14, 20, 0.8);
 backdrop-filter: blur(24px);
@@ -333,6 +362,7 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 ---
 
 #### 2. **ProductCard**
+
 **Purpose:** Display products with e-commerce actions
 **Design:** Glass cards with hover effects and quick actions
 
@@ -348,8 +378,8 @@ interface ProductCardProps {
   rating?: number;
   reviewCount?: number;
   badge?: string;
-  badgeVariant?: 'default' | 'sale' | 'new' | 'hot';
-  variant?: 'default' | 'compact' | 'detailed';
+  badgeVariant?: "default" | "sale" | "new" | "hot";
+  variant?: "default" | "compact" | "detailed";
   showQuickAdd?: boolean;
   showWishlist?: boolean;
   outOfStock?: boolean;
@@ -359,11 +389,13 @@ interface ProductCardProps {
 ```
 
 **Three Variants:**
+
 1. **Default:** Full featured with image, details, quick add
 2. **Compact:** Minimal for grid displays
 3. **Detailed:** Extended info with description
 
 **Interactive Features:**
+
 - Image zoom on hover (scale 1.1)
 - Quick add button slides up
 - Wishlist heart toggle
@@ -373,6 +405,7 @@ interface ProductCardProps {
 ---
 
 #### 3. **SearchBar**
+
 **Purpose:** Advanced product search with suggestions
 **Design:** Dropdown with categories, recent searches, and suggestions
 
@@ -387,11 +420,11 @@ interface SearchBarProps {
   showCategories?: boolean;
   showRecentSearches?: boolean;
   onSearch?: (query: string) => void;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 
 interface SearchSuggestion {
-  type: 'product' | 'category' | 'brand' | 'recent';
+  type: "product" | "category" | "brand" | "recent";
   text: string;
   subtitle?: string;
   image?: string;
@@ -400,6 +433,7 @@ interface SearchSuggestion {
 ```
 
 **Advanced Features:**
+
 - Keyboard navigation (arrows, enter, escape)
 - Highlight matching text
 - Clear recent searches
@@ -409,6 +443,7 @@ interface SearchSuggestion {
 ---
 
 #### 4. **Input**
+
 **Purpose:** Form inputs with validation and floating labels
 **Design:** Glass inputs with sophisticated label animations
 
@@ -418,7 +453,7 @@ interface InputProps {
   helperText?: string;
   error?: string;
   success?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   showCount?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -427,6 +462,7 @@ interface InputProps {
 ```
 
 **Key Features:**
+
 - Floating labels with transform animations
 - Validation states (error/success)
 - Character counter
@@ -434,6 +470,7 @@ interface InputProps {
 - Helper text support
 
 **Floating Label Animation:**
+
 ```css
 /* Resting state */
 transform: translateY(-50%) scale(1);
@@ -446,6 +483,7 @@ background: #0b0e14;
 ---
 
 #### 5. **Toast**
+
 **Purpose:** Non-blocking user notifications
 **Design:** Glass notifications with auto-dismiss
 
@@ -454,7 +492,7 @@ interface ToastProps {
   id: string;
   title: string;
   description?: string;
-  variant?: 'default' | 'success' | 'error' | 'warning' | 'info';
+  variant?: "default" | "success" | "error" | "warning" | "info";
   duration?: number;
   closable?: boolean;
   action?: {
@@ -465,6 +503,7 @@ interface ToastProps {
 ```
 
 **Provider Pattern:**
+
 ```jsx
 <ToastProvider position="top-right" limit={5}>
   {/* App content */}
@@ -472,6 +511,7 @@ interface ToastProps {
 ```
 
 **Features:**
+
 - 6 position options
 - Progress bar for auto-dismiss
 - Action buttons
@@ -483,6 +523,7 @@ interface ToastProps {
 ### Checkout Primitives (3 Total) - NEW WO 2.5.2
 
 #### 1. **Dialog**
+
 **Purpose:** Modal overlays for forms and confirmations
 **Design:** Glass modal with backdrop and focus trap
 
@@ -492,7 +533,7 @@ interface DialogProps {
   onClose: () => void;
   title?: string;
   description?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: "sm" | "md" | "lg" | "xl";
   closeOnOverlayClick?: boolean;
   closeOnEscape?: boolean;
   showCloseButton?: boolean;
@@ -501,6 +542,7 @@ interface DialogProps {
 ```
 
 **Key Features:**
+
 - Focus trap for accessibility
 - Backdrop blur effect
 - ESC key to close
@@ -509,6 +551,7 @@ interface DialogProps {
 - Portal rendering
 
 **Implementation:**
+
 ```jsx
 <Dialog isOpen={isOpen} onClose={handleClose} title="Checkout">
   <CheckoutForm />
@@ -518,6 +561,7 @@ interface DialogProps {
 ---
 
 #### 2. **Popover**
+
 **Purpose:** Contextual overlays for dropdowns and tooltips
 **Design:** Floating panel with smart positioning
 
@@ -525,8 +569,8 @@ interface DialogProps {
 interface PopoverProps {
   trigger: React.ReactElement;
   content: React.ReactNode;
-  placement?: 'top' | 'bottom' | 'left' | 'right';
-  align?: 'start' | 'center' | 'end';
+  placement?: "top" | "bottom" | "left" | "right";
+  align?: "start" | "center" | "end";
   sideOffset?: number;
   closeOnClickOutside?: boolean;
   closeOnEscape?: boolean;
@@ -534,6 +578,7 @@ interface PopoverProps {
 ```
 
 **Key Features:**
+
 - Smart collision detection
 - Auto-repositioning
 - Click outside to close
@@ -543,6 +588,7 @@ interface PopoverProps {
 ---
 
 #### 3. **QuantityStepper**
+
 **Purpose:** Numeric input for cart quantities
 **Design:** Increment/decrement controls with input
 
@@ -553,12 +599,13 @@ interface QuantityStepperProps {
   min?: number;
   max?: number;
   step?: number;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
 }
 ```
 
 **Key Features:**
+
 - Plus/minus buttons
 - Direct input editing
 - Min/max validation
@@ -566,13 +613,9 @@ interface QuantityStepperProps {
 - Loading states for async updates
 
 **Implementation:**
+
 ```jsx
-<QuantityStepper
-  value={quantity}
-  onChange={setQuantity}
-  min={1}
-  max={99}
-/>
+<QuantityStepper value={quantity} onChange={setQuantity} min={1} max={99} />
 ```
 
 ---
@@ -580,6 +623,7 @@ interface QuantityStepperProps {
 ### Layout Components (4 Total)
 
 #### 1. **Card System**
+
 Composable card components with glass styling:
 
 - **Card:** Container with glass effect
@@ -592,6 +636,7 @@ Composable card components with glass styling:
 ---
 
 #### 2. **Section System**
+
 Page layout components:
 
 - **Section:** Base container with spacing
@@ -602,12 +647,14 @@ Page layout components:
 ---
 
 #### 3. **FeatureRail**
+
 **Purpose:** Apple-inspired feature showcase
 **Layouts:** Card, Split, Inline
 
 ---
 
 #### 4. **ReviewsMarquee**
+
 **Purpose:** Auto-scrolling customer testimonials
 **Features:** Pause on hover, multi-row support
 
@@ -616,14 +663,17 @@ Page layout components:
 ### Branding Components (3 Total)
 
 #### 1. **ToolyWordmark**
+
 **Purpose:** Brand logo with effects
 **Features:** Chromatic aberration, size variants
 
 #### 2. **Watermark**
+
 **Purpose:** Background branding
 **Features:** Spotlight effect, opacity control
 
 #### 3. **WatermarkGrid & WatermarkAnimated**
+
 **Purpose:** Pattern backgrounds
 **Features:** Grid layout, floating animation
 
@@ -667,8 +717,13 @@ Page layout components:
 
 /* Animated Rainbow */
 @keyframes rainbow-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .rainbow-animated {
@@ -682,11 +737,11 @@ Page layout components:
 ```typescript
 // Tailwind breakpoints used throughout
 const breakpoints = {
-  sm: '640px',   // Mobile landscape
-  md: '768px',   // Tablet
-  lg: '1024px',  // Desktop
-  xl: '1280px',  // Large desktop
-  '2xl': '1536px' // Wide screen
+  sm: "640px", // Mobile landscape
+  md: "768px", // Tablet
+  lg: "1024px", // Desktop
+  xl: "1280px", // Large desktop
+  "2xl": "1536px", // Wide screen
 };
 ```
 
@@ -701,7 +756,9 @@ const breakpoints = {
 
 /* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
@@ -713,6 +770,7 @@ const breakpoints = {
 ## Accessibility Features
 
 ### Keyboard Navigation
+
 - ✅ All interactive elements reachable via Tab
 - ✅ Focus indicators on all components
 - ✅ Escape key closes modals/dropdowns
@@ -720,6 +778,7 @@ const breakpoints = {
 - ✅ Enter/Space for button activation
 
 ### Screen Reader Support
+
 - ✅ Semantic HTML throughout
 - ✅ ARIA labels on icon buttons
 - ✅ Live regions for notifications
@@ -727,11 +786,13 @@ const breakpoints = {
 - ✅ Alt text for all images
 
 ### Color Contrast
+
 - ✅ WCAG AA compliant (4.5:1 minimum)
 - ✅ Large text at 3:1 ratio
 - ✅ Focus indicators at 3:1 against all backgrounds
 
 ### Motion Preferences
+
 - ✅ Respects `prefers-reduced-motion`
 - ✅ Alternative static states
 - ✅ Essential animations only
@@ -741,18 +802,21 @@ const breakpoints = {
 ## Performance Optimizations
 
 ### Bundle Size Strategy
+
 - Component code splitting
 - Tree-shaking unused variants
 - CSS purging with Tailwind
 - Lazy loading heavy components
 
 ### Rendering Optimizations
+
 - React.memo for pure components
 - useMemo/useCallback for expensive operations
 - Virtual scrolling for long lists
 - Image lazy loading with Next.js Image
 
 ### CSS Performance
+
 - GPU-accelerated animations
 - Will-change for animated properties
 - Minimal repaints with transforms
@@ -771,19 +835,15 @@ import {
   ProductCard,
   SearchBar,
   ButtonPrimary,
-  useToast
-} from '@/brands/tooly/components/ui';
+  useToast,
+} from "@/brands/tooly/components/ui";
 
 function StorePage() {
   const { addToast } = useToast();
 
   return (
     <ToastProvider position="top-right">
-      <Navbar
-        logo="TOOLY"
-        cartCount={3}
-        onSearch={handleSearch}
-      />
+      <Navbar logo="TOOLY" cartCount={3} onSearch={handleSearch} />
 
       <SearchBar
         suggestions={productSuggestions}
@@ -791,14 +851,14 @@ function StorePage() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {products.map(product => (
+        {products.map((product) => (
           <ProductCard
             key={product.id}
             {...product}
             onAddToCart={() => {
               addToast({
-                title: 'Added to cart',
-                variant: 'success'
+                title: "Added to cart",
+                variant: "success",
               });
             }}
           />
@@ -814,9 +874,11 @@ function StorePage() {
 ## Work Order 2.5.2 Implementation Details
 
 ### Design Tokens System
+
 The WO 2.5.2 implementation introduced a comprehensive design tokens system using CSS custom properties:
 
 #### tokens.css
+
 ```css
 :root {
   /* Glass Effects */
@@ -830,13 +892,14 @@ The WO 2.5.2 implementation introduced a comprehensive design tokens system usin
   --elev-2: 0 4px 8px rgba(0, 0, 0, 0.15);
 
   /* Brand Colors */
-  --brand-orange: #FF6B35;
-  --brand-orange-hover: #FF5722;
-  --brand-orange-active: #F4511E;
+  --brand-orange: #ff6b35;
+  --brand-orange-hover: #ff5722;
+  --brand-orange-active: #f4511e;
 }
 ```
 
 #### motion.css
+
 ```css
 :root {
   /* Timing Functions */
@@ -853,12 +916,14 @@ The WO 2.5.2 implementation introduced a comprehensive design tokens system usin
 ### Component Organization
 
 #### Canonical Components (/ui)
+
 - Core design system components
 - Consistent API and behavior
 - Production-ready and tested
 - Used throughout the application
 
 #### Experimental Components (/ui/experiments)
+
 - Marketing-specific components
 - Animated/special effects buttons
 - Not part of canonical hierarchy
@@ -875,6 +940,7 @@ The WO 2.5.2 implementation introduced a comprehensive design tokens system usin
 7. **ButtonPill** - Rounded pills (Toggles/filters)
 
 ### The Critical Fix
+
 Version 2.5.2-RESTORED addresses the accidental replacement of the rainbow ButtonPrimary with an orange version. The rainbow gradient button that was carefully perfected through multiple iterations has been restored as the primary CTA component, while the orange variant has been preserved as ButtonBrand for alternative use cases.
 
 ## File Structure
@@ -925,6 +991,7 @@ apps/shofar-store/src/brands/tooly/
 ## Future Roadmap
 
 ### Phase 1 (Q1 2025)
+
 - [ ] Modal/Dialog system
 - [ ] Dropdown menus
 - [ ] Tabs component
@@ -932,6 +999,7 @@ apps/shofar-store/src/brands/tooly/
 - [ ] Data tables
 
 ### Phase 2 (Q2 2025)
+
 - [ ] Date/Time pickers
 - [ ] File upload
 - [ ] Progress indicators
@@ -939,6 +1007,7 @@ apps/shofar-store/src/brands/tooly/
 - [ ] Breadcrumbs
 
 ### Phase 3 (Q3 2025)
+
 - [ ] Charts/Graphs
 - [ ] Timeline
 - [ ] Kanban board
@@ -946,6 +1015,7 @@ apps/shofar-store/src/brands/tooly/
 - [ ] Rich text editor
 
 ### Continuous Improvements
+
 - [ ] Dark/Light mode toggle
 - [ ] Theme customization API
 - [ ] Component playground
@@ -965,6 +1035,7 @@ The combination of gunmetal aesthetics, glass morphism, and strategic rainbow ac
 The system's commitment to accessibility (WCAG AA compliance, contrast checking), performance (lazy loading, GPU-accelerated animations), and developer experience (TypeScript, clear APIs) ensures it will scale effectively as the platform grows.
 
 ### Key Lessons Learned
+
 - The rainbow ButtonPrimary is sacred and must not be altered without explicit direction
 - Design tokens provide consistency and maintainability
 - Experimental components should be clearly separated from canonical ones

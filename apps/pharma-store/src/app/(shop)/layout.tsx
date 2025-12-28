@@ -5,8 +5,8 @@
  * Route group: (shop)
  */
 
-import type { ReactNode } from 'react';
-import { PageShell } from '../../components/layout/PageShell';
+import type { ReactNode } from "react";
+import { PageShell } from "../../components/layout/PageShell";
 
 interface ShopLayoutProps {
   children: ReactNode;

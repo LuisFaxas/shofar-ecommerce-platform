@@ -22,12 +22,12 @@
  */
 
 // Production guard
-if (process.env.NODE_ENV === 'production') {
-  throw new Error('Do not run asset import scripts in production!');
+if (process.env.NODE_ENV === "production") {
+  throw new Error("Do not run asset import scripts in production!");
 }
 
-import { bootstrap } from '@vendure/core';
-import { config } from '../vendure-config';
+import { bootstrap } from "@vendure/core";
+import { config } from "../vendure-config";
 import {
   ChannelService,
   RequestContext,
@@ -36,9 +36,9 @@ import {
   AssetService,
   LanguageCode,
   Channel,
-} from '@vendure/core';
-import * as fs from 'fs';
-import * as path from 'path';
+} from "@vendure/core";
+import * as fs from "fs";
+import * as path from "path";
 
 interface AssetMap {
   [sku: string]: string; // SKU -> file path
@@ -48,8 +48,8 @@ interface AssetMap {
 // CONFIGURATION
 // ============================================================================
 
-const ASSETS_DIR = path.join(__dirname, '../../assets-import');
-const MAP_FILE = path.join(ASSETS_DIR, 'map.json');
+const ASSETS_DIR = path.join(__dirname, "../../assets-import");
+const MAP_FILE = path.join(ASSETS_DIR, "map.json");
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -58,20 +58,20 @@ const MAP_FILE = path.join(ASSETS_DIR, 'map.json');
 function getMimeType(filePath: string): string {
   const ext = path.extname(filePath).toLowerCase();
   const mimeTypes: Record<string, string> = {
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.png': 'image/png',
-    '.gif': 'image/gif',
-    '.webp': 'image/webp',
-    '.svg': 'image/svg+xml',
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+    ".svg": "image/svg+xml",
   };
-  return mimeTypes[ext] || 'application/octet-stream';
+  return mimeTypes[ext] || "application/octet-stream";
 }
 
 async function findVariantBySku(
   ctx: RequestContext,
   variantService: ProductVariantService,
-  sku: string
+  sku: string,
 ) {
   const result = await variantService.findAll(ctx, {
     filter: { sku: { eq: sku } },
@@ -86,7 +86,7 @@ async function uploadAndAttachAsset(
   productService: ProductService,
   variantService: ProductVariantService,
   sku: string,
-  filePath: string
+  filePath: string,
 ): Promise<boolean> {
   // Find variant by SKU
   const variant = await findVariantBySku(ctx, variantService, sku);
@@ -103,7 +103,9 @@ async function uploadAndAttachAsset(
   }
 
   // Resolve absolute path
-  const absolutePath = path.isAbsolute(filePath) ? filePath : path.join(process.cwd(), filePath);
+  const absolutePath = path.isAbsolute(filePath)
+    ? filePath
+    : path.join(process.cwd(), filePath);
 
   if (!fs.existsSync(absolutePath)) {
     console.log(`  ❌ File not found: ${absolutePath}`);
@@ -123,23 +125,27 @@ async function uploadAndAttachAsset(
       filename: fileName,
       mimetype: mimeType,
       createReadStream: () => {
-        const { Readable } = require('stream');
+        const { Readable } = require("stream");
         return Readable.from(fileBuffer);
       },
     },
   });
 
-  if (!asset || 'message' in asset) {
-    console.log(`  ❌ Failed to create asset: ${(asset as any)?.message || 'Unknown error'}`);
+  if (!asset || "message" in asset) {
+    console.log(
+      `  ❌ Failed to create asset: ${(asset as any)?.message || "Unknown error"}`,
+    );
     return false;
   }
 
   // Attach to variant as featured asset
-  await variantService.update(ctx, [{
-    id: variant.id,
-    featuredAssetId: asset.id,
-    assetIds: [asset.id],
-  }]);
+  await variantService.update(ctx, [
+    {
+      id: variant.id,
+      featuredAssetId: asset.id,
+      assetIds: [asset.id],
+    },
+  ]);
 
   // Also attach to parent product if it doesn't have one
   const product = await productService.findOne(ctx, variant.productId);
@@ -147,7 +153,7 @@ async function uploadAndAttachAsset(
     await productService.update(ctx, {
       id: product.id,
       featuredAssetId: asset.id,
-      assetIds: [...(product.assets?.map(a => a.id) || []), asset.id],
+      assetIds: [...(product.assets?.map((a) => a.id) || []), asset.id],
     });
     console.log(`  ✅ Attached to variant ${sku} and product ${product.slug}`);
   } else {
@@ -162,32 +168,38 @@ async function uploadAndAttachAsset(
 // ============================================================================
 
 async function bulkAttachAssets() {
-  console.log('\n========================================');
-  console.log('Bulk Asset Import');
-  console.log('========================================\n');
+  console.log("\n========================================");
+  console.log("Bulk Asset Import");
+  console.log("========================================\n");
 
   // Check if map file exists
   if (!fs.existsSync(MAP_FILE)) {
     console.log(`Map file not found: ${MAP_FILE}`);
-    console.log('\nTo use this script:');
-    console.log('1. Create folder: apps/vendure/assets-import/');
-    console.log('2. Create map.json with SKU → file path mappings');
-    console.log('3. Place image files in the folder');
-    console.log('\nExample map.json:');
-    console.log(JSON.stringify({
-      'TOOLY-DLC-GM': './assets-import/tooly-gunmetal.png',
-      'ACC-CASE-VIAL': './assets-import/case-vial.png',
-    }, null, 2));
+    console.log("\nTo use this script:");
+    console.log("1. Create folder: apps/vendure/assets-import/");
+    console.log("2. Create map.json with SKU → file path mappings");
+    console.log("3. Place image files in the folder");
+    console.log("\nExample map.json:");
+    console.log(
+      JSON.stringify(
+        {
+          "TOOLY-DLC-GM": "./assets-import/tooly-gunmetal.png",
+          "ACC-CASE-VIAL": "./assets-import/case-vial.png",
+        },
+        null,
+        2,
+      ),
+    );
     process.exit(0);
   }
 
   // Read map file
-  const mapContent = fs.readFileSync(MAP_FILE, 'utf-8');
+  const mapContent = fs.readFileSync(MAP_FILE, "utf-8");
   const assetMap: AssetMap = JSON.parse(mapContent);
   const entries = Object.entries(assetMap);
 
   if (entries.length === 0) {
-    console.log('No entries in map.json');
+    console.log("No entries in map.json");
     process.exit(0);
   }
 
@@ -208,14 +220,16 @@ async function bulkAttachAssets() {
       languageCode: LanguageCode.en,
       isAuthorized: true,
       authorizedAsOwnerOnly: false,
-      apiType: 'admin',
+      apiType: "admin",
     });
 
     const channels = await channelService.findAll(initialCtx);
-    const toolyChannel = channels.items.find((c: Channel) => c.code === 'tooly');
+    const toolyChannel = channels.items.find(
+      (c: Channel) => c.code === "tooly",
+    );
 
     if (!toolyChannel) {
-      throw new Error('tooly channel not found! Run setup first.');
+      throw new Error("tooly channel not found! Run setup first.");
     }
 
     const ctx = new RequestContext({
@@ -223,7 +237,7 @@ async function bulkAttachAssets() {
       languageCode: LanguageCode.en,
       isAuthorized: true,
       authorizedAsOwnerOnly: false,
-      apiType: 'admin',
+      apiType: "admin",
     });
 
     console.log(`Channel: ${toolyChannel.code}\n`);
@@ -241,7 +255,7 @@ async function bulkAttachAssets() {
         productService,
         variantService,
         sku,
-        filePath
+        filePath,
       );
 
       if (result) {
@@ -252,17 +266,16 @@ async function bulkAttachAssets() {
     }
 
     // Summary
-    console.log('\n========================================');
-    console.log('IMPORT COMPLETE');
-    console.log('========================================');
+    console.log("\n========================================");
+    console.log("IMPORT COMPLETE");
+    console.log("========================================");
     console.log(`Total: ${entries.length}`);
     console.log(`Success: ${success}`);
     console.log(`Skipped: ${skipped}`);
     console.log(`Failed: ${failed}`);
-    console.log('========================================\n');
-
+    console.log("========================================\n");
   } catch (error: any) {
-    console.error('\nIMPORT ERROR:', error?.message || error);
+    console.error("\nIMPORT ERROR:", error?.message || error);
     throw error;
   } finally {
     await app.close();
@@ -272,10 +285,10 @@ async function bulkAttachAssets() {
 // Run
 bulkAttachAssets()
   .then(() => {
-    console.log('Asset import completed.');
+    console.log("Asset import completed.");
     process.exit(0);
   })
   .catch((error) => {
-    console.error('Asset import failed:', error);
+    console.error("Asset import failed:", error);
     process.exit(1);
   });

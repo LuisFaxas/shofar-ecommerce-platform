@@ -1,33 +1,33 @@
-import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: {
-    'http://localhost:3001/shop-api': {
+    "http://localhost:3001/shop-api": {
       headers: {
-        'vendure-token': 'tooly',
+        "vendure-token": "tooly",
       },
     },
   },
-  documents: 'src/**/*.graphql',
+  documents: "src/**/*.graphql",
   generates: {
-    'src/generated/': {
-      preset: 'client',
+    "src/generated/": {
+      preset: "client",
       plugins: [],
       config: {
         strictScalars: true,
         scalars: {
-          DateTime: 'string',
-          JSON: 'Record<string, any>',
-          Money: 'number',
+          DateTime: "string",
+          JSON: "Record<string, any>",
+          Money: "number",
         },
       },
     },
-    'src/generated/shop-api.ts': {
+    "src/generated/shop-api.ts": {
       plugins: [
-        'typescript',
-        'typescript-operations',
-        'typescript-react-apollo',
+        "typescript",
+        "typescript-operations",
+        "typescript-react-apollo",
       ],
       config: {
         withHooks: true,

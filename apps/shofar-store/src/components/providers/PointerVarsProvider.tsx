@@ -6,10 +6,10 @@
  * Enables reactive UI animations throughout the application
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { usePointerVars } from '@/hooks/usePointerVars';
+import React from "react";
+import { usePointerVars } from "@/hooks/usePointerVars";
 
 export interface PointerVarsProviderProps {
   children: React.ReactNode;
@@ -35,7 +35,7 @@ export function PointerVarsProvider({
   throttle = 16,
   updateSpotlight = true,
   updateGlow = true,
-  updateAngle = true
+  updateAngle = true,
 }: PointerVarsProviderProps) {
   // Initialize pointer tracking for the entire document
   usePointerVars({
@@ -44,7 +44,7 @@ export function PointerVarsProvider({
     updateSpotlight,
     updateGlow,
     updateAngle,
-    enabled
+    enabled,
   });
 
   return <>{children}</>;

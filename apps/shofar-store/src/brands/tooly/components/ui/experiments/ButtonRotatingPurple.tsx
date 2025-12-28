@@ -3,14 +3,15 @@
  * Rotating purple-pink gradient effect button
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonRotatingPurpleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonRotatingPurpleProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -21,50 +22,55 @@ export interface ButtonRotatingPurpleProps extends React.ButtonHTMLAttributes<HT
  * Button with rotating purple-pink gradient effect
  * Bold gradient animation for primary CTAs
  */
-export const ButtonRotatingPurple = forwardRef<HTMLButtonElement, ButtonRotatingPurpleProps>(
+export const ButtonRotatingPurple = forwardRef<
+  HTMLButtonElement,
+  ButtonRotatingPurpleProps
+>(
   (
     {
       className,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizeClasses = {
-      sm: 'px-6 py-2 text-sm',
-      md: 'px-8 py-3 text-sm',
-      lg: 'px-10 py-4 text-base'
+      sm: "px-6 py-2 text-sm",
+      md: "px-8 py-3 text-sm",
+      lg: "px-10 py-4 text-base",
     };
 
     return (
       <div
         className={cn(
-          'rotating-purple-gradient relative z-0 overflow-hidden p-0.5 flex items-center justify-center rounded-full',
-          'hover:scale-105 transition duration-300 active:scale-100',
-          fullWidth && 'w-full',
-          disabled && 'opacity-50 cursor-not-allowed',
-          className
+          "rotating-purple-gradient relative z-0 overflow-hidden p-0.5 flex items-center justify-center rounded-full",
+          "hover:scale-105 transition duration-300 active:scale-100",
+          fullWidth && "w-full",
+          disabled && "opacity-50 cursor-not-allowed",
+          className,
         )}
       >
         <button
           ref={ref}
           className={cn(
             sizeClasses[size],
-            'text-white rounded-full font-medium bg-gray-800',
-            fullWidth && 'w-full',
-            loading && 'cursor-wait'
+            "text-white rounded-full font-medium bg-gray-800",
+            fullWidth && "w-full",
+            loading && "cursor-wait",
           )}
           disabled={disabled || loading}
           {...props}
         >
-          <span className={cn(
-            'flex items-center justify-center gap-2',
-            loading && 'opacity-0'
-          )}>
+          <span
+            className={cn(
+              "flex items-center justify-center gap-2",
+              loading && "opacity-0",
+            )}
+          >
             {children}
           </span>
 
@@ -103,7 +109,7 @@ export const ButtonRotatingPurple = forwardRef<HTMLButtonElement, ButtonRotating
           }
 
           .rotating-purple-gradient::before {
-            content: '';
+            content: "";
             position: absolute;
             z-index: -2;
             left: -50%;
@@ -114,15 +120,15 @@ export const ButtonRotatingPurple = forwardRef<HTMLButtonElement, ButtonRotating
             background-repeat: no-repeat;
             background-size: 50% 30%;
             filter: blur(6px);
-            background-image: linear-gradient(#FF0A7F, #780EFF);
+            background-image: linear-gradient(#ff0a7f, #780eff);
             animation: rotate 4s linear infinite;
           }
         `}</style>
       </div>
     );
-  }
+  },
 );
 
-ButtonRotatingPurple.displayName = 'ButtonRotatingPurple';
+ButtonRotatingPurple.displayName = "ButtonRotatingPurple";
 
 export default ButtonRotatingPurple;

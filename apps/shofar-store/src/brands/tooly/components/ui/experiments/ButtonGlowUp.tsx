@@ -3,14 +3,15 @@
  * Button with bottom glow effect on hover
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonGlowUpProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonGlowUpProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -25,45 +26,47 @@ export const ButtonGlowUp = forwardRef<HTMLButtonElement, ButtonGlowUpProps>(
   (
     {
       className,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizeClasses = {
-      sm: 'h-8 w-16 text-xs',
-      md: 'h-9 w-20 text-sm',
-      lg: 'h-10 w-24 text-base'
+      sm: "h-8 w-16 text-xs",
+      md: "h-9 w-20 text-sm",
+      lg: "h-10 w-24 text-base",
     };
 
     return (
       <div
         className={cn(
-          'relative group overflow-hidden bg-white/20 p-0.5 rounded-md',
-          'active:scale-100 hover:scale-105 transition-all duration-300',
+          "relative group overflow-hidden bg-white/20 p-0.5 rounded-md",
+          "active:scale-100 hover:scale-105 transition-all duration-300",
           sizeClasses[size],
-          fullWidth && 'w-full',
-          disabled && 'opacity-50 cursor-not-allowed',
-          className
+          fullWidth && "w-full",
+          disabled && "opacity-50 cursor-not-allowed",
+          className,
         )}
       >
         <button
           ref={ref}
           className={cn(
-            'text-white bg-gradient-to-t from-black/50 to-black h-full w-full rounded',
-            loading && 'cursor-wait'
+            "text-white bg-gradient-to-t from-black/50 to-black h-full w-full rounded",
+            loading && "cursor-wait",
           )}
           disabled={disabled || loading}
           {...props}
         >
-          <span className={cn(
-            'flex items-center justify-center gap-2',
-            loading && 'opacity-0'
-          )}>
+          <span
+            className={cn(
+              "flex items-center justify-center gap-2",
+              loading && "opacity-0",
+            )}
+          >
             {children}
           </span>
 
@@ -97,9 +100,9 @@ export const ButtonGlowUp = forwardRef<HTMLButtonElement, ButtonGlowUpProps>(
         <div className="absolute -bottom-12 group-hover:-bottom-10 transition-all duration-200 left-1/2 -z-10 -translate-x-1/2 blur size-14 rounded-full bg-white" />
       </div>
     );
-  }
+  },
 );
 
-ButtonGlowUp.displayName = 'ButtonGlowUp';
+ButtonGlowUp.displayName = "ButtonGlowUp";
 
 export default ButtonGlowUp;

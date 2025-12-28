@@ -8,12 +8,13 @@
  * - Icons
  */
 
-import type { InputHTMLAttributes, ReactNode } from 'react';
-import { forwardRef, useId } from 'react';
+import type { InputHTMLAttributes, ReactNode } from "react";
+import { forwardRef, useId } from "react";
 
-type InputSize = 'sm' | 'md' | 'lg';
+type InputSize = "sm" | "md" | "lg";
 
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   /** Input label */
   label?: string;
   /** Helper text below input */
@@ -32,16 +33,16 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>
 
 const sizeStyles: Record<InputSize, { input: string; label: string }> = {
   sm: {
-    input: 'px-3 py-1.5 text-sm',
-    label: 'text-xs',
+    input: "px-3 py-1.5 text-sm",
+    label: "text-xs",
   },
   md: {
-    input: 'px-4 py-2 text-sm',
-    label: 'text-sm',
+    input: "px-4 py-2 text-sm",
+    label: "text-sm",
   },
   lg: {
-    input: 'px-4 py-3 text-base',
-    label: 'text-base',
+    input: "px-4 py-3 text-base",
+    label: "text-base",
   },
 };
 
@@ -50,15 +51,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     label,
     helperText,
     error,
-    size = 'md',
+    size = "md",
     leftElement,
     rightElement,
     fullWidth = false,
-    className = '',
+    className = "",
     id,
     ...props
   },
-  ref
+  ref,
 ) {
   const generatedId = useId();
   const inputId = id || `input-${generatedId}`;
@@ -66,7 +67,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const styles = sizeStyles[size];
 
   return (
-    <div className={`${fullWidth ? 'w-full' : ''}`}>
+    <div className={`${fullWidth ? "w-full" : ""}`}>
       {/* Label */}
       {label && (
         <label
@@ -78,7 +79,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         >
           {label}
           {props.required && (
-            <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
+            <span className="text-red-500 ml-0.5" aria-hidden="true">
+              *
+            </span>
           )}
         </label>
       )}
@@ -98,7 +101,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           id={inputId}
           aria-invalid={hasError}
           aria-describedby={
-            hasError ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
+            hasError
+              ? `${inputId}-error`
+              : helperText
+                ? `${inputId}-helper`
+                : undefined
           }
           className={`
             w-full rounded-lg
@@ -107,14 +114,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             transition-all duration-200
             focus:outline-none focus:ring-2 focus:border-transparent
             ${styles.input}
-            ${leftElement ? 'pl-10' : ''}
-            ${rightElement ? 'pr-10' : ''}
+            ${leftElement ? "pl-10" : ""}
+            ${rightElement ? "pr-10" : ""}
             ${
               hasError
-                ? 'border-red-500 focus:ring-red-500/30'
-                : 'border-[var(--peptide-border)] focus:ring-[var(--peptide-primary)]/30 focus:border-[var(--peptide-primary)]'
+                ? "border-red-500 focus:ring-red-500/30"
+                : "border-[var(--peptide-border)] focus:ring-[var(--peptide-primary)]/30 focus:border-[var(--peptide-primary)]"
             }
-            ${props.disabled ? 'opacity-50 cursor-not-allowed bg-[var(--peptide-bg-alt)]' : ''}
+            ${props.disabled ? "opacity-50 cursor-not-allowed bg-[var(--peptide-bg-alt)]" : ""}
             ${className}
           `}
           {...props}
@@ -155,7 +162,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 /**
  * Textarea Component (similar styling to Input)
  */
-interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
+interface TextareaProps
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
   label?: string;
   helperText?: string;
   error?: string;
@@ -163,49 +171,56 @@ interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaEl
   fullWidth?: boolean;
 }
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  {
-    label,
-    helperText,
-    error,
-    size = 'md',
-    fullWidth = false,
-    className = '',
-    id,
-    ...props
-  },
-  ref
-) {
-  const generatedId = useId();
-  const inputId = id || `textarea-${generatedId}`;
-  const hasError = Boolean(error);
-  const styles = sizeStyles[size];
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  function Textarea(
+    {
+      label,
+      helperText,
+      error,
+      size = "md",
+      fullWidth = false,
+      className = "",
+      id,
+      ...props
+    },
+    ref,
+  ) {
+    const generatedId = useId();
+    const inputId = id || `textarea-${generatedId}`;
+    const hasError = Boolean(error);
+    const styles = sizeStyles[size];
 
-  return (
-    <div className={`${fullWidth ? 'w-full' : ''}`}>
-      {label && (
-        <label
-          htmlFor={inputId}
-          className={`
+    return (
+      <div className={`${fullWidth ? "w-full" : ""}`}>
+        {label && (
+          <label
+            htmlFor={inputId}
+            className={`
             block mb-1.5 font-medium text-[var(--peptide-fg)]
             ${styles.label}
           `}
-        >
-          {label}
-          {props.required && (
-            <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
-          )}
-        </label>
-      )}
+          >
+            {label}
+            {props.required && (
+              <span className="text-red-500 ml-0.5" aria-hidden="true">
+                *
+              </span>
+            )}
+          </label>
+        )}
 
-      <textarea
-        ref={ref}
-        id={inputId}
-        aria-invalid={hasError}
-        aria-describedby={
-          hasError ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
-        }
-        className={`
+        <textarea
+          ref={ref}
+          id={inputId}
+          aria-invalid={hasError}
+          aria-describedby={
+            hasError
+              ? `${inputId}-error`
+              : helperText
+                ? `${inputId}-helper`
+                : undefined
+          }
+          className={`
           w-full rounded-lg min-h-[100px] resize-y
           bg-[var(--peptide-bg)] border
           placeholder:text-[var(--peptide-fg-muted)]
@@ -214,26 +229,34 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
           ${styles.input}
           ${
             hasError
-              ? 'border-red-500 focus:ring-red-500/30'
-              : 'border-[var(--peptide-border)] focus:ring-[var(--peptide-primary)]/30 focus:border-[var(--peptide-primary)]'
+              ? "border-red-500 focus:ring-red-500/30"
+              : "border-[var(--peptide-border)] focus:ring-[var(--peptide-primary)]/30 focus:border-[var(--peptide-primary)]"
           }
-          ${props.disabled ? 'opacity-50 cursor-not-allowed bg-[var(--peptide-bg-alt)]' : ''}
+          ${props.disabled ? "opacity-50 cursor-not-allowed bg-[var(--peptide-bg-alt)]" : ""}
           ${className}
         `}
-        {...props}
-      />
+          {...props}
+        />
 
-      {hasError && (
-        <p id={`${inputId}-error`} className="mt-1.5 text-xs text-red-500" role="alert">
-          {error}
-        </p>
-      )}
+        {hasError && (
+          <p
+            id={`${inputId}-error`}
+            className="mt-1.5 text-xs text-red-500"
+            role="alert"
+          >
+            {error}
+          </p>
+        )}
 
-      {helperText && !hasError && (
-        <p id={`${inputId}-helper`} className="mt-1.5 text-xs text-[var(--peptide-fg-muted)]">
-          {helperText}
-        </p>
-      )}
-    </div>
-  );
-});
+        {helperText && !hasError && (
+          <p
+            id={`${inputId}-helper`}
+            className="mt-1.5 text-xs text-[var(--peptide-fg-muted)]"
+          >
+            {helperText}
+          </p>
+        )}
+      </div>
+    );
+  },
+);

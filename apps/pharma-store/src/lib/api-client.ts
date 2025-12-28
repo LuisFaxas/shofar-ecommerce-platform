@@ -7,19 +7,20 @@
  * All Shop API calls must include header: vendure-token: peptide
  */
 
-import { createShopClient, createAdminClient } from '@shofar/api-client';
-import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { createShopClient, createAdminClient } from "@shofar/api-client";
+import type { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 /**
  * Channel token for PEPTIDES brand
  * This is sent as the 'vendure-token' header on all API requests
  */
-const PEPTIDE_CHANNEL_TOKEN = 'peptide';
+const PEPTIDE_CHANNEL_TOKEN = "peptide";
 
 /**
  * Singleton instance of the Peptide shop client
  */
-let peptideShopClientInstance: ApolloClient<NormalizedCacheObject> | null = null;
+let peptideShopClientInstance: ApolloClient<NormalizedCacheObject> | null =
+  null;
 
 /**
  * Get the Peptide shop client (singleton)
@@ -73,7 +74,9 @@ export function createPeptideClient(options?: {
  * const { data } = await adminClient.query({ query: GET_ADMIN_PRODUCTS });
  * ```
  */
-export function getPeptideAdminClient(authToken: string): ApolloClient<NormalizedCacheObject> {
+export function getPeptideAdminClient(
+  authToken: string,
+): ApolloClient<NormalizedCacheObject> {
   return createAdminClient({
     channelToken: PEPTIDE_CHANNEL_TOKEN,
     authToken,

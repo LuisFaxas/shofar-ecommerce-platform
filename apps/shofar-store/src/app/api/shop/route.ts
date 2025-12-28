@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Vendure Shop API Proxy
@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * Rate-limiting will be added in Phase 7.
  */
 
-const VENDURE_API = process.env.VENDURE_INTERNAL_URL || 'http://localhost:3001';
+const VENDURE_API = process.env.VENDURE_INTERNAL_URL || "http://localhost:3001";
 const MAX_BODY_SIZE = 1_000_000; // 1 MB
 
 /**
@@ -19,18 +19,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const body = await request.text();
     if (body.length > MAX_BODY_SIZE) {
       return NextResponse.json(
-        { error: 'Request body too large' },
-        { status: 413 }
+        { error: "Request body too large" },
+        { status: 413 },
       );
     }
 
     // Forward request to Vendure
     const response = await fetch(`${VENDURE_API}/shop-api`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'vendure-token': 'tooly', // Inject channel token
-        Cookie: request.headers.get('cookie') || '',
+        "Content-Type": "application/json",
+        "vendure-token": "tooly", // Inject channel token
+        Cookie: request.headers.get("cookie") || "",
       },
       body,
     });
@@ -40,17 +40,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const res = NextResponse.json(data, { status: response.status });
 
     // Forward Set-Cookie headers for session persistence
-    const setCookie = response.headers.get('set-cookie');
+    const setCookie = response.headers.get("set-cookie");
     if (setCookie) {
-      res.headers.set('set-cookie', setCookie);
+      res.headers.set("set-cookie", setCookie);
     }
 
     return res;
   } catch (error) {
-    console.error('[API Proxy] POST error:', error);
+    console.error("[API Proxy] POST error:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
@@ -61,12 +61,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get('query');
+    const query = searchParams.get("query");
 
     if (!query) {
       return NextResponse.json(
-        { error: 'Missing query parameter' },
-        { status: 400 }
+        { error: "Missing query parameter" },
+        { status: 400 },
       );
     }
 
@@ -74,30 +74,30 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const response = await fetch(
       `${VENDURE_API}/shop-api?query=${encodeURIComponent(query)}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'vendure-token': 'tooly',
-          Cookie: request.headers.get('cookie') || '',
+          "Content-Type": "application/json",
+          "vendure-token": "tooly",
+          Cookie: request.headers.get("cookie") || "",
         },
-      }
+      },
     );
 
     const data = await response.json();
     const res = NextResponse.json(data, { status: response.status });
 
     // Forward Set-Cookie headers
-    const setCookie = response.headers.get('set-cookie');
+    const setCookie = response.headers.get("set-cookie");
     if (setCookie) {
-      res.headers.set('set-cookie', setCookie);
+      res.headers.set("set-cookie", setCookie);
     }
 
     return res;
   } catch (error) {
-    console.error('[API Proxy] GET error:', error);
+    console.error("[API Proxy] GET error:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

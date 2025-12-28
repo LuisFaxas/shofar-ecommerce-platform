@@ -1,71 +1,72 @@
-import type { BrandConfig } from '../types';
-import { BrandKey } from '../types';
+import type { BrandConfig } from "../types";
+import { BrandKey } from "../types";
 
 export const peptidesConfig: BrandConfig = {
   key: BrandKey.PEPTIDES,
-  name: 'peptides',
-  displayName: 'PEPTIDES',
-  domain: 'peptides.com',
-  subdomains: ['www', 'shop', 'research'],
-  channelToken: 'future',  // Using 'future' channel for now
+  name: "peptides",
+  displayName: "PEPTIDES",
+  domain: "peptides.com",
+  subdomains: ["www", "shop", "research"],
+  channelToken: "future", // Using 'future' channel for now
 
   theme: {
-    primaryColor: '#6366F1',   // Indigo
-    secondaryColor: '#8B5CF6', // Purple
-    accentColor: '#10B981',    // Emerald
-    backgroundColor: '#FAFAFA',
-    foregroundColor: '#111827',
-    borderRadius: 'lg',
+    primaryColor: "#6366F1", // Indigo
+    secondaryColor: "#8B5CF6", // Purple
+    accentColor: "#10B981", // Emerald
+    backgroundColor: "#FAFAFA",
+    foregroundColor: "#111827",
+    borderRadius: "lg",
     fontFamily: {
-      sans: 'Inter, system-ui, -apple-system, sans-serif',
-      mono: 'SF Mono, monospace'
+      sans: "Inter, system-ui, -apple-system, sans-serif",
+      mono: "SF Mono, monospace",
     },
     glassmorphism: {
       enabled: true,
       opacity: 0.05,
-      blur: 'xl'
-    }
+      blur: "xl",
+    },
   },
 
   seo: {
-    title: 'PEPTIDES - Research Peptides & Laboratory Supplies',
-    description: 'High-quality research peptides and laboratory supplies for scientific research. Purity guaranteed.',
+    title: "PEPTIDES - Research Peptides & Laboratory Supplies",
+    description:
+      "High-quality research peptides and laboratory supplies for scientific research. Purity guaranteed.",
     keywords: [
-      'research peptides',
-      'laboratory supplies',
-      'scientific research',
-      'peptide synthesis',
-      'lab equipment',
-      'research chemicals'
+      "research peptides",
+      "laboratory supplies",
+      "scientific research",
+      "peptide synthesis",
+      "lab equipment",
+      "research chemicals",
     ],
-    ogImage: '/images/peptides-og.jpg',
-    twitterHandle: '@peptidesresearch',
+    ogImage: "/images/peptides-og.jpg",
+    twitterHandle: "@peptidesresearch",
     structuredData: {
-      '@context': 'https://schema.org',
-      '@type': 'MedicalBusiness',
-      'name': 'PEPTIDES',
-      'description': 'Research peptides and laboratory supplies'
-    }
+      "@context": "https://schema.org",
+      "@type": "MedicalBusiness",
+      name: "PEPTIDES",
+      description: "Research peptides and laboratory supplies",
+    },
   },
 
   assets: {
     logo: {
-      light: '/logos/peptides-light.svg',
-      dark: '/logos/peptides-dark.svg',
-      alt: 'PEPTIDES - Research & Laboratory'
+      light: "/logos/peptides-light.svg",
+      dark: "/logos/peptides-dark.svg",
+      alt: "PEPTIDES - Research & Laboratory",
     },
-    favicon: '/favicons/peptides.ico'
+    favicon: "/favicons/peptides.ico",
   },
 
   // Navigation will be defined in brand-specific frontend
   navigation: {
     mainMenu: [],
-    footerLinks: []
+    footerLinks: [],
   },
 
   // Features will be implemented per-brand as needed
   features: {},
 
   // Analytics will be configured when actually set up
-  analytics: {}
+  analytics: {},
 };

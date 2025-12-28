@@ -1,24 +1,27 @@
-import { resolveBrand } from '@/lib/store-runtime';
-import { Suspense } from 'react';
+import { resolveBrand } from "@/lib/store-runtime";
+import { Suspense } from "react";
 
 // Import TOOLY data fetcher
-import { fetchToolyPageData, type ToolyPageData } from '@/brands/tooly/lib/fetchers';
+import {
+  fetchToolyPageData,
+  type ToolyPageData,
+} from "@/brands/tooly/lib/fetchers";
 
 async function HomePage() {
   const brand = await resolveBrand();
 
   // Dynamically import and render the brand-specific app
-  if (brand.key === 'tooly') {
+  if (brand.key === "tooly") {
     // Fetch TOOLY data server-side
     let pageData: ToolyPageData | null = null;
     try {
       pageData = await fetchToolyPageData();
     } catch (error) {
-      console.error('[HomePage] Failed to fetch TOOLY data:', error);
+      console.error("[HomePage] Failed to fetch TOOLY data:", error);
       // Continue with null data - sections will show placeholders
     }
 
-    const ToolyApp = (await import('@/brands/tooly')).default;
+    const ToolyApp = (await import("@/brands/tooly")).default;
     return <ToolyApp pageData={pageData} />;
   }
 

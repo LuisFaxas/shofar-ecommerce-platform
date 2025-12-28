@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * Newsletter Signup Form (Client Component)
@@ -6,29 +6,33 @@
  * Extracted from Footer to handle form events.
  */
 
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from "react";
 
 interface NewsletterFormProps {
   className?: string;
 }
 
-export function NewsletterForm({ className = '' }: NewsletterFormProps): JSX.Element {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+export function NewsletterForm({
+  className = "",
+}: NewsletterFormProps): JSX.Element {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
   function handleSubmit(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     if (!email.trim()) return;
 
     // Placeholder: In production, this would call an API
-    setStatus('loading');
+    setStatus("loading");
 
     // Simulate API call
     setTimeout(() => {
-      setStatus('success');
-      setEmail('');
+      setStatus("success");
+      setEmail("");
       // Reset after 3 seconds
-      setTimeout(() => setStatus('idle'), 3000);
+      setTimeout(() => setStatus("idle"), 3000);
     }, 500);
   }
 
@@ -41,7 +45,7 @@ export function NewsletterForm({ className = '' }: NewsletterFormProps): JSX.Ele
         Subscribe to our newsletter for research updates and new products.
       </p>
 
-      {status === 'success' ? (
+      {status === "success" ? (
         <p className="text-sm text-[var(--peptide-accent)] font-medium">
           Thank you for subscribing!
         </p>
@@ -53,7 +57,7 @@ export function NewsletterForm({ className = '' }: NewsletterFormProps): JSX.Ele
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
-            disabled={status === 'loading'}
+            disabled={status === "loading"}
             className="
               flex-1 px-4 py-2
               bg-[var(--peptide-bg)] border border-[var(--peptide-border)]
@@ -65,7 +69,7 @@ export function NewsletterForm({ className = '' }: NewsletterFormProps): JSX.Ele
           />
           <button
             type="submit"
-            disabled={status === 'loading'}
+            disabled={status === "loading"}
             className="
               px-4 py-2
               bg-[var(--peptide-primary)] text-white
@@ -75,7 +79,7 @@ export function NewsletterForm({ className = '' }: NewsletterFormProps): JSX.Ele
               disabled:opacity-50 disabled:cursor-not-allowed
             "
           >
-            {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+            {status === "loading" ? "Subscribing..." : "Subscribe"}
           </button>
         </form>
       )}

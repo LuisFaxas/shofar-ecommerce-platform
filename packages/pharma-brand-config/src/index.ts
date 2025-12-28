@@ -3,10 +3,10 @@
  * Handles brand resolution for medical & research store
  */
 
-export * from './types';
-import type { BrandConfig, BrandResolution } from './types';
-import { BrandKey } from './types';
-import { peptidesConfig } from './brands/peptides';
+export * from "./types";
+import type { BrandConfig, BrandResolution } from "./types";
+import { BrandKey } from "./types";
+import { peptidesConfig } from "./brands/peptides";
 
 // Brand configuration registry for PHARMA store
 const brands: Record<BrandKey, BrandConfig> = {
@@ -17,11 +17,11 @@ const brands: Record<BrandKey, BrandConfig> = {
 // Host to brand mapping for PHARMA store brands
 const hostToBrand: Map<string, BrandKey> = new Map([
   // PEPTIDES domains
-  ['peptides.com', BrandKey.PEPTIDES],
-  ['www.peptides.com', BrandKey.PEPTIDES],
-  ['shop.peptides.com', BrandKey.PEPTIDES],
-  ['research.peptides.com', BrandKey.PEPTIDES],
-  ['peptides.localhost', BrandKey.PEPTIDES],
+  ["peptides.com", BrandKey.PEPTIDES],
+  ["www.peptides.com", BrandKey.PEPTIDES],
+  ["shop.peptides.com", BrandKey.PEPTIDES],
+  ["research.peptides.com", BrandKey.PEPTIDES],
+  ["peptides.localhost", BrandKey.PEPTIDES],
   // Future pharma brand domains will be added here
 ]);
 
@@ -47,7 +47,7 @@ export function getBrandByHost(host: string): BrandConfig | null {
   }
 
   // Remove port if present
-  const hostname = (host.split(':')[0] || host).toLowerCase();
+  const hostname = (host.split(":")[0] || host).toLowerCase();
 
   // Check exact match first
   const brandKey = hostToBrand.get(hostname);
@@ -92,7 +92,9 @@ export function isValidBrandKey(key: string): key is BrandKey {
  * Get brand by channel token (Vendure integration)
  */
 export function getBrandByChannelToken(token: string): BrandConfig | null {
-  return Object.values(brands).find(brand => brand.channelToken === token) || null;
+  return (
+    Object.values(brands).find((brand) => brand.channelToken === token) || null
+  );
 }
 
 /**
@@ -100,7 +102,7 @@ export function getBrandByChannelToken(token: string): BrandConfig | null {
  */
 export function createBrandResolution(
   brand: BrandConfig | null,
-  source: 'env' | 'host' | 'cookie' | 'fallback'
+  source: "env" | "host" | "cookie" | "fallback",
 ): BrandResolution | null {
   if (!brand) {
     return null;
@@ -109,7 +111,7 @@ export function createBrandResolution(
   return {
     brand,
     source,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   };
 }
 
@@ -128,4 +130,4 @@ export function getDefaultBrand(): BrandConfig {
 /**
  * Export individual brand configs for direct access if needed
  */
-export { peptidesConfig } from './brands/peptides';
+export { peptidesConfig } from "./brands/peptides";

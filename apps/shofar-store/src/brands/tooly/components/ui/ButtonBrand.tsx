@@ -4,14 +4,15 @@
  * WCAG AA compliant with consistent API
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonBrandProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonBrandProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -30,7 +31,7 @@ export const ButtonBrand = forwardRef<HTMLButtonElement, ButtonBrandProps>(
   (
     {
       className,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
@@ -39,13 +40,13 @@ export const ButtonBrand = forwardRef<HTMLButtonElement, ButtonBrandProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Size classes following consistent system
     const sizeClasses = {
-      sm: 'h-9 px-4 text-sm',
-      md: 'h-11 px-5 text-base',
-      lg: 'h-13 px-6 text-lg'
+      sm: "h-9 px-4 text-sm",
+      md: "h-11 px-5 text-base",
+      lg: "h-13 px-6 text-lg",
     };
 
     return (
@@ -53,45 +54,45 @@ export const ButtonBrand = forwardRef<HTMLButtonElement, ButtonBrandProps>(
         ref={ref}
         className={cn(
           // Base styles
-          'relative inline-flex items-center justify-center gap-2',
-          'rounded-[10px] font-medium',
+          "relative inline-flex items-center justify-center gap-2",
+          "rounded-[10px] font-medium",
 
           // Brand orange background
-          'bg-[var(--brand-orange,#FF6B35)]',
-          'text-white',
+          "bg-[var(--brand-orange,#FF6B35)]",
+          "text-white",
 
           // Shadow and border
-          'shadow-[var(--elev-0)] border-0',
+          "shadow-[var(--elev-0)] border-0",
 
           // Transitions using motion tokens
-          'transition-all duration-[var(--motion-fast,160ms)] ease-[cubic-bezier(0.22,1,0.36,1)]',
+          "transition-all duration-[var(--motion-fast,160ms)] ease-[cubic-bezier(0.22,1,0.36,1)]",
 
           // Hover state
-          'hover:bg-[var(--brand-orange-hover,#FF5722)]',
-          'hover:shadow-[var(--elev-1)]',
-          'hover:scale-[1.01]',
+          "hover:bg-[var(--brand-orange-hover,#FF5722)]",
+          "hover:shadow-[var(--elev-1)]",
+          "hover:scale-[1.01]",
 
           // Active state
-          'active:bg-[var(--brand-orange-active,#F4511E)]',
-          'active:scale-[var(--scale-pressed,0.98)]',
+          "active:bg-[var(--brand-orange-active,#F4511E)]",
+          "active:scale-[var(--scale-pressed,0.98)]",
 
           // Focus state
-          'focus-visible:outline-none',
-          'focus-visible:ring-2 focus-visible:ring-[var(--focus-ring-color,rgba(255,255,255,0.5))]',
-          'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,#0b0e14)]',
+          "focus-visible:outline-none",
+          "focus-visible:ring-2 focus-visible:ring-[var(--focus-ring-color,rgba(255,255,255,0.5))]",
+          "focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,#0b0e14)]",
 
           // Size
           sizeClasses[size],
 
           // States
-          fullWidth && 'w-full',
-          disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
-          loading && 'cursor-wait',
+          fullWidth && "w-full",
+          disabled && "opacity-50 cursor-not-allowed pointer-events-none",
+          loading && "cursor-wait",
 
           // Disable hover scale on touch
-          'no-touch-zoom',
+          "no-touch-zoom",
 
-          className
+          className,
         )}
         disabled={disabled || loading}
         {...props}
@@ -130,9 +131,9 @@ export const ButtonBrand = forwardRef<HTMLButtonElement, ButtonBrandProps>(
         )}
       </button>
     );
-  }
+  },
 );
 
-ButtonBrand.displayName = 'ButtonBrand';
+ButtonBrand.displayName = "ButtonBrand";
 
 export default ButtonBrand;

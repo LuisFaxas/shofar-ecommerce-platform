@@ -9,21 +9,22 @@
  * 4. Dev override via signed cookie ONLY if ALLOW_BRAND_COOKIE_OVERRIDE=true
  */
 
-import type { BrandConfig } from '@shofar/shofar-brand-config';
+import type { BrandConfig } from "@shofar/shofar-brand-config";
 import {
   BrandKey,
   getBrandByKey,
   getBrandByHost,
   getDefaultBrand,
   isValidBrandKey,
-  createBrandResolution
-} from '@shofar/shofar-brand-config';
-import { headers, cookies } from 'next/headers';
-import * as jose from 'jose';
+  createBrandResolution,
+} from "@shofar/shofar-brand-config";
+import { headers, cookies } from "next/headers";
+import * as jose from "jose";
 
 // JWT secret for dev cookie override (only used in dev)
 const getJwtSecret = (): Uint8Array => {
-  const secret = process.env.JWT_SECRET || 'shofar-dev-secret-change-in-production';
+  const secret =
+    process.env.JWT_SECRET || "shofar-dev-secret-change-in-production";
   return new TextEncoder().encode(secret);
 };
 
@@ -45,13 +46,15 @@ export async function resolveBrand(): Promise<BrandConfig> {
       console.log(`[SHOFAR Store] Resolved via BRAND_KEY env: ${brand.key}`);
       return brand;
     }
-    console.warn(`[SHOFAR Store] Invalid BRAND_KEY env: ${process.env.BRAND_KEY}`);
+    console.warn(
+      `[SHOFAR Store] Invalid BRAND_KEY env: ${process.env.BRAND_KEY}`,
+    );
   }
 
   // Mode B: Dynamic resolution by host (SSR only)
   // Used for staging or multi-domain single deployment
   const headersList = await headers();
-  const host = headersList.get('host');
+  const host = headersList.get("host");
   if (host) {
     const brand = getBrandByHost(host);
     if (brand) {
@@ -63,11 +66,13 @@ export async function resolveBrand(): Promise<BrandConfig> {
 
   // Dev-only cookie override (NEVER use in production)
   // Only check if explicitly enabled via environment variable
-  if (process.env.NODE_ENV === 'development' &&
-      process.env.ALLOW_BRAND_COOKIE_OVERRIDE === 'true') {
+  if (
+    process.env.NODE_ENV === "development" &&
+    process.env.ALLOW_BRAND_COOKIE_OVERRIDE === "true"
+  ) {
     try {
       const cookieStore = await cookies();
-      const cookieValue = cookieStore.get('shofar-brand-override')?.value;
+      const cookieValue = cookieStore.get("shofar-brand-override")?.value;
       if (cookieValue) {
         // Verify JWT signature
         const secret = getJwtSecret();
@@ -82,7 +87,10 @@ export async function resolveBrand(): Promise<BrandConfig> {
         }
       }
     } catch (error) {
-      console.error('[SHOFAR Store] Failed to verify dev override cookie:', error);
+      console.error(
+        "[SHOFAR Store] Failed to verify dev override cookie:",
+        error,
+      );
       // Continue to fallback
     }
   }
@@ -109,31 +117,33 @@ export async function getBrandThemeVars(): Promise<Record<string, string>> {
   const { theme } = brand;
 
   return {
-    '--brand-primary': theme.primaryColor,
-    '--brand-secondary': theme.secondaryColor,
-    '--brand-accent': theme.accentColor,
-    '--brand-background': theme.backgroundColor,
-    '--brand-foreground': theme.foregroundColor,
-    '--brand-radius': theme.borderRadius,
-    '--brand-font-sans': theme.fontFamily.sans,
-    '--brand-font-mono': theme.fontFamily.mono,
-    '--brand-glass-opacity': String(theme.glassmorphism?.opacity || 0.1),
-    '--brand-glass-blur': theme.glassmorphism?.blur || 'md'
+    "--brand-primary": theme.primaryColor,
+    "--brand-secondary": theme.secondaryColor,
+    "--brand-accent": theme.accentColor,
+    "--brand-background": theme.backgroundColor,
+    "--brand-foreground": theme.foregroundColor,
+    "--brand-radius": theme.borderRadius,
+    "--brand-font-sans": theme.fontFamily.sans,
+    "--brand-font-mono": theme.fontFamily.mono,
+    "--brand-glass-opacity": String(theme.glassmorphism?.opacity || 0.1),
+    "--brand-glass-blur": theme.glassmorphism?.blur || "md",
   };
 }
 
 /**
  * Create a signed JWT for dev brand override (DEV ONLY)
  */
-export async function createBrandOverrideCookie(brandKey: BrandKey): Promise<string> {
-  if (process.env.NODE_ENV !== 'development') {
-    throw new Error('Brand override cookies are only available in development');
+export async function createBrandOverrideCookie(
+  brandKey: BrandKey,
+): Promise<string> {
+  if (process.env.NODE_ENV !== "development") {
+    throw new Error("Brand override cookies are only available in development");
   }
 
   const secret = getJwtSecret();
   const jwt = await new jose.SignJWT({ brand: brandKey })
-    .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime('24h')
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("24h")
     .setIssuedAt()
     .sign(secret);
 

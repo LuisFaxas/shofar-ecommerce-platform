@@ -4,14 +4,15 @@
  * Adapted for TOOLY's rainbow brand identity
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonPrimaryProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -28,7 +29,7 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
   (
     {
       className,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
@@ -36,47 +37,47 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Container size classes (font-size drives em-based sizing)
     const containerSizeClasses = {
-      sm: 'text-sm',
-      md: 'text-base',
-      lg: 'text-lg'
+      sm: "text-sm",
+      md: "text-base",
+      lg: "text-lg",
     };
 
     // Button padding classes
     const buttonSizeClasses = {
-      sm: 'px-4 py-2 text-sm',
-      md: 'px-5 py-2.5 text-base',
-      lg: 'px-6 py-3 text-lg'
+      sm: "px-4 py-2 text-sm",
+      md: "px-5 py-2.5 text-base",
+      lg: "px-6 py-3 text-lg",
     };
 
     return (
       <>
         <div
           className={cn(
-            'button-container',
-            'relative inline-flex',
-            'p-[2px] rounded-[0.9em]',
-            'transition-all duration-[400ms] ease-out',
-            'shadow-[2px_2px_3px_#000000b4]',
+            "button-container",
+            "relative inline-flex",
+            "p-[2px] rounded-[0.9em]",
+            "transition-all duration-[400ms] ease-out",
+            "shadow-[2px_2px_3px_#000000b4]",
             containerSizeClasses[size],
-            fullWidth && 'w-full',
-            disabled && 'opacity-50 cursor-not-allowed',
-            className
+            fullWidth && "w-full",
+            disabled && "opacity-50 cursor-not-allowed",
+            className,
           )}
         >
           <button
             ref={ref}
             className={cn(
               buttonSizeClasses[size],
-              'relative w-full rounded-[0.7em]',
-              'bg-[#0b0e14] text-white font-medium',
-              'border-none cursor-pointer',
-              'inline-flex items-center justify-center gap-2',
-              disabled && 'cursor-not-allowed',
-              loading && 'cursor-wait'
+              "relative w-full rounded-[0.7em]",
+              "bg-[#0b0e14] text-white font-medium",
+              "border-none cursor-pointer",
+              "inline-flex items-center justify-center gap-2",
+              disabled && "cursor-not-allowed",
+              loading && "cursor-wait",
             )}
             disabled={disabled || loading}
             {...props}
@@ -127,7 +128,12 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
 
         <style jsx>{`
           .button-container {
-            background: linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%);
+            background: linear-gradient(
+              90deg,
+              #02fcef 0%,
+              #ffb52b 50%,
+              #a02bfe 100%
+            );
             isolation: isolate;
           }
 
@@ -137,7 +143,12 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
             inset: 0;
             margin: auto;
             border-radius: 0.9em;
-            background: linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%);
+            background: linear-gradient(
+              90deg,
+              #02fcef 0%,
+              #ffb52b 50%,
+              #a02bfe 100%
+            );
             z-index: -10;
             filter: blur(0);
             transition: filter 0.4s ease;
@@ -171,9 +182,9 @@ export const ButtonPrimary = forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
         `}</style>
       </>
     );
-  }
+  },
 );
 
-ButtonPrimary.displayName = 'ButtonPrimary';
+ButtonPrimary.displayName = "ButtonPrimary";
 
 export default ButtonPrimary;

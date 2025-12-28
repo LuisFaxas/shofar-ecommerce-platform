@@ -18,12 +18,12 @@ This document covers deploying and managing the SHOFAR asset pipeline, including
 
 The SHOFAR platform supports multiple asset storage backends:
 
-| Storage Type | Use Case | Configuration |
-|--------------|----------|---------------|
-| **Local** | Development | Default, no config needed |
-| **AWS S3** | Production (AWS) | Full S3 credentials |
-| **Cloudflare R2** | Production (R2) | S3-compatible endpoint |
-| **MinIO** | Self-hosted | S3-compatible endpoint |
+| Storage Type      | Use Case         | Configuration             |
+| ----------------- | ---------------- | ------------------------- |
+| **Local**         | Development      | Default, no config needed |
+| **AWS S3**        | Production (AWS) | Full S3 credentials       |
+| **Cloudflare R2** | Production (R2)  | S3-compatible endpoint    |
+| **MinIO**         | Self-hosted      | S3-compatible endpoint    |
 
 Assets flow through the system as follows:
 

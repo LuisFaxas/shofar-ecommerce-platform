@@ -4,14 +4,15 @@
  * Moved to experiments - use standard ButtonPrimary for regular CTAs
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonMarketingPrimaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonMarketingPrimaryProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -24,11 +25,14 @@ export interface ButtonMarketingPrimaryProps extends React.ButtonHTMLAttributes<
  * Marketing button with static rainbow gradient border and blur glow on hover
  * Reserved for special marketing campaigns and hero CTAs
  */
-export const ButtonMarketingPrimary = forwardRef<HTMLButtonElement, ButtonMarketingPrimaryProps>(
+export const ButtonMarketingPrimary = forwardRef<
+  HTMLButtonElement,
+  ButtonMarketingPrimaryProps
+>(
   (
     {
       className,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
@@ -36,47 +40,47 @@ export const ButtonMarketingPrimary = forwardRef<HTMLButtonElement, ButtonMarket
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Container size classes (font-size drives em-based sizing)
     const containerSizeClasses = {
-      sm: 'text-sm',
-      md: 'text-base',
-      lg: 'text-lg'
+      sm: "text-sm",
+      md: "text-base",
+      lg: "text-lg",
     };
 
     // Button padding classes
     const buttonSizeClasses = {
-      sm: 'px-4 py-2 text-sm',
-      md: 'px-5 py-2.5 text-base',
-      lg: 'px-6 py-3 text-lg'
+      sm: "px-4 py-2 text-sm",
+      md: "px-5 py-2.5 text-base",
+      lg: "px-6 py-3 text-lg",
     };
 
     return (
       <>
         <div
           className={cn(
-            'button-container',
-            'relative inline-flex',
-            'p-[2px] rounded-[0.9em]',
-            'transition-all duration-[400ms] ease-out',
-            'shadow-[2px_2px_3px_#000000b4]',
+            "button-container",
+            "relative inline-flex",
+            "p-[2px] rounded-[0.9em]",
+            "transition-all duration-[400ms] ease-out",
+            "shadow-[2px_2px_3px_#000000b4]",
             containerSizeClasses[size],
-            fullWidth && 'w-full',
-            disabled && 'opacity-50 cursor-not-allowed',
-            className
+            fullWidth && "w-full",
+            disabled && "opacity-50 cursor-not-allowed",
+            className,
           )}
         >
           <button
             ref={ref}
             className={cn(
               buttonSizeClasses[size],
-              'relative w-full rounded-[0.7em]',
-              'bg-[#0b0e14] text-white font-medium',
-              'border-none cursor-pointer',
-              'inline-flex items-center justify-center gap-2',
-              disabled && 'cursor-not-allowed',
-              loading && 'cursor-wait'
+              "relative w-full rounded-[0.7em]",
+              "bg-[#0b0e14] text-white font-medium",
+              "border-none cursor-pointer",
+              "inline-flex items-center justify-center gap-2",
+              disabled && "cursor-not-allowed",
+              loading && "cursor-wait",
             )}
             disabled={disabled || loading}
             {...props}
@@ -127,7 +131,12 @@ export const ButtonMarketingPrimary = forwardRef<HTMLButtonElement, ButtonMarket
 
         <style jsx>{`
           .button-container {
-            background: linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%);
+            background: linear-gradient(
+              90deg,
+              #02fcef 0%,
+              #ffb52b 50%,
+              #a02bfe 100%
+            );
           }
 
           .button-container::before {
@@ -136,7 +145,12 @@ export const ButtonMarketingPrimary = forwardRef<HTMLButtonElement, ButtonMarket
             inset: 0;
             margin: auto;
             border-radius: 0.9em;
-            background: linear-gradient(90deg, #02fcef 0%, #ffb52b 50%, #a02bfe 100%);
+            background: linear-gradient(
+              90deg,
+              #02fcef 0%,
+              #ffb52b 50%,
+              #a02bfe 100%
+            );
             z-index: -10;
             filter: blur(0);
             transition: filter 0.4s ease;
@@ -170,9 +184,9 @@ export const ButtonMarketingPrimary = forwardRef<HTMLButtonElement, ButtonMarket
         `}</style>
       </>
     );
-  }
+  },
 );
 
-ButtonMarketingPrimary.displayName = 'ButtonMarketingPrimary';
+ButtonMarketingPrimary.displayName = "ButtonMarketingPrimary";
 
 export default ButtonMarketingPrimary;

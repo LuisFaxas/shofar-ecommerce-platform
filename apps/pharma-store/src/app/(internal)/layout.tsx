@@ -6,16 +6,14 @@
  * Route group: (internal)
  */
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 interface InternalLayoutProps {
   children: ReactNode;
 }
 
-export default function InternalLayout({ children }: InternalLayoutProps): JSX.Element {
-  return (
-    <div className="min-h-screen bg-[var(--peptide-bg)]">
-      {children}
-    </div>
-  );
+export default function InternalLayout({
+  children,
+}: InternalLayoutProps): JSX.Element {
+  return <div className="min-h-screen bg-[var(--peptide-bg)]">{children}</div>;
 }

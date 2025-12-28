@@ -3,14 +3,15 @@
  * Conic gradient with shine animation
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonConicShineProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonConicShineProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -21,50 +22,55 @@ export interface ButtonConicShineProps extends React.ButtonHTMLAttributes<HTMLBu
  * Button with conic gradient and shine animation
  * Cyan and black gradient with animated shine effect
  */
-export const ButtonConicShine = forwardRef<HTMLButtonElement, ButtonConicShineProps>(
+export const ButtonConicShine = forwardRef<
+  HTMLButtonElement,
+  ButtonConicShineProps
+>(
   (
     {
       className,
-      size = 'md',
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizeClasses = {
-      sm: 'px-6 py-2 text-sm',
-      md: 'px-8 py-2.5 text-sm',
-      lg: 'px-10 py-3 text-base'
+      sm: "px-6 py-2 text-sm",
+      md: "px-8 py-2.5 text-sm",
+      lg: "px-10 py-3 text-base",
     };
 
     return (
       <div
         className={cn(
-          'conic-shine-gradient rounded-full p-0.5',
-          'hover:scale-105 transition duration-300 active:scale-100',
-          fullWidth && 'w-full',
-          disabled && 'opacity-50 cursor-not-allowed',
-          className
+          "conic-shine-gradient rounded-full p-0.5",
+          "hover:scale-105 transition duration-300 active:scale-100",
+          fullWidth && "w-full",
+          disabled && "opacity-50 cursor-not-allowed",
+          className,
         )}
       >
         <button
           ref={ref}
           className={cn(
             sizeClasses[size],
-            'text-white rounded-full font-medium bg-gray-800',
-            fullWidth && 'w-full',
-            loading && 'cursor-wait'
+            "text-white rounded-full font-medium bg-gray-800",
+            fullWidth && "w-full",
+            loading && "cursor-wait",
           )}
           disabled={disabled || loading}
           {...props}
         >
-          <span className={cn(
-            'flex items-center justify-center gap-2',
-            loading && 'opacity-0'
-          )}>
+          <span
+            className={cn(
+              "flex items-center justify-center gap-2",
+              loading && "opacity-0",
+            )}
+          >
             {children}
           </span>
 
@@ -111,14 +117,14 @@ export const ButtonConicShine = forwardRef<HTMLButtonElement, ButtonConicShinePr
           .conic-shine-gradient {
             background: conic-gradient(
               from 0deg,
-              #00F5FF,
+              #00f5ff,
               #000,
               #000,
-              #00F5FF,
+              #00f5ff,
               #000,
               #000,
               #000,
-              #00F5FF
+              #00f5ff
             );
             background-size: 300% 300%;
             animation: shine 6s ease-out infinite;
@@ -126,9 +132,9 @@ export const ButtonConicShine = forwardRef<HTMLButtonElement, ButtonConicShinePr
         `}</style>
       </div>
     );
-  }
+  },
 );
 
-ButtonConicShine.displayName = 'ButtonConicShine';
+ButtonConicShine.displayName = "ButtonConicShine";
 
 export default ButtonConicShine;

@@ -8,9 +8,9 @@
  * - Copyright
  */
 
-import Link from 'next/link';
-import { ResearchDisclaimer } from '../compliance/ResearchDisclaimer';
-import { NewsletterForm } from './NewsletterForm';
+import Link from "next/link";
+import { ResearchDisclaimer } from "../compliance/ResearchDisclaimer";
+import { NewsletterForm } from "./NewsletterForm";
 
 interface FooterLink {
   href: string;
@@ -24,36 +24,36 @@ interface FooterColumn {
 
 const FOOTER_COLUMNS: FooterColumn[] = [
   {
-    title: 'Products',
+    title: "Products",
     links: [
-      { href: '/products', label: 'All Peptides' },
-      { href: '/products?category=research', label: 'Research Peptides' },
-      { href: '/products?category=reference', label: 'Reference Standards' },
+      { href: "/products", label: "All Peptides" },
+      { href: "/products?category=research", label: "Research Peptides" },
+      { href: "/products?category=reference", label: "Reference Standards" },
     ],
   },
   {
-    title: 'Research',
+    title: "Research",
     links: [
-      { href: '/research', label: 'Articles' },
-      { href: '/research/guides', label: 'Research Guides' },
-      { href: '/research/protocols', label: 'Protocols' },
+      { href: "/research", label: "Articles" },
+      { href: "/research/guides", label: "Research Guides" },
+      { href: "/research/protocols", label: "Protocols" },
     ],
   },
   {
-    title: 'Company',
+    title: "Company",
     links: [
-      { href: '/about', label: 'About Us' },
-      { href: '/contact', label: 'Contact' },
-      { href: '/faq', label: 'FAQ' },
+      { href: "/about", label: "About Us" },
+      { href: "/contact", label: "Contact" },
+      { href: "/faq", label: "FAQ" },
     ],
   },
   {
-    title: 'Legal',
+    title: "Legal",
     links: [
-      { href: '/privacy', label: 'Privacy Policy' },
-      { href: '/terms', label: 'Terms of Service' },
-      { href: '/shipping', label: 'Shipping Policy' },
-      { href: '/refunds', label: 'Refund Policy' },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms of Service" },
+      { href: "/shipping", label: "Shipping Policy" },
+      { href: "/refunds", label: "Refund Policy" },
     ],
   },
 ];
@@ -62,7 +62,7 @@ interface FooterProps {
   className?: string;
 }
 
-export function Footer({ className = '' }: FooterProps): JSX.Element {
+export function Footer({ className = "" }: FooterProps): JSX.Element {
   const currentYear = new Date().getFullYear();
 
   return (

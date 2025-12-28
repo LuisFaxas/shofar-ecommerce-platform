@@ -7,16 +7,17 @@
  * Inspired by Resend and Graphite's sophisticated rainbow borders
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonGraphiteProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonGraphiteProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button variant - primary shows rainbow ring on hover */
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: "primary" | "secondary" | "ghost";
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -31,12 +32,15 @@ export interface ButtonGraphiteProps extends React.ButtonHTMLAttributes<HTMLButt
  * Graphite-inspired button with static rainbow border on hover
  * Uses CSS variables from usePointerVars for reactive glow effects
  */
-export const ButtonGraphite = forwardRef<HTMLButtonElement, ButtonGraphiteProps>(
+export const ButtonGraphite = forwardRef<
+  HTMLButtonElement,
+  ButtonGraphiteProps
+>(
   (
     {
       className,
-      variant = 'primary',
-      size = 'md',
+      variant = "primary",
+      size = "md",
       fullWidth = false,
       loading = false,
       disabled = false,
@@ -45,111 +49,114 @@ export const ButtonGraphite = forwardRef<HTMLButtonElement, ButtonGraphiteProps>
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizeClasses = {
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-4 py-2 text-base',
-      lg: 'px-6 py-3 text-lg'
+      sm: "px-3 py-1.5 text-sm",
+      md: "px-4 py-2 text-base",
+      lg: "px-6 py-3 text-lg",
     };
 
     const baseClasses = cn(
       // Base structure
-      'relative inline-flex items-center justify-center',
-      'font-medium transition-all duration-200',
-      'rounded-lg',
-      'disabled:opacity-50 disabled:cursor-not-allowed',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+      "relative inline-flex items-center justify-center",
+      "font-medium transition-all duration-200",
+      "rounded-lg",
+      "disabled:opacity-50 disabled:cursor-not-allowed",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
 
       // Size
       sizeClasses[size],
 
       // Full width
-      fullWidth && 'w-full',
+      fullWidth && "w-full",
 
       // Loading state
-      loading && 'cursor-wait'
+      loading && "cursor-wait",
     );
 
     const variantClasses = {
       primary: cn(
         // Glass effect with cool tint
-        'bg-white/[0.08] backdrop-blur-md',
-        'border border-white/[0.14]',
-        'text-white',
-        'shadow-[0_6px_18px_rgba(0,0,0,0.25)]',
+        "bg-white/[0.08] backdrop-blur-md",
+        "border border-white/[0.14]",
+        "text-white",
+        "shadow-[0_6px_18px_rgba(0,0,0,0.25)]",
 
         // Rainbow ring container
-        'before:absolute before:inset-[-2px] before:rounded-[10px]',
-        'before:opacity-0 before:transition-opacity before:duration-300',
-        'before:pointer-events-none',
+        "before:absolute before:inset-[-2px] before:rounded-[10px]",
+        "before:opacity-0 before:transition-opacity before:duration-300",
+        "before:pointer-events-none",
 
         // Static rainbow gradient border (no spinning)
-        'before:bg-[conic-gradient(from_0deg,#ff6231_0deg,#ffb931_60deg,#ffcc00_120deg,#14c7ff_180deg,#1061ff_240deg,#ff1493_300deg,#ff6231_360deg)]',
+        "before:bg-[conic-gradient(from_0deg,#ff6231_0deg,#ffb931_60deg,#ffcc00_120deg,#14c7ff_180deg,#1061ff_240deg,#ff1493_300deg,#ff6231_360deg)]",
 
         // Mask to create border effect
-        'after:absolute after:inset-[1px] after:rounded-[9px]',
-        'after:bg-white/[0.08] after:backdrop-blur-md',
+        "after:absolute after:inset-[1px] after:rounded-[9px]",
+        "after:bg-white/[0.08] after:backdrop-blur-md",
 
         // Hover state
-        'hover:before:opacity-100',
-        'hover:bg-white/[0.10]',
-        'hover:border-transparent',
-        'hover:shadow-[0_6px_24px_rgba(0,0,0,0.3)]',
+        "hover:before:opacity-100",
+        "hover:bg-white/[0.10]",
+        "hover:border-transparent",
+        "hover:shadow-[0_6px_24px_rgba(0,0,0,0.3)]",
 
         // Active state
-        'active:bg-white/[0.06]',
-        'active:scale-[0.98]',
+        "active:bg-white/[0.06]",
+        "active:scale-[0.98]",
 
         // Focus
-        'focus-visible:ring-[var(--color-brand)]'
+        "focus-visible:ring-[var(--color-brand)]",
       ),
 
       secondary: cn(
         // Subtle glass effect
-        'bg-white/[0.04] backdrop-blur-sm',
-        'border border-white/[0.08]',
-        'text-white/80',
+        "bg-white/[0.04] backdrop-blur-sm",
+        "border border-white/[0.08]",
+        "text-white/80",
 
         // Hover state
-        'hover:bg-white/[0.06]',
-        'hover:border-white/[0.12]',
-        'hover:text-white',
+        "hover:bg-white/[0.06]",
+        "hover:border-white/[0.12]",
+        "hover:text-white",
 
         // Active state
-        'active:bg-white/[0.03]',
-        'active:scale-[0.98]',
+        "active:bg-white/[0.03]",
+        "active:scale-[0.98]",
 
         // Focus
-        'focus-visible:ring-white/30'
+        "focus-visible:ring-white/30",
       ),
 
       ghost: cn(
         // Minimal style
-        'bg-transparent',
-        'text-white/60',
+        "bg-transparent",
+        "text-white/60",
 
         // Hover state
-        'hover:bg-white/[0.04]',
-        'hover:text-white',
+        "hover:bg-white/[0.04]",
+        "hover:text-white",
 
         // Active state
-        'active:bg-white/[0.02]',
+        "active:bg-white/[0.02]",
 
         // Focus
-        'focus-visible:ring-white/20'
-      )
+        "focus-visible:ring-white/20",
+      ),
     };
 
     // Add reactive glow styles for primary variant
-    const reactiveGlowStyles = variant === 'primary' ? {
-      '--glow-opacity': 'calc(1 - var(--pointer-from-center, 0.5))',
-      boxShadow: `
+    const reactiveGlowStyles =
+      variant === "primary"
+        ? ({
+            "--glow-opacity": "calc(1 - var(--pointer-from-center, 0.5))",
+            boxShadow: `
         0 6px 18px rgba(0, 0, 0, 0.25),
         0 0 40px rgba(255, 98, 49, calc(0.2 * var(--glow-opacity))),
         0 0 60px rgba(20, 199, 255, calc(0.15 * var(--glow-opacity)))
-      `
-    } as React.CSSProperties : {};
+      `,
+          } as React.CSSProperties)
+        : {};
 
     return (
       <button
@@ -157,18 +164,20 @@ export const ButtonGraphite = forwardRef<HTMLButtonElement, ButtonGraphiteProps>
         className={cn(
           baseClasses,
           variantClasses[variant],
-          variant === 'primary' && 'button-graphite',
-          className
+          variant === "primary" && "button-graphite",
+          className,
         )}
         style={reactiveGlowStyles}
         disabled={disabled || loading}
         {...props}
       >
         {/* Content wrapper - above the rainbow border */}
-        <span className={cn(
-          'relative z-10 flex items-center justify-center gap-2',
-          loading && 'opacity-0'
-        )}>
+        <span
+          className={cn(
+            "relative z-10 flex items-center justify-center gap-2",
+            loading && "opacity-0",
+          )}
+        >
           {leftIcon && <span className="inline-flex">{leftIcon}</span>}
           {children}
           {rightIcon && <span className="inline-flex">{rightIcon}</span>}
@@ -201,9 +210,9 @@ export const ButtonGraphite = forwardRef<HTMLButtonElement, ButtonGraphiteProps>
         )}
       </button>
     );
-  }
+  },
 );
 
-ButtonGraphite.displayName = 'ButtonGraphite';
+ButtonGraphite.displayName = "ButtonGraphite";
 
 export default ButtonGraphite;

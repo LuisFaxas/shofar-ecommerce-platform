@@ -4,14 +4,15 @@
  * Complements ButtonPrimary without competing for attention
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-export interface ButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonSecondaryProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Full width button */
   fullWidth?: boolean;
   /** Loading state */
@@ -19,19 +20,22 @@ export interface ButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLBut
   /** Show arrow icon */
   showArrow?: boolean;
   /** Visual variant */
-  variant?: 'default' | 'outline' | 'ghost';
+  variant?: "default" | "outline" | "ghost";
 }
 
 /**
  * Secondary button with glass styling for supporting actions
  * Use for: View Details, Learn More, Add to Cart (non-primary)
  */
-export const ButtonSecondary = forwardRef<HTMLButtonElement, ButtonSecondaryProps>(
+export const ButtonSecondary = forwardRef<
+  HTMLButtonElement,
+  ButtonSecondaryProps
+>(
   (
     {
       className,
-      size = 'md',
-      variant = 'default',
+      size = "md",
+      variant = "default",
       fullWidth = false,
       loading = false,
       disabled = false,
@@ -39,38 +43,38 @@ export const ButtonSecondary = forwardRef<HTMLButtonElement, ButtonSecondaryProp
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Size classes
     const sizeClasses = {
-      sm: 'h-8 px-3 text-xs',
-      md: 'h-10 px-4 text-sm',
-      lg: 'h-12 px-6 text-base'
+      sm: "h-8 px-3 text-xs",
+      md: "h-10 px-4 text-sm",
+      lg: "h-12 px-6 text-base",
     };
 
     // Variant classes
     const variantClasses = {
       default: cn(
-        'bg-white/[0.08] backdrop-blur-md',
-        'border border-white/[0.14]',
-        'text-white',
-        'shadow-[0_1px_4px_rgba(0,0,0,0.2)]',
-        'hover:bg-white/[0.12] hover:border-white/[0.20]',
-        'active:bg-white/[0.10] active:scale-[0.98]'
+        "bg-white/[0.08] backdrop-blur-md",
+        "border border-white/[0.14]",
+        "text-white",
+        "shadow-[0_1px_4px_rgba(0,0,0,0.2)]",
+        "hover:bg-white/[0.12] hover:border-white/[0.20]",
+        "active:bg-white/[0.10] active:scale-[0.98]",
       ),
       outline: cn(
-        'bg-transparent',
-        'border border-white/[0.20]',
-        'text-white',
-        'hover:bg-white/[0.08] hover:border-white/[0.30]',
-        'active:bg-white/[0.05] active:scale-[0.98]'
+        "bg-transparent",
+        "border border-white/[0.20]",
+        "text-white",
+        "hover:bg-white/[0.08] hover:border-white/[0.30]",
+        "active:bg-white/[0.05] active:scale-[0.98]",
       ),
       ghost: cn(
-        'bg-transparent',
-        'text-white/80',
-        'hover:bg-white/[0.08] hover:text-white',
-        'active:bg-white/[0.05] active:scale-[0.98]'
-      )
+        "bg-transparent",
+        "text-white/80",
+        "hover:bg-white/[0.08] hover:text-white",
+        "active:bg-white/[0.05] active:scale-[0.98]",
+      ),
     };
 
     return (
@@ -78,10 +82,10 @@ export const ButtonSecondary = forwardRef<HTMLButtonElement, ButtonSecondaryProp
         ref={ref}
         className={cn(
           // Base styles
-          'relative inline-flex items-center justify-center',
-          'rounded-lg font-medium',
-          'transition-all duration-200',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50',
+          "relative inline-flex items-center justify-center",
+          "rounded-lg font-medium",
+          "transition-all duration-200",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
 
           // Size
           sizeClasses[size],
@@ -90,11 +94,11 @@ export const ButtonSecondary = forwardRef<HTMLButtonElement, ButtonSecondaryProp
           variantClasses[variant],
 
           // States
-          fullWidth && 'w-full',
-          disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
-          loading && 'cursor-wait',
+          fullWidth && "w-full",
+          disabled && "opacity-50 cursor-not-allowed pointer-events-none",
+          loading && "cursor-wait",
 
-          className
+          className,
         )}
         disabled={disabled || loading}
         {...props}
@@ -126,10 +130,12 @@ export const ButtonSecondary = forwardRef<HTMLButtonElement, ButtonSecondaryProp
         )}
 
         {/* Button content */}
-        <span className={cn(
-          'inline-flex items-center justify-center gap-2',
-          loading && 'opacity-0'
-        )}>
+        <span
+          className={cn(
+            "inline-flex items-center justify-center gap-2",
+            loading && "opacity-0",
+          )}
+        >
           {children}
           {showArrow && (
             <svg
@@ -155,9 +161,9 @@ export const ButtonSecondary = forwardRef<HTMLButtonElement, ButtonSecondaryProp
         />
       </button>
     );
-  }
+  },
 );
 
-ButtonSecondary.displayName = 'ButtonSecondary';
+ButtonSecondary.displayName = "ButtonSecondary";
 
 export default ButtonSecondary;

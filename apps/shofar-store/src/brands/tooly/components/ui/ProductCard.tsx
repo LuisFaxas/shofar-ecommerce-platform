@@ -4,12 +4,12 @@
  * Core component for TOOLY product grid
  */
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { cn } from '@/lib/utils';
-import { ButtonPrimary } from './index';
-import { ButtonSecondary } from './ButtonSecondary';
+import React, { useState } from "react";
+import { cn } from "@/lib/utils";
+import { ButtonPrimary } from "./index";
+import { ButtonSecondary } from "./ButtonSecondary";
 
 export interface ProductCardProps {
   /** Product ID */
@@ -39,7 +39,7 @@ export interface ProductCardProps {
   /** Badge text (New, Hot, etc.) */
   badge?: string;
   /** Badge variant */
-  badgeVariant?: 'default' | 'sale' | 'new' | 'hot';
+  badgeVariant?: "default" | "sale" | "new" | "hot";
   /** Quick add to cart */
   showQuickAdd?: boolean;
   /** Wishlist button */
@@ -47,7 +47,7 @@ export interface ProductCardProps {
   /** Is in wishlist */
   isWishlisted?: boolean;
   /** Card variant */
-  variant?: 'default' | 'compact' | 'detailed';
+  variant?: "default" | "compact" | "detailed";
   /** Click handlers */
   onCardClick?: () => void;
   onAddToCart?: () => void;
@@ -68,35 +68,37 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   imageAlt,
   price,
   originalPrice,
-  currency = '$',
+  currency = "$",
   salePercentage,
   rating = 0,
   reviewCount = 0,
   outOfStock = false,
   badge,
-  badgeVariant = 'default',
+  badgeVariant = "default",
   showQuickAdd = true,
   showWishlist = true,
   isWishlisted = false,
-  variant = 'default',
+  variant = "default",
   onCardClick,
   onAddToCart,
   onWishlistToggle,
-  className
+  className,
 }) => {
   const [imageHover, setImageHover] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // Calculate sale percentage if not provided
-  const calculatedSalePercentage = salePercentage || (
-    originalPrice && typeof originalPrice === 'number' && typeof price === 'number'
+  const calculatedSalePercentage =
+    salePercentage ||
+    (originalPrice &&
+    typeof originalPrice === "number" &&
+    typeof price === "number"
       ? Math.round(((originalPrice - price) / originalPrice) * 100)
-      : 0
-  );
+      : 0);
 
   // Format price display
   const formatPrice = (value: number | string) => {
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
       return `${currency}${value.toFixed(2)}`;
     }
     return `${currency}${value}`;
@@ -104,10 +106,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   // Badge colors
   const badgeColors = {
-    default: 'bg-white/[0.08] text-white',
-    sale: 'bg-gradient-to-r from-[#02fcef] to-[#a02bfe] text-white',
-    new: 'bg-green-500/20 text-green-400 border border-green-500/30',
-    hot: 'bg-red-500/20 text-red-400 border border-red-500/30'
+    default: "bg-white/[0.08] text-white",
+    sale: "bg-gradient-to-r from-[#02fcef] to-[#a02bfe] text-white",
+    new: "bg-green-500/20 text-green-400 border border-green-500/30",
+    hot: "bg-red-500/20 text-red-400 border border-red-500/30",
   };
 
   const handleAddToCart = async (e: React.MouseEvent) => {
@@ -132,8 +134,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <svg
             key={i}
             className={cn(
-              'w-4 h-4',
-              i < Math.floor(rating) ? 'text-yellow-500' : 'text-white/20'
+              "w-4 h-4",
+              i < Math.floor(rating) ? "text-yellow-500" : "text-white/20",
             )}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -148,19 +150,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     );
   };
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div
         onClick={onCardClick}
         className={cn(
-          'group relative cursor-pointer',
-          'bg-white/[0.03] backdrop-blur-sm',
-          'border border-white/[0.08] rounded-lg',
-          'overflow-hidden',
-          'transition-all duration-300',
-          'hover:bg-white/[0.05] hover:border-white/[0.14]',
-          'hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]',
-          className
+          "group relative cursor-pointer",
+          "bg-white/[0.03] backdrop-blur-sm",
+          "border border-white/[0.08] rounded-lg",
+          "overflow-hidden",
+          "transition-all duration-300",
+          "hover:bg-white/[0.05] hover:border-white/[0.14]",
+          "hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+          className,
         )}
       >
         {/* Image */}
@@ -177,10 +179,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {(badge || calculatedSalePercentage > 0) && (
             <div className="absolute top-2 left-2 flex flex-col gap-1">
               {badge && (
-                <span className={cn(
-                  'px-2 py-1 rounded-full text-xs font-semibold',
-                  badgeColors[badgeVariant]
-                )}>
+                <span
+                  className={cn(
+                    "px-2 py-1 rounded-full text-xs font-semibold",
+                    badgeColors[badgeVariant],
+                  )}
+                >
                   {badge}
                 </span>
               )}
@@ -197,14 +201,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <button
               onClick={handleWishlistToggle}
               className="absolute top-2 right-2 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
-              aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+              aria-label={
+                isWishlisted ? "Remove from wishlist" : "Add to wishlist"
+              }
             >
               <svg
                 className={cn(
-                  'w-4 h-4',
-                  isWishlisted ? 'text-red-500 fill-red-500' : 'text-white'
+                  "w-4 h-4",
+                  isWishlisted ? "text-red-500 fill-red-500" : "text-white",
                 )}
-                fill={isWishlisted ? 'currentColor' : 'none'}
+                fill={isWishlisted ? "currentColor" : "none"}
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={2}
@@ -221,10 +227,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Content */}
         <div className="p-3">
-          <h3 className="text-sm font-medium text-white line-clamp-1">{title}</h3>
+          <h3 className="text-sm font-medium text-white line-clamp-1">
+            {title}
+          </h3>
           <div className="mt-1 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-lg font-bold text-white">{formatPrice(price)}</span>
+              <span className="text-lg font-bold text-white">
+                {formatPrice(price)}
+              </span>
               {originalPrice && (
                 <span className="text-sm text-white/40 line-through">
                   {formatPrice(originalPrice)}
@@ -241,15 +251,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     <div
       onClick={onCardClick}
       className={cn(
-        'group relative cursor-pointer',
-        'bg-white/[0.03] backdrop-blur-sm',
-        'border border-white/[0.08] rounded-xl',
-        'overflow-hidden',
-        'transition-all duration-300',
-        'hover:bg-white/[0.05] hover:border-white/[0.14]',
-        'hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]',
-        'hover:-translate-y-1',
-        className
+        "group relative cursor-pointer",
+        "bg-white/[0.03] backdrop-blur-sm",
+        "border border-white/[0.08] rounded-xl",
+        "overflow-hidden",
+        "transition-all duration-300",
+        "hover:bg-white/[0.05] hover:border-white/[0.14]",
+        "hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+        "hover:-translate-y-1",
+        className,
       )}
     >
       {/* Image Container */}
@@ -275,10 +285,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             ) : (
               <>
                 {badge && (
-                  <span className={cn(
-                    'px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm',
-                    badgeColors[badgeVariant]
-                  )}>
+                  <span
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm",
+                      badgeColors[badgeVariant],
+                    )}
+                  >
                     {badge}
                   </span>
                 )}
@@ -297,19 +309,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <button
             onClick={handleWishlistToggle}
             className={cn(
-              'absolute top-3 right-3 p-2 rounded-full',
-              'bg-black/50 backdrop-blur-sm',
-              'hover:bg-black/70 transition-all duration-200',
-              'transform scale-0 group-hover:scale-100'
+              "absolute top-3 right-3 p-2 rounded-full",
+              "bg-black/50 backdrop-blur-sm",
+              "hover:bg-black/70 transition-all duration-200",
+              "transform scale-0 group-hover:scale-100",
             )}
-            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            aria-label={
+              isWishlisted ? "Remove from wishlist" : "Add to wishlist"
+            }
           >
             <svg
               className={cn(
-                'w-5 h-5',
-                isWishlisted ? 'text-red-500 fill-red-500' : 'text-white'
+                "w-5 h-5",
+                isWishlisted ? "text-red-500 fill-red-500" : "text-white",
               )}
-              fill={isWishlisted ? 'currentColor' : 'none'}
+              fill={isWishlisted ? "currentColor" : "none"}
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={2}
@@ -349,16 +363,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </h3>
 
         {/* Description (for detailed variant) */}
-        {variant === 'detailed' && description && (
+        {variant === "detailed" && description && (
           <p className="text-sm text-white/60 line-clamp-2">{description}</p>
         )}
 
         {/* Price */}
         <div className="flex items-end gap-2">
-          <span className={cn(
-            'text-2xl font-bold',
-            outOfStock ? 'text-white/40' : 'text-white'
-          )}>
+          <span
+            className={cn(
+              "text-2xl font-bold",
+              outOfStock ? "text-white/40" : "text-white",
+            )}
+          >
             {formatPrice(price)}
           </span>
           {originalPrice && (
@@ -369,7 +385,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Add to Cart (for detailed variant) */}
-        {variant === 'detailed' && !outOfStock && (
+        {variant === "detailed" && !outOfStock && (
           <div className="pt-2">
             <ButtonPrimary
               size="sm"
@@ -393,6 +409,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-ProductCard.displayName = 'ProductCard';
+ProductCard.displayName = "ProductCard";
 
 export default ProductCard;

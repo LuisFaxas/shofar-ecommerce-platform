@@ -2,7 +2,7 @@
  * Brand keys enum - defines all available brands for PHARMA store (medical & research)
  */
 export enum BrandKey {
-  PEPTIDES = 'peptides',
+  PEPTIDES = "peptides",
   // Future pharma/medical brands can be added here
 }
 
@@ -15,7 +15,7 @@ export interface BrandTheme {
   accentColor: string;
   backgroundColor: string;
   foregroundColor: string;
-  borderRadius: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  borderRadius: "none" | "sm" | "md" | "lg" | "xl";
   fontFamily: {
     sans: string;
     mono: string;
@@ -99,6 +99,6 @@ export interface BrandConfig {
  */
 export interface BrandResolution {
   brand: BrandConfig;
-  source: 'env' | 'host' | 'cookie' | 'fallback';
+  source: "env" | "host" | "cookie" | "fallback";
   timestamp: number;
 }

@@ -17,11 +17,17 @@
  * - subtle: Light background
  */
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-type BadgeStyle = 'solid' | 'outline' | 'subtle';
-type BadgeSize = 'sm' | 'md';
+type BadgeVariant =
+  | "default"
+  | "primary"
+  | "secondary"
+  | "success"
+  | "warning"
+  | "danger";
+type BadgeStyle = "solid" | "outline" | "subtle";
+type BadgeSize = "sm" | "md";
 
 interface BadgeProps {
   children: ReactNode;
@@ -35,48 +41,52 @@ interface BadgeProps {
   className?: string;
 }
 
-const variantColors: Record<BadgeVariant, { solid: string; outline: string; subtle: string }> = {
+const variantColors: Record<
+  BadgeVariant,
+  { solid: string; outline: string; subtle: string }
+> = {
   default: {
-    solid: 'bg-[var(--peptide-fg-muted)] text-white',
-    outline: 'border-[var(--peptide-border)] text-[var(--peptide-fg-muted)]',
-    subtle: 'bg-[var(--peptide-bg-alt)] text-[var(--peptide-fg-muted)]',
+    solid: "bg-[var(--peptide-fg-muted)] text-white",
+    outline: "border-[var(--peptide-border)] text-[var(--peptide-fg-muted)]",
+    subtle: "bg-[var(--peptide-bg-alt)] text-[var(--peptide-fg-muted)]",
   },
   primary: {
-    solid: 'bg-[var(--peptide-primary)] text-white',
-    outline: 'border-[var(--peptide-primary)] text-[var(--peptide-primary)]',
-    subtle: 'bg-[var(--peptide-primary)]/10 text-[var(--peptide-primary)]',
+    solid: "bg-[var(--peptide-primary)] text-white",
+    outline: "border-[var(--peptide-primary)] text-[var(--peptide-primary)]",
+    subtle: "bg-[var(--peptide-primary)]/10 text-[var(--peptide-primary)]",
   },
   secondary: {
-    solid: 'bg-[var(--peptide-secondary)] text-white',
-    outline: 'border-[var(--peptide-secondary)] text-[var(--peptide-secondary)]',
-    subtle: 'bg-[var(--peptide-secondary)]/10 text-[var(--peptide-secondary)]',
+    solid: "bg-[var(--peptide-secondary)] text-white",
+    outline:
+      "border-[var(--peptide-secondary)] text-[var(--peptide-secondary)]",
+    subtle: "bg-[var(--peptide-secondary)]/10 text-[var(--peptide-secondary)]",
   },
   success: {
-    solid: 'bg-[var(--peptide-accent)] text-white',
-    outline: 'border-[var(--peptide-accent)] text-[var(--peptide-accent)]',
-    subtle: 'bg-[var(--peptide-accent)]/10 text-[var(--peptide-accent)]',
+    solid: "bg-[var(--peptide-accent)] text-white",
+    outline: "border-[var(--peptide-accent)] text-[var(--peptide-accent)]",
+    subtle: "bg-[var(--peptide-accent)]/10 text-[var(--peptide-accent)]",
   },
   warning: {
-    solid: 'bg-amber-500 text-white',
-    outline: 'border-amber-500 text-amber-600',
-    subtle: 'bg-amber-500/10 text-amber-600',
+    solid: "bg-amber-500 text-white",
+    outline: "border-amber-500 text-amber-600",
+    subtle: "bg-amber-500/10 text-amber-600",
   },
   danger: {
-    solid: 'bg-red-500 text-white',
-    outline: 'border-red-500 text-red-500',
-    subtle: 'bg-red-500/10 text-red-500',
+    solid: "bg-red-500 text-white",
+    outline: "border-red-500 text-red-500",
+    subtle: "bg-red-500/10 text-red-500",
   },
 };
 
 const sizeStyles: Record<BadgeSize, string> = {
-  sm: 'px-2 py-0.5 text-xs',
-  md: 'px-2.5 py-1 text-xs',
+  sm: "px-2 py-0.5 text-xs",
+  md: "px-2.5 py-1 text-xs",
 };
 
 /**
  * Close icon for removable badges
  */
-function CloseIcon({ className = '' }: { className?: string }): JSX.Element {
+function CloseIcon({ className = "" }: { className?: string }): JSX.Element {
   return (
     <svg
       className={className}
@@ -98,15 +108,15 @@ function CloseIcon({ className = '' }: { className?: string }): JSX.Element {
 
 export function Badge({
   children,
-  variant = 'default',
-  badgeStyle = 'subtle',
-  size = 'md',
+  variant = "default",
+  badgeStyle = "subtle",
+  size = "md",
   icon,
   onRemove,
-  className = '',
+  className = "",
 }: BadgeProps): JSX.Element {
   const colorStyles = variantColors[variant][badgeStyle];
-  const borderStyle = badgeStyle === 'outline' ? 'border' : '';
+  const borderStyle = badgeStyle === "outline" ? "border" : "";
 
   return (
     <span
@@ -142,22 +152,22 @@ export function Badge({
 /**
  * Pill variant - larger, more prominent
  */
-interface PillProps extends Omit<BadgeProps, 'size'> {
+interface PillProps extends Omit<BadgeProps, "size"> {
   /** Make the pill interactive (hover states) */
   interactive?: boolean;
 }
 
 export function Pill({
   children,
-  variant = 'default',
-  badgeStyle = 'subtle',
+  variant = "default",
+  badgeStyle = "subtle",
   icon,
   onRemove,
   interactive = false,
-  className = '',
+  className = "",
 }: PillProps): JSX.Element {
   const colorStyles = variantColors[variant][badgeStyle];
-  const borderStyle = badgeStyle === 'outline' ? 'border' : '';
+  const borderStyle = badgeStyle === "outline" ? "border" : "";
 
   return (
     <span
@@ -166,7 +176,7 @@ export function Pill({
         px-3 py-1.5 text-sm font-medium rounded-full
         ${colorStyles}
         ${borderStyle}
-        ${interactive ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}
+        ${interactive ? "cursor-pointer hover:opacity-80 transition-opacity" : ""}
         ${className}
       `}
     >

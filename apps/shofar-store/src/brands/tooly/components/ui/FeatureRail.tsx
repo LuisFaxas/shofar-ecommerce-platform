@@ -6,10 +6,10 @@
  * Smooth transitions between feature highlights
  */
 
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 export interface Feature {
   id: string;
@@ -29,7 +29,7 @@ export interface FeatureRailProps {
   /** Show progress indicators */
   showProgress?: boolean;
   /** Layout variant */
-  variant?: 'horizontal' | 'vertical' | 'split';
+  variant?: "horizontal" | "vertical" | "split";
   /** Custom className */
   className?: string;
 }
@@ -42,8 +42,8 @@ export const FeatureRail: React.FC<FeatureRailProps> = ({
   features,
   autoAdvance = 5000,
   showProgress = true,
-  variant = 'horizontal',
-  className
+  variant = "horizontal",
+  className,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -67,7 +67,7 @@ export const FeatureRail: React.FC<FeatureRailProps> = ({
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) return 100;
-        return prev + (100 / (autoAdvance / 100));
+        return prev + 100 / (autoAdvance / 100);
       });
     }, 100);
 
@@ -81,7 +81,7 @@ export const FeatureRail: React.FC<FeatureRailProps> = ({
 
   const activeFeature = features[activeIndex];
 
-  if (variant === 'split') {
+  if (variant === "split") {
     return (
       <SplitLayout
         features={features}
@@ -94,7 +94,7 @@ export const FeatureRail: React.FC<FeatureRailProps> = ({
     );
   }
 
-  if (variant === 'vertical') {
+  if (variant === "vertical") {
     return (
       <VerticalLayout
         features={features}
@@ -109,7 +109,7 @@ export const FeatureRail: React.FC<FeatureRailProps> = ({
 
   // Default horizontal layout
   return (
-    <div className={cn('space-y-8', className)}>
+    <div className={cn("space-y-8", className)}>
       {/* Active feature display */}
       <div className="glass-card p-8 min-h-[400px]">
         <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -183,20 +183,20 @@ const FeatureTab: React.FC<{
     <button
       onClick={onClick}
       className={cn(
-        'relative flex-1 p-4 text-left transition-all duration-300',
-        'rounded-lg overflow-hidden',
+        "relative flex-1 p-4 text-left transition-all duration-300",
+        "rounded-lg overflow-hidden",
         isActive
-          ? 'bg-white/[0.08] border border-white/[0.14]'
-          : 'bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04]'
+          ? "bg-white/[0.08] border border-white/[0.14]"
+          : "bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04]",
       )}
     >
       {/* Progress bar */}
       {showProgress && (
         <div
           className={cn(
-            'absolute bottom-0 left-0 h-0.5',
-            'bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-2)]',
-            'transition-all duration-100'
+            "absolute bottom-0 left-0 h-0.5",
+            "bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-2)]",
+            "transition-all duration-100",
           )}
           style={{ width: `${isActive ? progress : 0}%` }}
         />
@@ -204,10 +204,12 @@ const FeatureTab: React.FC<{
 
       {/* Content */}
       <div className="relative z-10">
-        <h4 className={cn(
-          'font-medium transition-colors',
-          isActive ? 'text-white' : 'text-white/60'
-        )}>
+        <h4
+          className={cn(
+            "font-medium transition-colors",
+            isActive ? "text-white" : "text-white/60",
+          )}
+        >
           {feature.title}
         </h4>
       </div>
@@ -223,11 +225,18 @@ const SplitLayout: React.FC<{
   showProgress: boolean;
   onFeatureClick: (index: number) => void;
   className?: string;
-}> = ({ features, activeIndex, progress, showProgress, onFeatureClick, className }) => {
+}> = ({
+  features,
+  activeIndex,
+  progress,
+  showProgress,
+  onFeatureClick,
+  className,
+}) => {
   const activeFeature = features[activeIndex];
 
   return (
-    <div className={cn('grid md:grid-cols-2 gap-8', className)}>
+    <div className={cn("grid md:grid-cols-2 gap-8", className)}>
       {/* Left: Feature list */}
       <div className="space-y-2">
         {features.map((feature, index) => (
@@ -235,11 +244,11 @@ const SplitLayout: React.FC<{
             key={feature.id}
             onClick={() => onFeatureClick(index)}
             className={cn(
-              'relative w-full p-6 text-left transition-all duration-300',
-              'rounded-xl overflow-hidden',
+              "relative w-full p-6 text-left transition-all duration-300",
+              "rounded-xl overflow-hidden",
               index === activeIndex
-                ? 'bg-white/[0.08] border border-white/[0.14]'
-                : 'bg-white/[0.02] border border-transparent hover:bg-white/[0.04] hover:border-white/[0.08]'
+                ? "bg-white/[0.08] border border-white/[0.14]"
+                : "bg-white/[0.02] border border-transparent hover:bg-white/[0.04] hover:border-white/[0.08]",
             )}
           >
             {/* Progress bar */}
@@ -248,23 +257,27 @@ const SplitLayout: React.FC<{
                 className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[var(--color-brand)] to-[var(--color-brand-2)]"
                 style={{
                   transform: `scaleY(${progress / 100})`,
-                  transformOrigin: 'top'
+                  transformOrigin: "top",
                 }}
               />
             )}
 
             {/* Content */}
             <div className="relative z-10 pl-2">
-              <h4 className={cn(
-                'text-lg font-semibold mb-2 transition-colors',
-                index === activeIndex ? 'text-white' : 'text-white/60'
-              )}>
+              <h4
+                className={cn(
+                  "text-lg font-semibold mb-2 transition-colors",
+                  index === activeIndex ? "text-white" : "text-white/60",
+                )}
+              >
                 {feature.title}
               </h4>
-              <p className={cn(
-                'text-sm transition-colors',
-                index === activeIndex ? 'text-white/70' : 'text-white/40'
-              )}>
+              <p
+                className={cn(
+                  "text-sm transition-colors",
+                  index === activeIndex ? "text-white/70" : "text-white/40",
+                )}
+              >
                 {feature.description}
               </p>
             </div>
@@ -282,9 +295,7 @@ const SplitLayout: React.FC<{
           />
         ) : activeFeature.icon ? (
           <div className="flex items-center justify-center h-64">
-            <div className="text-8xl text-white/20">
-              {activeFeature.icon}
-            </div>
+            <div className="text-8xl text-white/20">{activeFeature.icon}</div>
           </div>
         ) : (
           <div className="h-64 rounded-lg bg-gradient-to-br from-white/5 to-white/10" />
@@ -307,20 +318,27 @@ const VerticalLayout: React.FC<{
   showProgress: boolean;
   onFeatureClick: (index: number) => void;
   className?: string;
-}> = ({ features, activeIndex, progress, showProgress, onFeatureClick, className }) => {
+}> = ({
+  features,
+  activeIndex,
+  progress,
+  showProgress,
+  onFeatureClick,
+  className,
+}) => {
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {features.map((feature, index) => (
         <button
           key={feature.id}
           onClick={() => onFeatureClick(index)}
           className={cn(
-            'relative w-full text-left transition-all duration-300',
-            'rounded-xl overflow-hidden',
+            "relative w-full text-left transition-all duration-300",
+            "rounded-xl overflow-hidden",
             index === activeIndex
-              ? 'bg-white/[0.08] border border-white/[0.14]'
-              : 'bg-white/[0.02] border border-transparent hover:bg-white/[0.04] hover:border-white/[0.08]',
-            'p-6'
+              ? "bg-white/[0.08] border border-white/[0.14]"
+              : "bg-white/[0.02] border border-transparent hover:bg-white/[0.04] hover:border-white/[0.08]",
+            "p-6",
           )}
         >
           {/* Progress overlay */}
@@ -329,7 +347,7 @@ const VerticalLayout: React.FC<{
               className="absolute inset-0 bg-gradient-to-r from-white/[0.02] to-transparent"
               style={{
                 transform: `scaleX(${progress / 100})`,
-                transformOrigin: 'left'
+                transformOrigin: "left",
               }}
             />
           )}
@@ -342,25 +360,31 @@ const VerticalLayout: React.FC<{
                   {feature.badge}
                 </span>
               )}
-              <h4 className={cn(
-                'text-xl font-semibold mb-2 transition-colors',
-                index === activeIndex ? 'text-white' : 'text-white/60'
-              )}>
+              <h4
+                className={cn(
+                  "text-xl font-semibold mb-2 transition-colors",
+                  index === activeIndex ? "text-white" : "text-white/60",
+                )}
+              >
                 {feature.title}
               </h4>
-              <p className={cn(
-                'text-sm transition-colors',
-                index === activeIndex ? 'text-white/70' : 'text-white/40'
-              )}>
+              <p
+                className={cn(
+                  "text-sm transition-colors",
+                  index === activeIndex ? "text-white/70" : "text-white/40",
+                )}
+              >
                 {feature.description}
               </p>
             </div>
             {feature.icon && (
               <div className="flex justify-end">
-                <div className={cn(
-                  'text-4xl transition-opacity',
-                  index === activeIndex ? 'text-white/30' : 'text-white/10'
-                )}>
+                <div
+                  className={cn(
+                    "text-4xl transition-opacity",
+                    index === activeIndex ? "text-white/30" : "text-white/10",
+                  )}
+                >
                   {feature.icon}
                 </div>
               </div>
@@ -372,6 +396,6 @@ const VerticalLayout: React.FC<{
   );
 };
 
-FeatureRail.displayName = 'FeatureRail';
+FeatureRail.displayName = "FeatureRail";
 
 export default FeatureRail;

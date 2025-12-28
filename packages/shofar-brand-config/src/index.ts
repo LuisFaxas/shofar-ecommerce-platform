@@ -3,10 +3,10 @@
  * Handles brand resolution for tools & hardware store
  */
 
-export * from './types';
-import type { BrandConfig, BrandResolution } from './types';
-import { BrandKey } from './types';
-import { toolyConfig } from './brands/tooly';
+export * from "./types";
+import type { BrandConfig, BrandResolution } from "./types";
+import { BrandKey } from "./types";
+import { toolyConfig } from "./brands/tooly";
 
 // Brand configuration registry for SHOFAR store
 const brands: Record<BrandKey, BrandConfig> = {
@@ -17,12 +17,12 @@ const brands: Record<BrandKey, BrandConfig> = {
 // Host to brand mapping for SHOFAR store brands
 const hostToBrand: Map<string, BrandKey> = new Map([
   // TOOLY domains
-  ['tooly.com', BrandKey.TOOLY],
-  ['www.tooly.com', BrandKey.TOOLY],
-  ['shop.tooly.com', BrandKey.TOOLY],
-  ['tools.tooly.com', BrandKey.TOOLY],
-  ['tooly.localhost', BrandKey.TOOLY],
-  ['localhost', BrandKey.TOOLY], // Default for development
+  ["tooly.com", BrandKey.TOOLY],
+  ["www.tooly.com", BrandKey.TOOLY],
+  ["shop.tooly.com", BrandKey.TOOLY],
+  ["tools.tooly.com", BrandKey.TOOLY],
+  ["tooly.localhost", BrandKey.TOOLY],
+  ["localhost", BrandKey.TOOLY], // Default for development
   // Future tool brand domains will be added here
 ]);
 
@@ -48,7 +48,7 @@ export function getBrandByHost(host: string): BrandConfig | null {
   }
 
   // Remove port if present
-  const hostname = (host.split(':')[0] || host).toLowerCase();
+  const hostname = (host.split(":")[0] || host).toLowerCase();
 
   // Check exact match first
   const brandKey = hostToBrand.get(hostname);
@@ -93,7 +93,9 @@ export function isValidBrandKey(key: string): key is BrandKey {
  * Get brand by channel token (Vendure integration)
  */
 export function getBrandByChannelToken(token: string): BrandConfig | null {
-  return Object.values(brands).find(brand => brand.channelToken === token) || null;
+  return (
+    Object.values(brands).find((brand) => brand.channelToken === token) || null
+  );
 }
 
 /**
@@ -101,7 +103,7 @@ export function getBrandByChannelToken(token: string): BrandConfig | null {
  */
 export function createBrandResolution(
   brand: BrandConfig | null,
-  source: 'env' | 'host' | 'cookie' | 'fallback'
+  source: "env" | "host" | "cookie" | "fallback",
 ): BrandResolution | null {
   if (!brand) {
     return null;
@@ -110,7 +112,7 @@ export function createBrandResolution(
   return {
     brand,
     source,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   };
 }
 
@@ -129,4 +131,4 @@ export function getDefaultBrand(): BrandConfig {
 /**
  * Export individual brand configs for direct access if needed
  */
-export { toolyConfig } from './brands/tooly';
+export { toolyConfig } from "./brands/tooly";

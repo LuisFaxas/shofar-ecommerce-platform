@@ -1,9 +1,9 @@
 module.exports = {
-  extends: ['../../packages/config/eslint/library.js'],
+  extends: ["../../packages/config/eslint/library.js"],
   parserOptions: {
-    project: './tsconfig.json',
+    project: "./tsconfig.json",
     tsconfigRootDir: __dirname,
   },
-  ignorePatterns: ['scripts/**/*'],
+  ignorePatterns: ["scripts/**/*"],
   root: true,
 };
