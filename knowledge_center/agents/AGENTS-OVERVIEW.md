@@ -2,10 +2,10 @@
 
 > Complete guide to all Claude Code agents configured for the SHOFAR project.
 
-**Last Updated**: 2025-12-27
+**Last Updated**: 2025-12-28
 **Author**: Claude
 **Status**: Active
-**Total Agents**: 11
+**Total Agents**: 12
 
 ---
 
@@ -260,6 +260,46 @@ These agents help with deployment and operations.
 
 ---
 
+### git-flow
+
+**File**: `.claude/agents/git-flow.md`
+**Model**: haiku (fast + cheap)
+**Purpose**: Git workflow automation with zero commitlint errors
+
+**When Claude Uses It**:
+
+- Creating commits (validates message before attempting)
+- Branch operations (feature/, fix/, wo/ naming)
+- Stash management (with descriptive messages)
+- Worktree operations (clean environment creation)
+- ANY git operation requiring validation
+
+**Example Prompts**:
+
+```
+"Commit the navbar changes"
+"Create a feature branch for the carousel"
+"Stash my current work"
+"Create a clean worktree"
+```
+
+**Key Features**:
+
+- Pre-validates commit messages against commitlint rules
+- Infers scope from file paths (apps/shofar-store/ → "web")
+- Zero trial-and-error - all commits pass on first try
+- Handles atomic commit strategies
+
+**Scope Inference**:
+
+- `apps/shofar-store/` → web
+- `apps/vendure/` → vendure
+- `packages/ui/` → ui
+- `.claude/`, `CHECKPOINT.md` → repo
+- `package.json` → deps
+
+---
+
 ## Debugging Agents
 
 These agents help troubleshoot specific issues.
@@ -356,6 +396,7 @@ All agent files are stored in:
 ├── graphql-sync.md       # GraphQL sync
 ├── deploy-check.md       # Pre-deploy validation
 ├── wo-tracker.md         # Work order tracking
+├── git-flow.md           # Git workflow automation
 ├── stripe-debug.md       # Payment debugging
 ├── asset-manager.md      # Asset pipeline
 └── mobile-tester.md      # Responsive testing

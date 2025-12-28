@@ -404,6 +404,7 @@ This project has specialized Claude Code agents in `.claude/agents/`. Each agent
 | graphql-sync  | sonnet | GraphQL schema sync        |
 | deploy-check  | haiku  | Pre-deployment validation  |
 | wo-tracker    | sonnet | CHECKPOINT.md updates      |
+| git-flow      | haiku  | Git workflow automation    |
 | stripe-debug  | sonnet | Payment troubleshooting    |
 | asset-manager | sonnet | R2/S3 asset pipeline       |
 | mobile-tester | sonnet | Responsive testing         |
