@@ -322,22 +322,36 @@ NODE_ENV=development
 DB_TYPE=better-sqlite3  # or 'postgres' for production
 DATABASE_URL=vendure-db.sqlite
 SUPERADMIN_USERNAME=superadmin
-SUPERADMIN_PASSWORD=superadmin123
-COOKIE_SECRET=change-in-production
+SUPERADMIN_PASSWORD=<see_credentials.env>
+COOKIE_SECRET=<see_credentials.env>
 PORT=3001
 ```
 
 ### Default Credentials
 
-- **Superadmin**: superadmin / superadmin123
-- **Tooly Manager**: manager@tooly.com / manager123
+Copy `credentials.env.example` to `credentials.env` and set your passwords.
+
+| Account       | Username          | Password Reference               |
+| ------------- | ----------------- | -------------------------------- |
+| Superadmin    | superadmin        | `VENDURE_ADMIN_PASSWORD`         |
+| Tooly Manager | manager@tooly.com | `VENDURE_TOOLY_MANAGER_PASSWORD` |
+
+## Credentials Management
+
+All credentials are managed via `credentials.env` (gitignored). To set up:
+
+1. Copy the template: `cp credentials.env.example credentials.env`
+2. Edit `credentials.env` and replace all `<placeholder>` values
+3. Source in your shell if needed: `source credentials.env`
+
+**Never commit `credentials.env`** - only commit `.example` files with placeholders.
 
 ## API Channel Headers
 
 ### TOOLY (shofar-store)
 
 ```typescript
-headers: { 'vendure-token': 'tooly' }
+headers: { 'vendure-token': '<VENDURE_CHANNEL_TOKEN>' }
 ```
 
 ### PEPTIDES (pharma-store)

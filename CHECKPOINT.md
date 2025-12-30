@@ -28,7 +28,7 @@
 
 **Railway Project**: `tooly-vendure-staging`
 **Branch**: `tooly-storefront`
-**Credentials**: superadmin / superadmin123
+**Credentials**: superadmin / <VENDURE_ADMIN_PASSWORD>
 
 ### Vercel Deployment (LIVE)
 
@@ -51,7 +51,7 @@
 ### Active Brand: TOOLY
 
 **BRAND_KEY**: `tooly`
-**Channel Token**: `vendure-token: tooly`
+**Channel Token**: `vendure-token: <VENDURE_CHANNEL_TOKEN>`
 
 ### Presale Readiness Checklist
 
@@ -101,24 +101,26 @@ pnpm --filter @shofar/api-client codegen:shop
 ```bash
 # Check products in tooly channel
 curl -s http://localhost:3001/shop-api -H "Content-Type: application/json" \
-  -H "vendure-token: tooly" \
+  -H "vendure-token: <VENDURE_CHANNEL_TOKEN>" \
   -d '{"query":"{ products { items { name variants { sku stockLevel } } } }"}'
 
 # Check shipping methods (requires active order)
-curl -s http://localhost:3001/shop-api -H "vendure-token: tooly" \
+curl -s http://localhost:3001/shop-api -H "vendure-token: <VENDURE_CHANNEL_TOKEN>" \
   -d '{"query":"{ eligibleShippingMethods { id name price } }"}'
 
 # Admin login
 curl -s http://localhost:3001/admin-api -c cookies.txt \
-  -d '{"query":"mutation { login(username: \"superadmin\", password: \"superadmin123\") { ... on CurrentUser { id } } }"}'
+  -d '{"query":"mutation { login(username: \"superadmin\", password: \"<VENDURE_ADMIN_PASSWORD>\") { ... on CurrentUser { id } } }"}'
 ```
 
 ### Credentials
 
-| Service       | Username          | Password      |
-| ------------- | ----------------- | ------------- |
-| Vendure Admin | superadmin        | superadmin123 |
-| Tooly Manager | manager@tooly.com | manager123    |
+For all credentials, copy `credentials.env.example` to `credentials.env` and fill in your values.
+
+| Service       | Username          | Password Reference               |
+| ------------- | ----------------- | -------------------------------- |
+| Vendure Admin | superadmin        | `VENDURE_ADMIN_PASSWORD`         |
+| Tooly Manager | manager@tooly.com | `VENDURE_TOOLY_MANAGER_PASSWORD` |
 
 ### Key File Locations
 
@@ -146,7 +148,7 @@ packages/
 1. **NO production cookies for brand switching** — Kills SEO
 2. **Mode A (BRAND_KEY) for production** — Enables SSG/ISR
 3. **Complete UI isolation between stores** — No shared components
-4. **Channel token required for Vendure queries** — `vendure-token: tooly`
+4. **Channel token required for Vendure queries** — `vendure-token: <VENDURE_CHANNEL_TOKEN>`
 5. **Never use `--no-verify` on commits** — Fix lint/typecheck errors instead
 6. **Don't touch ButtonPrimary** — It's the sacred component
 
@@ -250,7 +252,7 @@ packages/
   - ✅ Stripe CLI installed via winget
   - ✅ `stripe login` authenticated to Faxas Enterprise LLC sandbox
   - ✅ `stripe listen --forward-to localhost:3001/payments/stripe` running
-  - ✅ Webhook secret updated in Vendure Admin (whsec_725f78aa...)
+  - ✅ Webhook secret updated in Vendure Admin (<WEBHOOK_SECRET>)
   - ⚠️ Order state not updating to PaymentSettled (webhook processing issue)
 - **Files Modified**:
   - `apps/shofar-store/src/app/checkout/page.tsx` - activeCustomer check + full mutation fields
@@ -375,11 +377,11 @@ packages/
 
   ```bash
   # Shop API: 1 variant
-  curl -s http://localhost:3001/shop-api -H "vendure-token: tooly" \
+  curl -s http://localhost:3001/shop-api -H "vendure-token: <VENDURE_CHANNEL_TOKEN>" \
     -d '{"query":"{ product(slug:\"tooly\"){ variants { sku } } }"}'
 
   # Shop API: 0 accessories
-  curl -s http://localhost:3001/shop-api -H "vendure-token: tooly" \
+  curl -s http://localhost:3001/shop-api -H "vendure-token: <VENDURE_CHANNEL_TOKEN>" \
     -d '{"query":"{ collection(slug:\"accessories\"){ productVariants { totalItems } } }"}'
   ```
 
@@ -528,7 +530,7 @@ packages/
 ```
 Browser → Next.js App → /api/shop proxy → Vendure Shop API
                                               ↓
-                                    vendure-token: tooly
+                                    vendure-token: <VENDURE_CHANNEL_TOKEN>
                                               ↓
                                     Channel-scoped data
 ```
@@ -615,12 +617,12 @@ Browser → Next.js App → /api/shop proxy → Vendure Shop API
 
 ### Channels
 
-| Channel | Code    | Token Header           |
-| ------- | ------- | ---------------------- |
-| Default | default | (none)                 |
-| TOOLY   | tooly   | vendure-token: tooly   |
-| Future  | future  | vendure-token: future  |
-| Peptide | peptide | vendure-token: peptide |
+| Channel | Code    | Token Header                           |
+| ------- | ------- | -------------------------------------- |
+| Default | default | (none)                                 |
+| TOOLY   | tooly   | vendure-token: <VENDURE_CHANNEL_TOKEN> |
+| Future  | future  | vendure-token: <VENDURE_CHANNEL_TOKEN> |
+| Peptide | peptide | vendure-token: <VENDURE_CHANNEL_TOKEN> |
 
 ---
 
