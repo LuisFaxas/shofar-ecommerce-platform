@@ -63,6 +63,45 @@ export const Navbar: React.FC<NavbarProps> = ({
   className,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // `transparent` flips to false once the user scrolls past the hero cinemascroll.
+  // The navbar is purely chrome on top of the cinematic during the hero scroll.
+  const [transparent, setTransparent] = useState(true);
+
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      const hero = document.getElementById("hero");
+      if (!hero) {
+        setTransparent(false);
+        return;
+      }
+      const rect = hero.getBoundingClientRect();
+      // Materialize once the hero's bottom passes the navbar's bottom edge.
+      // We approximate the navbar height with the larger desktop value so the
+      // transition feels consistent across breakpoints.
+      const navH = 80;
+      setTransparent(rect.bottom > navH);
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        update();
+        raf = 0;
+      });
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  // While the mobile menu is open we always want a solid backdrop, regardless
+  // of scroll position, so the menu items read cleanly.
+  const showSolid = !transparent || isMobileMenuOpen;
 
   // Use props for cart (provided by parent component using CartContext)
   const itemCount = cartCount ?? 0;
@@ -132,10 +171,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       <nav
         className={cn(
-          "relative z-50",
-          "bg-[#0b0e14]/80 backdrop-blur-xl",
-          "border-b border-white/[0.08]",
-          sticky && "sticky top-0",
+          // Fixed so the hero cinemascroll sits edge-to-edge at the very top of
+          // the page; the navbar floats over content. Subsequent sections supply
+          // their own top padding (py-16+) so the navbar never obscures content.
+          "fixed inset-x-0 top-0 z-50",
+          // Smooth fade between transparent (over hero cinemascroll) and solid
+          // (everywhere else / when mobile menu open).
+          "transition-[background-color,border-color,backdrop-filter] duration-300",
+          showSolid
+            ? "bg-[#0b0e14]/80 backdrop-blur-xl border-b border-white/[0.08]"
+            : "bg-transparent border-b border-transparent",
           className,
         )}
       >
@@ -145,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center">
               <Link href="/" className="flex items-center gap-2">
                 {typeof logo === "string" ? (
-                  <span className="text-2xl font-bold bg-gradient-to-r from-[#02fcef] via-[#ffb52b] to-[#a02bfe] bg-clip-text text-transparent">
+                  <span className="text-2xl font-semibold tracking-tight text-white">
                     {logo}
                   </span>
                 ) : (
@@ -345,9 +390,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Glass shine effect */}
+        {/* Glass shine effect — hidden while transparent (over hero) */}
         <span
-          className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          className={cn(
+            "absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent",
+            "transition-opacity duration-300",
+            showSolid ? "opacity-100" : "opacity-0",
+          )}
           aria-hidden="true"
         />
       </nav>
