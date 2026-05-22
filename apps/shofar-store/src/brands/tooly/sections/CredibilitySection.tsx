@@ -180,7 +180,7 @@ export function CredibilitySection({
             Why Choose TOOLY
           </h2>
           <p className="text-2xl md:text-3xl font-semibold text-white mb-4">
-            Trusted by Professionals Worldwide
+            One TOOLY to rule them all
           </p>
           <p className="text-white/60 max-w-xl mx-auto">
             Join thousands of satisfied customers who have elevated their craft
